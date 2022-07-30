@@ -24,7 +24,7 @@
     "ionic.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "pages/index.js", "pages/_app.js"  ],
+, "pages/index.js", "pages/_app.js", "components/IonSegment.js", "components/IonSearchbar.js", "components/BottomTabs.js", "pages/Food.js"  ],
   "exclude": [
     "node_modules"
   ]
