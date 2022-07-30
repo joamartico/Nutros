@@ -1,10 +1,12 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
 import IonSearchbar from "../components/IonSearchbar";
 
 export default function Home({ foodData }) {
 	const [search, setSearch] = useState("");
+	const router = useRouter();
 
 	return (
 		<>
@@ -19,9 +21,6 @@ export default function Home({ foodData }) {
 
 			<ion-content fullscreen>
 				<ion-header collapse="condense">
-					<ion-buttons slot="start">
-						<ion-back-button></ion-back-button>
-					</ion-buttons>
 					<ion-toolbar>
 						<ion-title size="large">Search Food</ion-title>
 					</ion-toolbar>
@@ -41,11 +40,23 @@ export default function Home({ foodData }) {
 						return food.description
 							.toLowerCase()
 							.includes(search.toLowerCase());
-					}).map((food) => (
-						<ion-item key={food.id}>
-							<ion-label>{food.description}</ion-label>
-						</ion-item>
-					))}
+					})
+						.slice(0, 20)
+						.map((food) => (
+							<ion-item
+								key={food.foodCode}
+								onClick={() =>
+									router.push({
+										pathname: "/food/" + food.foodCode,
+										query: {
+											name: food.description,
+										}
+									})
+								}
+							>
+								<ion-label>{food.description}</ion-label>
+							</ion-item>
+						))}
 				</ion-list>
 			</ion-content>
 		</>
