@@ -1,20 +1,24 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-const IonSearchbar = ({onChange, id}) => {
-  const ref = useRef()
+const IonSearchbar = ({ onChange, id }) => {
+	const ref = useRef();
 
-    useEffect(() => {
-      ref?.current?.addEventListener('ionChange', onChange);
-    
-        // cleanup this component
-        return () => {
-          ref?.current?.removeEventListener('ionChange', onChange);
-        };
-      }, []);
+	useEffect(() => {
+		ref?.current?.addEventListener("ionChange", onChange);
 
-    return (
-        <ion-searchbar ref={ref} animated show-cancel-button="focus" />
-    )
-}
+		// cleanup this component
+		return () => {
+			ref?.current?.removeEventListener("ionChange", onChange);
+		};
+	}, []);
 
-export default IonSearchbar
+	return (
+		<ion-searchbar
+			ref={ref}
+			// animated
+			// show-cancel-button="focus"
+		/>
+	);
+};
+
+export default IonSearchbar;

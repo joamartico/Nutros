@@ -20,29 +20,14 @@ import "@ionic/core/css/display.css";
 import foodData from "../foodData.json";
 
 function MyApp({ Component, pageProps }) {
-
 	useEffect(() => {
 		ionDefineCustomElements(window);
 	});
 	return (
 		<ion-app>
-			<ion-header translucent>
-				<ion-toolbar>
-					<ion-title>Next.js with Ionic</ion-title>
-				</ion-toolbar>
-			</ion-header>
-
-			<ion-content fullscreen>
 				<Component {...pageProps} foodData={foodData} />
-			</ion-content>
-			<ion-footer>
-				<ion-toolbar>
-					<ion-title>Footer</ion-title>
-				</ion-toolbar>
-			</ion-footer>
 		</ion-app>
 	);
 }
 
 export default MyApp;
-
