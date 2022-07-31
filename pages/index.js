@@ -3,10 +3,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
 import IonSearchbar from "../components/IonSearchbar";
-import foodData from "../foodData.json";
 import useGlobalState from "../hooks/useGlobalState";
 
-export default function Home() {
+export default function Home({foodData}) {
 	const {setFood} = useGlobalState();
 	const [search, setSearch] = useState("");
 	const router = useRouter();

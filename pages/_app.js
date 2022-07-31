@@ -20,6 +20,9 @@ import "@ionic/core/css/display.css";
 import Context from "../Context";
 import Head from "next/head";
 
+import foodData from "../foodData.json";
+
+
 function MyApp({ Component, pageProps }) {
 	useEffect(() => {
 		ionDefineCustomElements(window);
@@ -52,7 +55,7 @@ function MyApp({ Component, pageProps }) {
 			</Head>
 			<Context>
 				<ion-app>
-					<Component {...pageProps} />
+					<Component {...pageProps} foodData={foodData} />
 				</ion-app>
 			</Context>
 		</>
