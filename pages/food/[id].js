@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
+import styled from "styled-components";
 
 const food = () => {
 	const router = useRouter();
 	// const {id} = router.query;
 	const food = router.query;
-	console.log("food: ", food);
 
 	return (
 		<>
@@ -25,9 +25,18 @@ const food = () => {
 
 					
 				</ion-header>
+
+                <Title>
+                    Vitamins
+                </Title>
 			</ion-content>
 		</>
 	);
 };
 
 export default food;
+
+
+const Title = styled.h2`
+    
+`;

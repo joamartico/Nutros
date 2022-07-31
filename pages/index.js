@@ -5,6 +5,7 @@ import styled from "styled-components";
 import IonSearchbar from "../components/IonSearchbar";
 
 export default function Home({ foodData }) {
+	console.log(foodData);
 	const [search, setSearch] = useState("");
 	const router = useRouter();
 
@@ -35,24 +36,25 @@ export default function Home({ foodData }) {
 				</ion-header>
 
 				<ion-list>
-					{foodData.SurveyFoods.filter((food) => {
-						search == "" && true;
-						return food.description
-							.toLowerCase()
-							.includes(search.toLowerCase());
-					})
-						.slice(0, 20)
+					{foodData
+						.filter((food) => {
+							search == "" && true;
+							return food.description
+								.toLowerCase()
+								.includes(search.toLowerCase());
+						})
 						.map((food) => (
 							<ion-item
 								key={food.foodCode}
-								onClick={() =>
+								onClick={() => {
 									router.push({
 										pathname: "/food/" + food.foodCode,
 										query: {
 											name: food.description,
-										}
-									})
-								}
+											...food.foodNutrients,
+										},
+									});
+								}}
 							>
 								<ion-label>{food.description}</ion-label>
 							</ion-item>
@@ -61,4 +63,34 @@ export default function Home({ foodData }) {
 			</ion-content>
 		</>
 	);
+}
+
+// export async function getServerSideProps(context) {
+// 	const params = {
+// 		api_key: "X66ugLvvhHYrDgeiwTuSwPZEJAhupK2WSEEcxvaC",
+// 		query: "Mango",
+// 		dataType: ["Survey (FNDDS)"],
+// 		pagesize: 200,
+// 	};
+
+// 	const res = await fetch(
+// 		`https://api.nal.usda.gov/fdc/v1/foods/list?api_key=${encodeURIComponent(
+// 			"X66ugLvvhHYrDgeiwTuSwPZEJAhupK2WSEEcxvaC"
+// 		)}
+// 		&dataType=${encodeURIComponent(
+// 			params.dataType
+// 		)}&pageSize=${encodeURIComponent(params.pagesize)}`
+// 	);
+// 	const foodData = await res.json();
+
+// 	console.log(foodData);
+// 	return { props: { foodData } };
+// }
+
+export async function getServerSideProps(context) {
+	const res = await fetch(`http://localhost:3000/api/foods`);
+	const foodData = await res.json();
+
+	console.log(foodData);
+	return { props: { foodData } };
 }

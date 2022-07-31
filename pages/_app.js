@@ -17,7 +17,7 @@ import "@ionic/core/css/text-transformation.css";
 import "@ionic/core/css/flex-utils.css";
 import "@ionic/core/css/display.css";
 
-import foodData from "../foodData.json";
+// import foodData from "../foodData.json";
 
 function MyApp({ Component, pageProps }) {
 	useEffect(() => {
@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
 	});
 	return (
 		<ion-app>
-				<Component {...pageProps} foodData={foodData} />
+				<Component {...pageProps}  />
 		</ion-app>
 	);
 }
