@@ -18,17 +18,44 @@ import "@ionic/core/css/flex-utils.css";
 import "@ionic/core/css/display.css";
 
 import Context from "../Context";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
 	useEffect(() => {
 		ionDefineCustomElements(window);
 	});
 	return (
-		<Context>
-			<ion-app>
-				<Component {...pageProps} />
-			</ion-app>
-		</Context>
+		<>
+			<Head>
+				<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+				{/* SEO  */}
+				<title>Nutros</title>
+				<meta
+					name="description"
+					content="Nutros is your web app to search and track your food and nutrition."
+				/>
+				<meta
+					name="keywords"
+					content="nutrition, food, vitamins, minerals"
+				/>
+				{/*  PWA  */}
+				<meta
+					name="viewport"
+					content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no"
+				/>
+				<meta name="mobile-web-app-capable" content="yes" />
+				<meta name="apple-mobile-web-app-capable" content="yes" />
+				<meta
+					name="apple-mobile-web-app-status-bar-style"
+					content="default"
+				/>
+			</Head>
+			<Context>
+				<ion-app>
+					<Component {...pageProps} />
+				</ion-app>
+			</Context>
+		</>
 	);
 }
 

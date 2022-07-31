@@ -1,6 +1,9 @@
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import useGlobalState from "../../hooks/useGlobalState";
+import IonSearchbar from "../../components/IonSearchbar";
+
+
 
 const food = () => {
 	const router = useRouter();
@@ -25,16 +28,13 @@ const food = () => {
 
 			<ion-content fullscreen>
 				<ion-header collapse="condense">
-					<ion-buttons slot="start">
-						<ion-back-button></ion-back-button>
-					</ion-buttons>
-					{/* <ion-toolbar> */}
-					<ion-title size="large">{food.description}</ion-title>
-					{/* </ion-toolbar> */}
+					<ion-toolbar>
+						<ion-title size="large">{food.description}</ion-title>
+					</ion-toolbar>
 				</ion-header>
 
 				<Title>Minerals</Title>
-
+				
 				{food.foodNutrients
 					.filter((item) => {
 						return (
@@ -43,7 +43,10 @@ const food = () => {
 						);
 					})
 					.map((item) => (
-						<p>{item.nutrient.name}  -  {item.amount} {item.nutrient.unitName} </p>
+						<p>
+							{item.nutrient.name} - {item.amount}{" "}
+							{item.nutrient.unitName}{" "}
+						</p>
 					))}
 
 				<Title>Vitamins</Title>
@@ -56,7 +59,10 @@ const food = () => {
 						);
 					})
 					.map((item) => (
-						<p>{item.nutrient.name}  -  {item.amount} {item.nutrient.unitName}</p>
+						<p>
+							{item.nutrient.name} - {item.amount}{" "}
+							{item.nutrient.unitName}
+						</p>
 					))}
 			</ion-content>
 		</>

@@ -1,0 +1,17 @@
+{
+    "theme_color": "#e0f6f6",
+    "background_color": "#66CFD5",
+    "display": "standalone",
+    "start_url": ".",
+    "name": "Nutros",
+    "short_name": "Nutros",
+    "icons": [
+        {
+          "src": "rounded.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+    ]
+  }
+
+  

@@ -13,6 +13,7 @@ export default function Home() {
 
 	return (
 		<>
+		
 			<ion-header>
 				<ion-toolbar>
 					<ion-title>Search food</ion-title>
