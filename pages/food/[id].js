@@ -10,32 +10,32 @@ const food = () => {
 	// const {id} = router.query;
 
 	const { food } = useGlobalState();
-	console.log(food.foodNutrients);
 
-	const vitamins = food.foodNutrients.filter((item) => {
-		return item.nutrient.id == 1105;
-	});
+		
 
-	console.log("vitamins: ", vitamins);
+	console.log(food?.foodNutrients);
+
+
+
 
 	return (
 		<>
 			<ion-header>
 				<ion-toolbar>
-					<ion-title>{food.description}</ion-title>
+					<ion-title>{food?.description}</ion-title>
 				</ion-toolbar>
 			</ion-header>
 
 			<ion-content fullscreen>
 				<ion-header collapse="condense">
 					<ion-toolbar>
-						<ion-title size="large">{food.description}</ion-title>
+						<ion-title size="large">{food?.description}</ion-title>
 					</ion-toolbar>
 				</ion-header>
 
 				<Title>Minerals</Title>
-				
-				{food.foodNutrients
+
+				{food?.foodNutrients
 					.filter((item) => {
 						return (
 							parseInt(item.nutrient.id) > 1086 &&
@@ -51,7 +51,7 @@ const food = () => {
 
 				<Title>Vitamins</Title>
 
-				{food.foodNutrients
+				{food?.foodNutrients
 					.filter((item) => {
 						return (
 							parseInt(item.nutrient.id) > 1105 &&
