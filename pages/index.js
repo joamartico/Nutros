@@ -88,7 +88,7 @@ export default function Home({ foodData }) {
 // }
 
 export async function getServerSideProps(context) {
-	const res = await fetch(`http://localhost:3000/api/foods`);
+	const res = await fetch("https://nutros.vercel.app/api/foods");
 	const foodData = await res.json();
 
 	console.log(foodData);
