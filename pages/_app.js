@@ -17,16 +17,18 @@ import "@ionic/core/css/text-transformation.css";
 import "@ionic/core/css/flex-utils.css";
 import "@ionic/core/css/display.css";
 
-// import foodData from "../foodData.json";
+import Context from "../Context";
 
 function MyApp({ Component, pageProps }) {
 	useEffect(() => {
 		ionDefineCustomElements(window);
 	});
 	return (
-		<ion-app>
-				<Component {...pageProps}  />
-		</ion-app>
+		<Context>
+			<ion-app>
+				<Component {...pageProps} />
+			</ion-app>
+		</Context>
 	);
 }
 
