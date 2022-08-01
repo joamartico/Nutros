@@ -1,8 +1,6 @@
-import React from "react";
-
 const NutrientItem = ({ item, group }) => {
 	const nutrientPercentage = (
-		(item.amount / group[item.nutrient.name]) *
+		(item?.amount / group[item?.nutrient.name]) *
 		100
 	).toFixed(1);
 
@@ -19,10 +17,10 @@ const NutrientItem = ({ item, group }) => {
 	return (
 		<ion-item>
 			<ion-label>
-				{item.nutrient.name} - {item.amount} {item.nutrient.unitName}{" "}
+				{item?.nutrient.name} - {item?.amount} {item?.nutrient.unitName}{" "}
 			</ion-label>
 
-			{group[item.nutrient.name] && (
+			{group[item?.nutrient.name] && (
 				<ion-note slot="end" color={getColor(nutrientPercentage)}>
 					{nutrientPercentage}%
 				</ion-note>
