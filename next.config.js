@@ -3,6 +3,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 const withPWA = require('next-pwa')
 
 module.exports = withPWA({
+  
   pwa: {
     dest: 'public',
     register: true,
