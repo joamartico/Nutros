@@ -81,7 +81,7 @@ export default function Home({ foodData }) {
 							.toLowerCase()
 							.includes(search.toLowerCase());
 					})
-						.slice(0, 20)
+						.slice(0, 100)
 						.map((food) => (
 							<ion-item
 								key={food.foodCode}
