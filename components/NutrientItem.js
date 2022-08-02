@@ -7,7 +7,7 @@ const NutrientItem = ({ item, group }) => {
     function getColor(percentage) {
         if (percentage > 10) {
             return "success";
-        } else if (percentage > 5) {
+        } else if (percentage > 3) {
             return "warning";
         }
         return "danger";

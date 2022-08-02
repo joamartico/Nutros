@@ -6,22 +6,30 @@ import IonSearchbar from "../../components/IonSearchbar";
 import dv from "../../dv.json";
 import NutrientItem from "../../components/NutrientItem";
 
-const food = () => {
+const food = ({ foodData }) => {
 	const router = useRouter();
-	// const {id} = router.query;
+	const { id } = router.query;
 
-	const { food } = useGlobalState();
+	// const { food, setFood } = useGlobalState();
 
-	console.log("food", food);
+	// if(!food) {
+	// 	const newFood = foodData.SurveyFoods.find(f => f.foodCode === id);
+	// 	setFood(newFood);
+	// }
+
+	const food = foodData.SurveyFoods.find((f) => f.foodCode === id);
 
 	const group = "men 19-30";
 
-	console.log(food?.foodNutrients);
-
 	return (
 		<>
-			<ion-header>
+			<ion-header translucent>
 				<ion-toolbar>
+					<ion-buttons slot="start">
+						<ion-button onClick={() => router.push("/")}>
+							Back
+						</ion-button>
+					</ion-buttons>
 					<ion-title>{food?.description}</ion-title>
 				</ion-toolbar>
 			</ion-header>
@@ -30,11 +38,16 @@ const food = () => {
 				<ion-header collapse="condense">
 					<ion-toolbar>
 						<ion-title size="large">{food?.description}</ion-title>
+						<ion-buttons slot="start">
+							<ion-back-button defaultHref="/" />
+						</ion-buttons>
 					</ion-toolbar>
 				</ion-header>
 
 				<ion-list>
-					<ion-list-header><h2>Minerals</h2></ion-list-header>
+					<ion-list-header>
+						<h2>Minerals</h2>
+					</ion-list-header>
 
 					{food?.foodNutrients
 						.filter((item) => {
@@ -44,12 +57,17 @@ const food = () => {
 							);
 						})
 						.map((item) => (
-							<NutrientItem item={item} group={dv.minerals[group]} />
+							<NutrientItem
+								item={item}
+								group={dv.minerals[group]}
+							/>
 						))}
 				</ion-list>
 
 				<ion-list>
-					<ion-list-header><h2>Vitamins</h2></ion-list-header>
+					<ion-list-header>
+						<h2>Vitamins</h2>
+					</ion-list-header>
 					{food?.foodNutrients
 						.filter((item) => {
 							return (
@@ -57,9 +75,12 @@ const food = () => {
 								parseInt(item.nutrient.id) < 1186
 							);
 						})
-						.map((item) => ( 
-							<NutrientItem item={item} group={dv.vitamins[group]} /> ))}
-						
+						.map((item) => (
+							<NutrientItem
+								item={item}
+								group={dv.vitamins[group]}
+							/>
+						))}
 				</ion-list>
 			</ion-content>
 		</>
@@ -67,5 +88,3 @@ const food = () => {
 };
 
 export default food;
-
-const Title = styled.h2``;

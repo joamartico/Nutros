@@ -17,6 +17,8 @@ import "@ionic/core/css/text-transformation.css";
 import "@ionic/core/css/flex-utils.css";
 import "@ionic/core/css/display.css";
 
+import "../index.css";
+
 import Context from "../Context";
 import Head from "next/head";
 

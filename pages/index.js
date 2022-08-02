@@ -3,27 +3,65 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
 import IonSearchbar from "../components/IonSearchbar";
+import IonSelect from "../components/IonSelect";
 import useGlobalState from "../hooks/useGlobalState";
 
-export default function Home({foodData}) {
-	const {setFood} = useGlobalState();
+export default function Home({ foodData }) {
+	const { setFood } = useGlobalState();
 	const [search, setSearch] = useState("");
 	const router = useRouter();
+	const [selectedNutrient, setSelectedNutrient] = useState(true)
+
+	const nutrients = foodData.SurveyFoods[0].foodNutrients
+		.map((item, i) => item.nutrient.name)
+		.slice(0, 44);
+
+	async function orderFoodBy(nutrient) {
+		await foodData.SurveyFoods.sort((a, b) => {
+			return (
+				b.foodNutrients.find(
+					(item) => item.nutrient.name === nutrient
+				).amount
+				-
+				a.foodNutrients.find(
+					(item) => item.nutrient.name === nutrient
+				).amount 
+			);
+		});
+		setSelectedNutrient(nutrient);
+	}
 
 	return (
 		<>
-		
-			<ion-header>
+			<ion-header translucent>
 				<ion-toolbar>
 					<ion-title>Search food</ion-title>
+
 					<ion-buttons slot="end">
 						<ion-button>Order By</ion-button>
+
+						<IonSelect
+							onChange={(e) => {
+								orderFoodBy(e.target.value[0]);
+							}}
+							value={selectedNutrient}
+
+						>
+							{nutrients.map((nutrient, i) => (
+								<ion-select-option
+									key={nutrient}
+									value={nutrient}
+								>
+									{nutrient}
+								</ion-select-option>
+							))}
+						</IonSelect>
 					</ion-buttons>
 				</ion-toolbar>
 			</ion-header>
 
 			<ion-content fullscreen>
-				<ion-header collapse="condense">
+				<ion-header collapse="condense" translucent>
 					<ion-toolbar>
 						<ion-title size="large">Search Food</ion-title>
 					</ion-toolbar>
@@ -50,13 +88,7 @@ export default function Home({foodData}) {
 								key={food.foodCode}
 								onClick={() => {
 									setFood(food);
-									router.push({
-										pathname: "/food/" + food.foodCode,
-										query: {
-											name: food.description,
-											...food.foodNutrients,
-										},
-									});
+									router.push("/food/" + food.foodCode);
 								}}
 							>
 								<ion-label>{food.description}</ion-label>
