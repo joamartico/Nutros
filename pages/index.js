@@ -11,7 +11,7 @@ export default function Home({ foodData }) {
 	const router = useRouter();
 	const [selectedNutrient, setSelectedNutrient] = useState(true);
 
-	const nutrients = foodData.foundationFoods[0].foodNutrients.map(
+	const nutrients = foodData.foundationFoods[1]?.foodNutrients.map(
 		(item, i) => item.nutrient.name
 	);
 	// .slice(0, 44);

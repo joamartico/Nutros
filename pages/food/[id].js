@@ -54,8 +54,8 @@ const food = ({ foodData }) => {
 					{food?.foodNutrients
 						.filter((item) => {
 							return (
-								parseInt(item.nutrient.id) > 1086 &&
-								parseInt(item.nutrient.id) < 1105
+								parseInt(item.nutrient?.id) > 1086 &&
+								parseInt(item.nutrient?.id) < 1105
 							);
 						})
 						.map((item) => (
@@ -78,8 +78,8 @@ const food = ({ foodData }) => {
 					{food?.foodNutrients
 						.filter((item) => {
 							return (
-								parseInt(item.nutrient.id) > 1104 &&
-								parseInt(item.nutrient.id) < 1186
+								parseInt(item.nutrient?.id) > 1104 &&
+								parseInt(item.nutrient?.id) < 1186
 							);
 						})
 						.map((item) => (
