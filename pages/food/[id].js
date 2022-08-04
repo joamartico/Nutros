@@ -40,9 +40,11 @@ const food = ({ foodData }) => {
 				<ion-header collapse="condense">
 					<ion-toolbar>
 						<ion-title size="large">{food?.description}</ion-title>
-						<ion-buttons slot="start">
-							<ion-back-button defaultHref="/" />
-						</ion-buttons>
+					</ion-toolbar>
+					<ion-toolbar>
+						<ion-text class="ion-padding">
+								Amount: {food?.foodPortions[0]?.gramWeight} grams
+						</ion-text>
 					</ion-toolbar>
 				</ion-header>
 
