@@ -13,11 +13,13 @@ const food = ({ foodData }) => {
 	// const { food, setFood } = useGlobalState();
 
 	// if(!food) {
-	// 	const newFood = foodData.SurveyFoods.find(f => f.foodCode === id);
+	// 	const newFood = foodData.foundationFoods.find(f => f.fdcId === id);
 	// 	setFood(newFood);
 	// }
 
-	const food = foodData.SurveyFoods.find((f) => f.foodCode === id);
+	const food = foodData.foundationFoods.find((f) => f.fdcId == id);
+
+	console.log(food);
 
 	const group = "men 19-30";
 
@@ -58,7 +60,12 @@ const food = ({ foodData }) => {
 						})
 						.map((item) => (
 							<NutrientItem
-								item={item}
+								name={item?.nutrient.name}
+								amount={
+									item.amount *
+									(food.foodPortions[0]?.gramWeight / 100)
+								}
+								unitName={item?.nutrient.unitName}
 								group={dv.minerals[group]}
 							/>
 						))}
@@ -77,7 +84,12 @@ const food = ({ foodData }) => {
 						})
 						.map((item) => (
 							<NutrientItem
-								item={item}
+								name={item?.nutrient.name}
+								amount={
+									item.amount *
+									(food.foodPortions[0]?.gramWeight / 100)
+								}
+								unitName={item?.nutrient.unitName}
 								group={dv.vitamins[group]}
 							/>
 						))}

@@ -22,8 +22,7 @@ import "../index.css";
 import Context from "../Context";
 import Head from "next/head";
 
-import foodData from "../foodData.json";
-
+import foodData from "../foodData_foundation.json";
 
 function MyApp({ Component, pageProps }) {
 	useEffect(() => {
@@ -43,6 +42,7 @@ function MyApp({ Component, pageProps }) {
 					name="keywords"
 					content="nutrition, food, vitamins, minerals"
 				/>
+
 				{/*  PWA  */}
 				<meta
 					name="viewport"
@@ -56,7 +56,7 @@ function MyApp({ Component, pageProps }) {
 				/>
 			</Head>
 			<Context>
-				<ion-app>
+				<ion-app mode="ios">
 					<Component {...pageProps} foodData={foodData} />
 				</ion-app>
 			</Context>

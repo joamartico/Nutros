@@ -1,26 +1,22 @@
-const NutrientItem = ({ item, group }) => {
-	const nutrientPercentage = (
-		(item?.amount / group[item?.nutrient.name]) *
-		100
-	).toFixed(1);
+const NutrientItem = ({ group, name, amount, unitName }) => {
+	const nutrientPercentage = ((amount / group[name]) * 100).toFixed(1);
 
-    function getColor(percentage) {
-        if (percentage > 10) {
-            return "success";
-        } else if (percentage > 3) {
-            return "warning";
-        }
-        return "danger";
-
-    }
+	function getColor(percentage) {
+		if (percentage > 10) {
+			return "success";
+		} else if (percentage > 3) {
+			return "warning";
+		}
+		return "danger";
+	}
 
 	return (
 		<ion-item>
 			<ion-label>
-				{item?.nutrient.name} - {item?.amount} {item?.nutrient.unitName}{" "}
+				{name} - {amount.toFixed(1)} {unitName}{" "}
 			</ion-label>
 
-			{group[item?.nutrient.name] && (
+			{group[name] && (
 				<ion-note slot="end" color={getColor(nutrientPercentage)}>
 					{nutrientPercentage}%
 				</ion-note>

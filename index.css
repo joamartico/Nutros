@@ -5,3 +5,8 @@ ion-select {
     top: 0;
     width: 100%;
 }
+
+ion-title, ion-header, ion-toolbar{
+    text-overflow: inherit;
+   white-space: normal;
+}
