@@ -36,11 +36,16 @@ function MyApp({ Component, pageProps }) {
 				<title>Nutros</title>
 				<meta
 					name="description"
-					content="Nutros is your web app to search and track your food and nutrition."
+					content="Nutros is your web app to search and track your food nutrients."
 				/>
 				<meta
 					name="keywords"
-					content="nutrition, food, vitamins, minerals"
+					content="nutrition, food, vitamins, minerals, nutrients"
+				/>
+
+				<meta
+					name="google-site-verification"
+					content="3XoSVdS7QLQWutddbE1sJ60XT3mFR-WXrP80V4AharU"
 				/>
 
 				{/*  PWA  */}
