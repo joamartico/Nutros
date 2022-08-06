@@ -10,13 +10,13 @@ import { useState } from "react";
 import MeScreen from "../tab-screens/MeScreen";
 
 export default function Home({ foodData }) {
-	const [capturedPhoto, setCapturedPhoto] = useState()
+	const [capturedPhoto, setCapturedPhoto] = useState();
 	async function addNewToGallery() {
 		Camera.getPhoto({
 			resultType: CameraResultType.Uri,
 			source: CameraSource.Camera,
 			quality: 100,
-		}).then(foto => setCapturedPhoto(foto.webPath))
+		}).then((foto) => setCapturedPhoto(foto.webPath));
 	}
 
 	return (
@@ -44,11 +44,13 @@ export default function Home({ foodData }) {
 				</ion-tab>
 
 				<ion-tab tab="camera">
-					<CameraScreen capturedPhoto={capturedPhoto} setCapturedPhoto={setCapturedPhoto}
-						/>
-					{
-						capturedPhoto && <img src={capturedPhoto} alt="captured photo" />
-					}
+					<CameraScreen
+						capturedPhoto={capturedPhoto}
+						setCapturedPhoto={setCapturedPhoto}
+					/>
+					{capturedPhoto && (
+						<img src={capturedPhoto} alt="captured photo" />
+					)}
 				</ion-tab>
 
 				<ion-tab tab="me">

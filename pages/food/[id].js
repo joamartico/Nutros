@@ -50,10 +50,38 @@ const food = ({ foodData }) => {
 
 				<ion-list>
 					<ion-list-header>
+						<h2>General</h2>
+					</ion-list-header>
+					{food?.foodNutrients.forEach((item) => {
+						// console.log(item.nutrient);
+					})}
+
+					{food?.foodNutrients
+						.filter((item) => {
+							return (
+								// parseInt(item.nutrient?.id) > 1086 &&
+								parseInt(item.nutrient?.id) < 1087
+							);
+						})
+						.map((item) => (
+							<NutrientItem
+								name={item?.nutrient.name}
+								amount={
+									item.amount *
+									(food.foodPortions[0]?.gramWeight / 100)
+								}
+								unitName={item?.nutrient.unitName}
+								group={dv.minerals[group]}
+							/>
+						))}
+				</ion-list>
+
+				<ion-list>
+					<ion-list-header>
 						<h2>Minerals</h2>
 					</ion-list-header>
 					{food?.foodNutrients.forEach((item) => {
-						console.log(item.nutrient);
+						// console.log(item.nutrient);
 					})}
 
 					{food?.foodNutrients
@@ -87,17 +115,23 @@ const food = ({ foodData }) => {
 								parseInt(item.nutrient?.id) < 1186
 							);
 						})
-						.map((item) => (
-							<NutrientItem
-								name={item?.nutrient.name}
-								amount={
-									item.amount *
-									(food.foodPortions[0]?.gramWeight / 100)
-								}
-								unitName={item?.nutrient.unitName}
-								group={dv.vitamins[group]}
-							/>
-						))}
+						.map((item) => {
+							if (dv.vitamins[group][item?.nutrient.name]) {
+								return (
+									<NutrientItem
+										name={item?.nutrient.name}
+										amount={
+											item.amount *
+												(food.foodPortions[0]
+													?.gramWeight /
+													100) || item.amount
+										}
+										unitName={item?.nutrient.unitName}
+										group={dv.vitamins[group]}
+									/>
+								);
+							}
+						})}
 				</ion-list>
 			</ion-content>
 		</>

@@ -16,9 +16,9 @@ const CameraScreen = ({ capturedPhoto, setCapturedPhoto }) => {
 		}).then(photo => setCapturedPhoto(photo.webPath));
 	}
 
-	useEffect(() => {
-		addNewToGallery();
-	}, []);
+	// useEffect(() => {
+	// 	addNewToGallery();
+	// }, []);
 
 	return (
 		<>

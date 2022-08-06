@@ -5,7 +5,7 @@ import IonSearchbar from "../components/IonSearchbar";
 import IonSelect from "../components/IonSelect";
 import useGlobalState from "../hooks/useGlobalState";
 
-const FoodsScreen = ({foodData}) => {
+const FoodsScreen = ({ foodData }) => {
 	const { setFood } = useGlobalState();
 	const [search, setSearch] = useState("");
 	const router = useRouter();
