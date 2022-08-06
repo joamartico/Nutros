@@ -59,6 +59,7 @@ function MyApp({ Component, pageProps }) {
 					name="apple-mobile-web-app-status-bar-style"
 					content="default"
 				/>
+				<meta name="theme-color" content="#ffffff"></meta>
 			</Head>
 			<Context>
 				<ion-app mode="ios">

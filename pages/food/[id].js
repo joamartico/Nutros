@@ -43,7 +43,7 @@ const food = ({ foodData }) => {
 					</ion-toolbar>
 					<ion-toolbar>
 						<ion-text class="ion-padding">
-								Amount: {food?.foodPortions[0]?.gramWeight} grams
+							Amount: {food?.foodPortions[0]?.gramWeight} grams
 						</ion-text>
 					</ion-toolbar>
 				</ion-header>
@@ -52,6 +52,9 @@ const food = ({ foodData }) => {
 					<ion-list-header>
 						<h2>Minerals</h2>
 					</ion-list-header>
+					{food?.foodNutrients.forEach((item) => {
+						console.log(item.nutrient);
+					})}
 
 					{food?.foodNutrients
 						.filter((item) => {

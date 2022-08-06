@@ -12,7 +12,7 @@ export default function Home({ foodData }) {
 	const [selectedNutrient, setSelectedNutrient] = useState(true);
 
 	const nutrients = foodData.foundationFoods[1]?.foodNutrients.map(
-		(item, i) => item.nutrient.name
+		(item, i) => item.nutrient?.name
 	);
 	// .slice(0, 44);
 
@@ -36,10 +36,10 @@ export default function Home({ foodData }) {
 			console.log(a.foodPortions[0]);
 
 			return (
-				b.foodNutrients.find((item) => item.nutrient.name === nutrient)
+				b.foodNutrients.find((item) => item.nutrient?.name === nutrient)
 					?.amount *
 					(b.foodPortions[0]?.gramWeight / 100) -
-				a.foodNutrients.find((item) => item.nutrient.name === nutrient)
+				a.foodNutrients.find((item) => item.nutrient?.name === nutrient)
 					?.amount *
 					(a.foodPortions[0]?.gramWeight / 100)
 			);
@@ -49,69 +49,104 @@ export default function Home({ foodData }) {
 
 	return (
 		<>
-			<ion-header translucent>
-				<ion-toolbar>
-					<ion-title>Search food</ion-title>
+			<ion-tabs>
+				<ion-tab tab="foods">
+					<ion-header translucent>
+						<ion-toolbar>
+							<ion-title>Search food</ion-title>
 
-					<ion-buttons slot="end">
-						<ion-button>Order By</ion-button>
+							<ion-buttons slot="end">
+								<ion-button>Order By</ion-button>
 
-						<IonSelect
-							onChange={(e) => {
-								orderFoodBy(e.target.value[0]);
-							}}
-							value={selectedNutrient}
-						>
-							{nutrients.map((nutrient, i) => (
-								<ion-select-option
-									key={nutrient}
-									value={nutrient}
+								<IonSelect
+									onChange={(e) => {
+										orderFoodBy(e.target.value[0]);
+									}}
+									value={selectedNutrient}
 								>
-									{nutrient}
-								</ion-select-option>
-							))}
-						</IonSelect>
-					</ion-buttons>
-				</ion-toolbar>
-			</ion-header>
+									{nutrients.map((nutrient, i) => (
+										<ion-select-option
+											key={nutrient}
+											value={nutrient}
+										>
+											{nutrient}
+										</ion-select-option>
+									))}
+								</IonSelect>
+							</ion-buttons>
+						</ion-toolbar>
+					</ion-header>
 
-			<ion-content fullscreen>
-				<ion-header collapse="condense" translucent>
-					<ion-toolbar>
-						<ion-title size="large">Search Food</ion-title>
-					</ion-toolbar>
+					<ion-content fullscreen>
+						<ion-header collapse="condense" translucent>
+							<ion-toolbar>
+								<ion-title size="large">Search Food</ion-title>
+							</ion-toolbar>
 
-					<ion-toolbar display="true">
-						<IonSearchbar
-							value={search}
-							onChange={(e) => setSearch(e.detail.value)}
-							placeholder="Search"
-						/>
-					</ion-toolbar>
-				</ion-header>
+							<ion-toolbar display="true">
+								<IonSearchbar
+									value={search}
+									onChange={(e) => setSearch(e.detail.value)}
+									placeholder="Search"
+								/>
+							</ion-toolbar>
+						</ion-header>
 
-				<ion-list>
-					{foodData.foundationFoods
-						.filter((food) => {
-							search == "" && true;
-							return food.description
-								.toLowerCase()
-								.includes(search.toLowerCase());
-						})
-						.slice(0, 100)
-						.map((food) => (
-							<ion-item
-								key={food.foodCode}
-								onClick={() => {
-									setFood(food);
-									router.push("/food/" + food.fdcId);
-								}}
-							>
-								<ion-label>{food.description}</ion-label>
-							</ion-item>
-						))}
-				</ion-list>
-			</ion-content>
+						<ion-list>
+							{foodData.foundationFoods
+								.filter((food) => {
+									search == "" && true;
+									return food.description
+										.toLowerCase()
+										.includes(search.toLowerCase());
+								})
+								.slice(0, 100)
+								.map((food) => (
+									<ion-item
+										key={food.foodCode}
+										onClick={() => {
+											setFood(food);
+											router.push("/food/" + food.fdcId);
+										}}
+									>
+										<ion-label>
+											{food.description}
+										</ion-label>
+									</ion-item>
+								))}
+						</ion-list>
+					</ion-content>
+				</ion-tab>
+
+				<ion-tab tab="me">
+					<ion-header translucent>
+						<ion-toolbar>
+							<ion-title>Me</ion-title>
+						</ion-toolbar>
+					</ion-header>
+
+					<ion-content fullscreen class="ion-padding">
+						<h1>Me</h1>
+					</ion-content>
+				</ion-tab>
+
+				<ion-tab-bar slot="bottom">
+					<ion-tab-button tab="foods">
+						{/* <ion-label>Foods</ion-label> */}
+						<ion-icon src="/svg/fruits-icon.svg"></ion-icon>
+					</ion-tab-button>
+
+					<ion-tab-button tab="camera">
+						{/* <ion-label>Photo</ion-label> */}
+						<ion-icon src="/svg/camera.svg"></ion-icon>
+					</ion-tab-button>
+
+					<ion-tab-button tab="me">
+						{/* <ion-label>Me</ion-label> */}
+						<ion-icon src="/svg/person.svg"></ion-icon>
+					</ion-tab-button>
+				</ion-tab-bar>
+			</ion-tabs>
 		</>
 	);
 }

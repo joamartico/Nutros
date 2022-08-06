@@ -6,7 +6,6 @@ ion-select {
     width: 100%;
 }
 
-ion-title, ion-header, ion-toolbar{
-    text-overflow: inherit;
-   white-space: normal;
+:root{
+    --ion-color-primary: #7ed445;
 }
