@@ -9,3 +9,11 @@ ion-select {
 :root{
     --ion-color-primary: #7ed445;
 }
+
+/* ion-modal{
+    --ion-background-color: #fff;
+    background-color: #fff !important;
+    z-index: 99999999999 !important;
+    height: 50vh !important;
+    --height: 50vh !important;
+} */

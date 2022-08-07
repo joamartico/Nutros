@@ -3,13 +3,17 @@ import { useState } from "react";
 import styled from "styled-components";
 import IonSearchbar from "../components/IonSearchbar";
 import IonSelect from "../components/IonSelect";
+import SearchFoodList from "../components/SearchFoodList";
 import useGlobalState from "../hooks/useGlobalState";
 
 const FoodsScreen = ({ foodData }) => {
-	const { setFood } = useGlobalState();
-	const [search, setSearch] = useState("");
-	const router = useRouter();
+	// const { setFood } = useGlobalState();
+	// const [search, setSearch] = useState("");
+	// const router = useRouter();
 	const [selectedNutrient, setSelectedNutrient] = useState(true);
+	const { setFood } = useGlobalState();
+	const router = useRouter();
+
 
 	const nutrients = foodData.foundationFoods[1]?.foodNutrients.map(
 		(item, i) => item.nutrient?.name
@@ -76,7 +80,14 @@ const FoodsScreen = ({ foodData }) => {
 			</ion-header>
 
 			<ion-content fullscreen>
-				<ion-header collapse="condense" translucent>
+				<SearchFoodList 
+				foodData={foodData}
+				onClickItem={(food) => {
+					setFood(food);
+					router.push("/food/" + food.fdcId);
+				}}
+				/>
+				{/* <ion-header collapse="condense" translucent>
 					<ion-toolbar>
 						<ion-title size="large">Search Food</ion-title>
 					</ion-toolbar>
@@ -110,7 +121,7 @@ const FoodsScreen = ({ foodData }) => {
 								<ion-label>{food.description}</ion-label>
 							</ion-item>
 						))}
-				</ion-list>
+				</ion-list> */}
 			</ion-content>
 		</>
 	);

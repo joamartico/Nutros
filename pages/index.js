@@ -54,9 +54,10 @@ export default function Home({ foodData }) {
 				</ion-tab>
 
 				<ion-tab tab="me">
-					<MeScreen />
+					<MeScreen foodData={foodData} />
 				</ion-tab>
 			</ion-tabs>
+				
 		</>
 	);
 }

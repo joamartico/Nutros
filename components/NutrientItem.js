@@ -1,5 +1,5 @@
 const NutrientItem = ({ group, name, amount, unitName }) => {
-	const nutrientPercentage = ((amount / group[name]) * 100).toFixed(1);
+	const nutrientPercentage = ((amount / group[name]) * 100).toFixed(1) 
 
 	function getColor(percentage) {
 		if (percentage > 10) {
