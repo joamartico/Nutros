@@ -43,7 +43,8 @@ const food = ({ foodData }) => {
 					</ion-toolbar>
 					<ion-toolbar>
 						<ion-text class="ion-padding">
-							Amount: {food?.foodPortions[0]?.gramWeight || 100} grams
+							Amount: {food?.foodPortions[0]?.gramWeight || 100}{" "}
+							grams
 						</ion-text>
 					</ion-toolbar>
 				</ion-header>
@@ -100,6 +101,7 @@ const food = ({ foodData }) => {
 										(food.foodPortions[0]?.gramWeight /
 											100) || item.amount
 								}
+								
 								unitName={item?.nutrient.unitName}
 								group={dv.minerals[group]}
 							/>
@@ -128,6 +130,7 @@ const food = ({ foodData }) => {
 													?.gramWeight /
 													100) || item.amount
 										}
+										
 										unitName={item?.nutrient.unitName}
 										group={dv.vitamins[group]}
 									/>

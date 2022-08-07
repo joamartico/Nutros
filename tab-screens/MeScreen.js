@@ -1,4 +1,5 @@
 import { modalController } from "@ionic/core";
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import FoodItem from "../components/FoodItem";
@@ -16,38 +17,51 @@ const vitamins = [
 	"Vitamin C",
 	"Vitamin D",
 	"Vitamin E",
-	"Vitamin K"
+	"Vitamin K",
 ];
+
+function getPortionName(food) {
+	if (!food.portions) return "";
+	const name = food.foodPortions[0].portionDescription;
+	// if name starts with 1, remove it
+	if (name?.startsWith("1 ")) {
+		return name.substring(2);
+	}
+	return name;
+}
 
 const MeScreen = ({ foodData }) => {
 	const [foods, setFoods] = useState([]);
-	const [selectedIndex, setSelectedIndex] = useState();
 	const [currentModal, setCurrentModal] = useState();
 
 	const pageRef = useRef();
 	const modalRef = useRef();
 
-	async function openModal() {
+	const router = useRouter();
+
+	async function openModal(opts = {}) {
 		window.modalController = await modalController; // necesario?
 		const modal = await modalController.create({
 			component: modalRef.current,
-			swipeToClose: true,
-			// ...opts,
+			...opts,
 		});
 		modal.present();
 
 		setCurrentModal(modal);
-
-		// modal.onDidDismiss().then(() => {
-		// 	setCurrentModal(null);
-		// }
-		// );
 	}
 
 	function openCardModal() {
 		openModal({
 			swipeToClose: true,
 			presentingElement: pageRef.current,
+		});
+	}
+
+	function openSheetModal() {
+		openModal({
+			breakpoints: [0, 0.2, 0.5, 1],
+			initialBreakpoint: 0.2,
+			swipeToClose: true,
 		});
 	}
 
@@ -62,70 +76,76 @@ const MeScreen = ({ foodData }) => {
 	}
 
 	return (
-		<div ref={pageRef} class="ion-page" className="ion-page">
-			<ion-header translucent>
-				<ion-toolbar>
-					<ion-title>Your Daily Nutrition</ion-title>
-				</ion-toolbar>
-			</ion-header>
-
-			<ion-content fullscreen>
-				<ion-header collapse="condense">
+		<>
+			<div ref={pageRef} class="ion-page" className="ion-page">
+				<ion-header translucent>
 					<ion-toolbar>
-						<ion-title size="large">Your Daily Nutrition</ion-title>
+						<ion-title>Your Daily Nutrition</ion-title>
 					</ion-toolbar>
 				</ion-header>
 
-				<br />
+				<ion-content fullscreen>
+					<ion-header collapse="condense">
+						<ion-toolbar>
+							<ion-title size="large">
+								Your Daily Nutrition
+							</ion-title>
+						</ion-toolbar>
+					</ion-header>
 
-				<ion-list>
-					<ion-list-header>
-						<h2>Today</h2>
-					</ion-list-header>
+					<br />
 
-					{foods.map((food, i) => {
-						return (
-							<FoodItem
-								name={food.description}
-								amount={
-									food.foodPortions
-										? food.foodPortions[0].gramWeight
-										: ""
-								}
-								onClick={() => {
-									openCardModal();
-									setSelectedIndex(i);
-								}}
-							/>
-						);
-					})}
+					<ion-list>
+						<ion-list-header>
+							<h2>Today</h2>
+						</ion-list-header>
 
-					<AddButton
-						onClick={() =>
-							setFoods((prev) => [
-								...prev,
-								{ description: "Search Food" },
-							])
-						}
-					>
-						Add Food
-					</AddButton>
-				</ion-list>
+						{foods.map((food, i) => {
+							return (
+								<FoodItem
+									name={food.description}
+									amount={
+										food.foodPortions
+											? food.foodPortions[0].gramWeight
+											: ""
+									}
+									portionName={getPortionName(food)}
+									onClick={() => {
+										router.push("/food/" + food.fdcId);
+									}}
+									onAdd={() => {
+										const newFoods = [...foods];
+										newFoods[i].portions += 1;
+										setFoods(newFoods);
+									}}
+									onRemove={() => {
+										const newFoods = [...foods];
+										newFoods[i].portions -= 1;
+										setFoods(newFoods);
+									}}
+									portions={food.portions}
+								/>
+							);
+						})}
 
-				<ion-list>
-					<ion-list-header>
-						<h2>Vitamins</h2>
-					</ion-list-header>
-				</ion-list>
+						<AddButton onClick={openCardModal}>Add Food</AddButton>
+					</ion-list>
 
-				<ion-list>
-					<ion-list-header>
-						<h2>Minerals</h2>
-					</ion-list-header>
-				</ion-list>
-			</ion-content>
+					<ion-list>
+						<ion-list-header>
+							<h2>Vitamins</h2>
+						</ion-list-header>
+					</ion-list>
 
-			<div ref={modalRef}>
+					<ion-list>
+						<ion-list-header>
+							<h2>Minerals</h2>
+						</ion-list-header>
+					</ion-list>
+				</ion-content>
+			</div>
+
+			<Modal ref={modalRef} currentModal={currentModal ? true : false}>
 				<ion-header translucent>
 					<ion-toolbar>
 						<ion-title>Search your Food</ion-title>
@@ -143,16 +163,16 @@ const MeScreen = ({ foodData }) => {
 						noTitle
 						onClickItem={(food) => {
 							console.log("food: ", food);
-							setFoods((prev) => {
-								prev[selectedIndex] = food;
-								return [...prev];
-							});
+							setFoods((prev) => [
+								...prev,
+								{ ...food, portions: 1 },
+							]);
 							dismissModal();
 						}}
 					/>
 				</ion-content>
-			</div>
-		</div>
+			</Modal>
+		</>
 	);
 };
 
@@ -174,4 +194,8 @@ const AddButton = styled.div`
 	cursor: pointer;
 	font-size: 16px;
 	font-weight: bold;
+`;
+
+const Modal = styled.div`
+	display: ${({ currentModal }) => (currentModal ? "block" : "none")};
 `;

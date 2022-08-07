@@ -1,17 +1,23 @@
 import styled from "styled-components";
 
 const FoodItem = (props) => {
-	const { name, amount } = props;
+	const { name, portionName, amount, portions, onClick, onRemove, onAdd } = props;
 	return (
-		<ion-item {...props}>
-			<ion-label>
+		<ion-item>
+			<ion-label onClick={onClick}>
 				<h2>{name}</h2>
-				{amount && <p>{amount} g</p>}
+				<p>{portions} {portionName || ""} ({(portions * amount).toFixed(1)} g)</p>
 			</ion-label>
 
-			<ion-button slot="end" fill="clear">
-				<ion-icon name="add-circle-outline"></ion-icon>
-			</ion-button>
+			<ion-buttons slot="end">
+				<ion-button slot="end" fill="clear" onClick={onRemove}>
+					<ion-icon name="remove-circle-outline"></ion-icon>
+				</ion-button>
+
+				<ion-button slot="end" fill="clear" onClick={onAdd}>
+					<ion-icon name="add-circle-outline"></ion-icon>
+				</ion-button>
+			</ion-buttons>
 		</ion-item>
 	);
 };
