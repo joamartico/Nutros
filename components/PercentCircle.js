@@ -11,7 +11,7 @@ const PercentCircle = ({ num = 0, name }) => {
 				<Circle
 					cx="60"
 					cy="60"
-					r="18px"
+					r="53"
 					strokeLinecap="round"
 					num={num > 100 ? 100 : num}
 				/>
@@ -47,11 +47,12 @@ const ExtCircle = styled.div`
 			return "var(--ion-color-success)";
 		}
 	}}}; */
-    background: #cacaca99;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 5px;
+	background: #cacaca99;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 5px;
+    margin-top: -60px;
 `;
 
 const IntCircle = styled.div`
@@ -66,7 +67,7 @@ const IntCircle = styled.div`
 
 const Circle = styled.circle`
 	fill: none;
-	stroke-width: 5px;
+	stroke-width: 13px;
 	stroke: ${({ num }) => {
 		if (num < 30) {
 			return "var(--ion-color-danger)";
@@ -76,17 +77,17 @@ const Circle = styled.circle`
 			return "var(--ion-color-success)";
 		}
 	}}};
-	stroke-dasharray:113;
+	stroke-dasharray:330;
 	stroke-dashoffset: ${({ num }) => {
-        return (113 - (num / 100) * 113);
-    }};
+		return 330 - (num / 100) * 330;
+	}};
     transition: all 0.5s ease-in-out;
 
 `;
 
 const Svg = styled.svg`
-	position: absolute;
-	height: 100%;
+	position: relative;
 	width: 100%;
-	top: 11.5px;
+	top: 0px;
+	height: 60px;
 `;
