@@ -7,9 +7,6 @@ import SearchFoodList from "../components/SearchFoodList";
 import useGlobalState from "../hooks/useGlobalState";
 
 const FoodsScreen = ({ foodData }) => {
-	// const { setFood } = useGlobalState();
-	// const [search, setSearch] = useState("");
-	// const router = useRouter();
 	const [selectedNutrient, setSelectedNutrient] = useState(true);
 	const { setFood } = useGlobalState();
 	const router = useRouter();
@@ -20,20 +17,7 @@ const FoodsScreen = ({ foodData }) => {
 	);
 	// .slice(0, 44);
 
-	function findPortion(food) {
-		const portion = food.foodPortions.find((portion, i) => {
-			return (
-				portion.modifier == "60813" ||
-				portion.modifier == "60343" ||
-				portion.modifier == "61238" ||
-				portion.modifier == "62368" ||
-				portion.modifier == "10043" ||
-				portion.modifier == "10205" ||
-				i === 0
-			);
-		});
-		return portion.gramWeight;
-	}
+	
 
 	async function orderFoodBy(nutrient) {
 		await foodData.foundationFoods.sort((a, b) => {
@@ -87,41 +71,6 @@ const FoodsScreen = ({ foodData }) => {
 					router.push("/food/" + food.fdcId);
 				}}
 				/>
-				{/* <ion-header collapse="condense" translucent>
-					<ion-toolbar>
-						<ion-title size="large">Search Food</ion-title>
-					</ion-toolbar>
-
-					<ion-toolbar display="true">
-						<IonSearchbar
-							value={search}
-							onChange={(e) => setSearch(e.detail.value)}
-							placeholder="Search"
-						/>
-					</ion-toolbar>
-				</ion-header>
-
-				<ion-list>
-					{foodData.foundationFoods
-						.filter((food) => {
-							search == "" && true;
-							return food.description
-								.toLowerCase()
-								.includes(search.toLowerCase());
-						})
-						.slice(0, 100)
-						.map((food) => (
-							<ion-item
-								key={food.foodCode}
-								onClick={() => {
-									setFood(food);
-									router.push("/food/" + food.fdcId);
-								}}
-							>
-								<ion-label>{food.description}</ion-label>
-							</ion-item>
-						))}
-				</ion-list> */}
 			</ion-content>
 		</>
 	);

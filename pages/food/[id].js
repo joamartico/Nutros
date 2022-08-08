@@ -10,13 +10,6 @@ const food = ({ foodData }) => {
 	const router = useRouter();
 	const { id } = router.query;
 
-	// const { food, setFood } = useGlobalState();
-
-	// if(!food) {
-	// 	const newFood = foodData.foundationFoods.find(f => f.fdcId === id);
-	// 	setFood(newFood);
-	// }
-
 	const food = foodData.foundationFoods.find((f) => f.fdcId == id);
 
 	console.log(food);

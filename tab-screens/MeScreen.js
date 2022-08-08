@@ -3,27 +3,44 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import FoodItem from "../components/FoodItem";
+import PercentCircle from "../components/PercentCircle";
 import SearchFoodList from "../components/SearchFoodList";
+import dv from "../dv.json";
 
-const vitamins = [
-	"Vitamin A",
-	"Vitamin B1",
-	"Vitamin B2",
-	"Vitamin B3",
-	"Vitamin B5",
-	"Vitamin B6",
-	"Vitamin B9",
-	"Vitamin B12",
-	"Vitamin C",
-	"Vitamin D",
-	"Vitamin E",
-	"Vitamin K",
+const vitamins = ["A", "B1", "B2", "B3", "B6", "B9", "B12", "C", "D", "E", "K"];
+
+const vitaminsNames = [
+	"Vitamin A, RAE",
+	"Thiamin",
+	"Riboflavin",
+	"Niacin",
+	"Vitamin B-6",
+	"Folate, total",
+	"Vitamin B-12",
+	"Vitamin C, total ascorbic acid",
+	"Vitamin D (D2 + D3)",
+	"Vitamin E (alpha-tocopherol)",
+	"Vitamin K (phylloquinone)",
 ];
+
+const minerals = ["Ca", "Cu", "Fe", "K", "Mg", "P", "Se", "Zn"];
+
+const mineralsNames = [
+	"Calcium, Ca",
+	"Copper, Cu",
+	"Iron, Fe",
+	"Potassium, K",
+	"Magnesium, Mg",
+	"Phosphorus, P",
+	"Selenium, Se",
+	"Zinc, Zn",
+];
+
+const group = "men 19-30";
 
 function getPortionName(food) {
 	if (!food.portions) return "";
 	const name = food.foodPortions[0].portionDescription;
-	// if name starts with 1, remove it
 	if (name?.startsWith("1 ")) {
 		return name.substring(2);
 	}
@@ -75,6 +92,26 @@ const MeScreen = ({ foodData }) => {
 		}
 	}
 
+	function getDVPercent(nutrientName, nutrientType) {
+		let amountSum = 0;
+		foods.map((food) => {
+			console.log("FOOD", food);
+			food.foodNutrients.map((item) => {
+				if (item.nutrient?.name === nutrientName) {
+					amountSum +=
+						item.amount *
+						(food.foodPortions[0].gramWeight / 100) *
+						food.portions;
+				}
+			});
+		});
+
+		return (
+			(amountSum / dv[nutrientType][group][nutrientName]) *
+			100
+		).toFixed(0);
+	}
+
 	return (
 		<>
 			<div ref={pageRef} class="ion-page" className="ion-page">
@@ -121,6 +158,9 @@ const MeScreen = ({ foodData }) => {
 									onRemove={() => {
 										const newFoods = [...foods];
 										newFoods[i].portions -= 1;
+										if (newFoods[i].portions === 0) {
+											newFoods.splice(i, 1);
+										}
 										setFoods(newFoods);
 									}}
 									portions={food.portions}
@@ -135,12 +175,34 @@ const MeScreen = ({ foodData }) => {
 						<ion-list-header>
 							<h2>Vitamins</h2>
 						</ion-list-header>
+
+						<Row className="ion-padding">
+							{vitamins.map((vitamin, i) => {
+								return (
+									<PercentCircle
+										num={getDVPercent(vitaminsNames[i], "vitamins")}
+										name={vitamin}
+									/>
+								);
+							})}
+						</Row>
 					</ion-list>
 
 					<ion-list>
 						<ion-list-header>
 							<h2>Minerals</h2>
 						</ion-list-header>
+
+						<Row className="ion-padding">
+							{minerals.map((mineral, i) => {
+								return (
+									<PercentCircle
+										num={getDVPercent(mineralsNames[i], "minerals")}
+										name={mineral}
+									/>
+								);
+							})}
+						</Row>
 					</ion-list>
 				</ion-content>
 			</div>
@@ -192,10 +254,20 @@ const AddButton = styled.div`
 	margin-top: 10px;
 	margin-bottom: 20px;
 	cursor: pointer;
-	font-size: 16px;
+	font-size: 15px;
 	font-weight: bold;
+	color: #040;
 `;
 
 const Modal = styled.div`
 	display: ${({ currentModal }) => (currentModal ? "block" : "none")};
+`;
+
+const Row = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+	overflow-x: scroll;
 `;
