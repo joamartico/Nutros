@@ -180,24 +180,32 @@ const MeScreen = ({ foodData }) => {
 							{vitamins.map((vitamin, i) => {
 								return (
 									<PercentCircle
-										num={getDVPercent(vitaminsNames[i], "vitamins")}
+										num={getDVPercent(
+											vitaminsNames[i],
+											"vitamins"
+										)}
 										name={vitamin}
 									/>
 								);
 							})}
 						</Row>
 					</ion-list>
+						
 
 					<ion-list>
 						<ion-list-header>
 							<h2>Minerals</h2>
 						</ion-list-header>
 
+
 						<Row className="ion-padding">
 							{minerals.map((mineral, i) => {
 								return (
 									<PercentCircle
-										num={getDVPercent(mineralsNames[i], "minerals")}
+										num={getDVPercent(
+											mineralsNames[i],
+											"minerals"
+										)}
 										name={mineral}
 									/>
 								);
@@ -271,3 +279,4 @@ const Row = styled.div`
 	margin-bottom: 10px;
 	overflow-x: scroll;
 `;
+
