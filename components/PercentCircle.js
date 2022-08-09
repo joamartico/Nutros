@@ -53,6 +53,7 @@ const ExtCircle = styled.div`
 	align-items: center;
 	margin-bottom: 5px;
     margin-top: -60px;
+    
 `;
 
 const IntCircle = styled.div`
@@ -82,7 +83,8 @@ const Circle = styled.circle`
 		return 330 - (num / 100) * 330;
 	}};
     transition: all 0.5s ease-in-out;
-
+	transform: rotate(-90deg);
+	transform-origin: center;
 `;
 
 const Svg = styled.svg`
