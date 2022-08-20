@@ -6,35 +6,10 @@ import FoodItem from "../components/FoodItem";
 import PercentCircle from "../components/PercentCircle";
 import SearchFoodList from "../components/SearchFoodList";
 import dv from "../dv.json";
+import { minerals, vitamins } from "../nutrients";
 
-const vitamins = ["A", "B1", "B2", "B3", "B6", "B9", "B12", "C", "D", "E", "K"];
 
-const vitaminsNames = [
-	"Vitamin A, RAE",
-	"Thiamin",
-	"Riboflavin",
-	"Niacin",
-	"Vitamin B-6",
-	"Folate, total",
-	"Vitamin B-12",
-	"Vitamin C, total ascorbic acid",
-	"Vitamin D (D2 + D3)",
-	"Vitamin E (alpha-tocopherol)",
-	"Vitamin K (phylloquinone)",
-];
 
-const minerals = ["Ca", "Cu", "Fe", "K", "Mg", "P", "Se", "Zn"];
-
-const mineralsNames = [
-	"Calcium, Ca",
-	"Copper, Cu",
-	"Iron, Fe",
-	"Potassium, K",
-	"Magnesium, Mg",
-	"Phosphorus, P",
-	"Selenium, Se",
-	"Zinc, Zn",
-];
 
 const group = "men 19-30";
 
@@ -181,10 +156,10 @@ const MeScreen = ({ foodData }) => {
 								return (
 									<PercentCircle
 										num={getDVPercent(
-											vitaminsNames[i],
+											vitamin.dbName,
 											"vitamins"
 										)}
-										name={vitamin}
+										name={vitamin.shortName}
 									/>
 								);
 							})}
@@ -203,10 +178,10 @@ const MeScreen = ({ foodData }) => {
 								return (
 									<PercentCircle
 										num={getDVPercent(
-											mineralsNames[i],
+											mineral.dbName,
 											"minerals"
 										)}
-										name={mineral}
+										name={mineral.shortName}
 									/>
 								);
 							})}

@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 
 const IonSelect = ({ onChange, children }) => {
-    const ref = useRef();
+	const ref = useRef();
 
-    useEffect(() => {
+	useEffect(() => {
 		ref?.current?.addEventListener("ionChange", onChange);
 
 		// cleanup this component
@@ -12,7 +12,15 @@ const IonSelect = ({ onChange, children }) => {
 		};
 	}, []);
 
-	return <ion-select multiple="true" ref={ref}>{children}</ion-select>;
+	return (
+		<ion-select 
+			multiple="true" 
+			ref={ref} 
+			interface="action-sheet"
+		>
+			{children}
+		</ion-select>
+	);
 };
 
 export default IonSelect;

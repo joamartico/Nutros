@@ -5,6 +5,7 @@ import IonSearchbar from "../components/IonSearchbar";
 import IonSelect from "../components/IonSelect";
 import SearchFoodList from "../components/SearchFoodList";
 import useGlobalState from "../hooks/useGlobalState";
+import { minerals, vitamins } from "../nutrients";
 
 const FoodsScreen = ({ foodData }) => {
 	const [selectedNutrient, setSelectedNutrient] = useState(true);
@@ -49,13 +50,23 @@ const FoodsScreen = ({ foodData }) => {
 								orderFoodBy(e.target.value[0]);
 							}}
 							value={selectedNutrient}
+							
+
 						>
-							{nutrients.map((nutrient, i) => (
+							{vitamins.map((vitamin) => (
 								<ion-select-option
-									key={nutrient}
-									value={nutrient}
+									key={vitamin.shortName}
+									value={vitamin.dbName}
 								>
-									{nutrient}
+									{vitamin.completeName}
+								</ion-select-option>
+							))}
+							{minerals.map((mineral) => (
+								<ion-select-option
+									key={mineral.shortName}
+									value={mineral.dbName}
+								>
+									{mineral.completeName}
 								</ion-select-option>
 							))}
 						</IonSelect>
