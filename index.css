@@ -81,4 +81,7 @@ ion-select {
     --ion-color-light-tint: #f5f6f9;
   }
 
- 
+ /* add 50px padding bottom to content */
+ion-list {
+    margin-bottom: 40px !important;
+}

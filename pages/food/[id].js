@@ -38,9 +38,9 @@ const food = ({ foodData }) => {
 					<ion-toolbar>
 						<ion-text class="ion-padding">
 							<span class="ion-text-capitalize">
-								{food?.foodPortions[0].portionDescription ||
-									food?.foodPortions[0].measureUnit.name ||
-									food?.foodPortions[0].modifier ||
+								{food?.foodPortions[0]?.portionDescription ||
+									food?.foodPortions[0]?.measureUnit.name ||
+									food?.foodPortions[0]?.modifier ||
 									"Portion"}{" "}
 							</span>
 							({food?.foodPortions[0]?.gramWeight || 100} grams)
@@ -165,7 +165,7 @@ const food = ({ foodData }) => {
 								dbName={item?.nutrient.name}
 								amount={
 									item.amount *
-										(food.foodPortions[0]?.gramWeight /
+										(food?.foodPortions[0]?.gramWeight /
 											100) || item.amount
 								}
 								unitName={item?.nutrient.unitName}
