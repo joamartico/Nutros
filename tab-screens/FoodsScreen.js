@@ -12,17 +12,13 @@ const FoodsScreen = ({ foodData }) => {
 	const { setFood } = useGlobalState();
 	const router = useRouter();
 
-
-	const nutrients = foodData.foundationFoods[1]?.foodNutrients.map(
+	const nutrients = foodData.surveyFoods[1]?.foodNutrients.map(
 		(item, i) => item.nutrient?.name
 	);
 	// .slice(0, 44);
 
-	
-
 	async function orderFoodBy(nutrient) {
-		await foodData.foundationFoods.sort((a, b) => {
-
+		await foodData.surveyFoods.sort((a, b) => {
 			return (
 				b.foodNutrients.find((item) => item.nutrient?.name === nutrient)
 					?.amount *
@@ -49,8 +45,6 @@ const FoodsScreen = ({ foodData }) => {
 								orderFoodBy(e.target.value[0]);
 							}}
 							value={selectedNutrient}
-							
-
 						>
 							{vitamins.map((vitamin) => (
 								<ion-select-option
@@ -74,12 +68,12 @@ const FoodsScreen = ({ foodData }) => {
 			</ion-header>
 
 			<ion-content fullscreen>
-				<SearchFoodList 
-				foodData={foodData}
-				onClickItem={(food) => {
-					setFood(food);
-					router.push("/food/" + food.fdcId);
-				}}
+				<SearchFoodList
+					foodData={foodData}
+					onClickItem={(food) => {
+						setFood(food);
+						router.push("/food/" + food.fdcId);
+					}}
 				/>
 			</ion-content>
 		</>

@@ -27,7 +27,7 @@ const SearchFoodList = ({ foodData, noTitle, onClickItem }) => {
 			</ion-header>
 
 			<ion-list>
-				{foodData.foundationFoods
+				{foodData.surveyFoods
 					.filter((food) => {
 						search == "" && true;
 						return food.description
@@ -44,7 +44,6 @@ const SearchFoodList = ({ foodData, noTitle, onClickItem }) => {
 							// }}
 							// onClick={onClickItem}
 							onClick={() => onClickItem(food)}
-
 						>
 							<ion-label>{food.description}</ion-label>
 						</ion-item>

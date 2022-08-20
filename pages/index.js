@@ -57,7 +57,6 @@ export default function Home({ foodData }) {
 					<MeScreen foodData={foodData} />
 				</ion-tab>
 			</ion-tabs>
-				
 		</>
 	);
 }
@@ -67,7 +66,7 @@ export default function Home({ foodData }) {
 // 	const params = {
 // 		api_key: "X66ugLvvhHYrDgeiwTuSwPZEJAhupK2WSEEcxvaC",
 // 		query: "Mango",
-// 		dataType: ["foundation (FNDDS)"],
+// 		dataType: ["survey (FNDDS)"],
 // 		pagesize: 200,
 // 	};
 // 	const res = await fetch(

@@ -11,7 +11,7 @@ const food = ({ foodData }) => {
 	const router = useRouter();
 	const { id } = router.query;
 
-	const food = foodData.foundationFoods.find((f) => f.fdcId == id);
+	const food = foodData.surveyFoods.find((f) => f.fdcId == id);
 
 	console.log(food);
 
