@@ -31,7 +31,7 @@ const Center = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	margin-right: 15px;
+	margin-right: 25px;
 `;
 
 const ExtCircle = styled.div`

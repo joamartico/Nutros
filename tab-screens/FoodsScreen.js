@@ -22,7 +22,6 @@ const FoodsScreen = ({ foodData }) => {
 
 	async function orderFoodBy(nutrient) {
 		await foodData.foundationFoods.sort((a, b) => {
-			console.log(a.foodPortions[0]);
 
 			return (
 				b.foodNutrients.find((item) => item.nutrient?.name === nutrient)

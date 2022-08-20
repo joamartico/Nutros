@@ -54,6 +54,11 @@ export const vitamins = [
 		shortName: "K",
 		dbName: "Vitamin K (phylloquinone)",
 	},
+	{
+		completeName: "Choline",
+		dbName: "Choline, total",
+		shortName: "Choline",
+	}
 ];
 
 export const minerals = [

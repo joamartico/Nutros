@@ -152,6 +152,8 @@ const food = ({ foodData }) => {
 
 					{food?.foodNutrients
 						.filter((item) => {
+							console.log(item?.nutrient.name, item.amount);
+
 							return (
 								// parseInt(item.nutrient?.id) > 1086 &&
 								parseInt(item.nutrient?.id) < 1087

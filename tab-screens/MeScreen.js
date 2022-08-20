@@ -62,15 +62,12 @@ const MeScreen = ({ foodData }) => {
 			currentModal.dismiss().then(() => {
 				setCurrentModal(null);
 			});
-		} else {
-			console.log("no modal to dismiss");
-		}
+		} 
 	}
 
 	function getDVPercent(nutrientName, nutrientType) {
 		let amountSum = 0;
 		foods.map((food) => {
-			console.log("FOOD", food);
 			food.foodNutrients.map((item) => {
 				if (item.nutrient?.name === nutrientName) {
 					amountSum +=
@@ -207,7 +204,6 @@ const MeScreen = ({ foodData }) => {
 						foodData={foodData}
 						noTitle
 						onClickItem={(food) => {
-							console.log("food: ", food);
 							setFoods((prev) => [
 								...prev,
 								{ ...food, portions: 1 },
@@ -253,5 +249,11 @@ const Row = styled.div`
 	align-items: center;
 	margin-bottom: 10px;
 	overflow-x: scroll;
+	white-space: nowrap; 
+	scrollbar-width: none;
+	::-webkit-scrollbar {
+		display: none;
+	}
+
 `;
 

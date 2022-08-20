@@ -18,7 +18,7 @@ const NutrientItem = ({ group, completeName, dbName, amount, unitName }) => {
 				<h2>{completeName}</h2>
 
 				<p>
-					{amount?.toFixed(1)} {unitName}{" "}
+					{amount?.toFixed(1) || "Null"} {unitName}{" "}
 				</p>
 			</ion-label>
 
