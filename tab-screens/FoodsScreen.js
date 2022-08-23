@@ -47,7 +47,7 @@ const FoodsScreen = ({ foodData }) => {
 				console.log("SplitA: ", splittedFoodA);
 				console.log("SplitB: ", splittedFoodB);
 			}
-			if (splittedFoodA.length < 2) return true;
+			if (splittedFoodA.length < 2 || !splittedFoodB) return true;
 
 		
 
