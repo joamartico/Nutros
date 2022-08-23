@@ -12,13 +12,13 @@ const FoodsScreen = ({ foodData }) => {
 	const { setFood } = useGlobalState();
 	const router = useRouter();
 
-	const nutrients = foodData.surveyFoods[1]?.foodNutrients.map(
+	const nutrients = foodData[1]?.foodNutrients.map(
 		(item, i) => item.nutrient?.name
 	);
 	// .slice(0, 44);
 
 	async function orderFoodBy(nutrient) {
-		await foodData.surveyFoods.sort((a, b) => {
+		await foodData.sort((a, b) => {
 			return (
 				b.foodNutrients.find((item) => item.nutrient?.name === nutrient)
 					?.amount *
@@ -29,6 +29,35 @@ const FoodsScreen = ({ foodData }) => {
 			);
 		});
 		setSelectedNutrient(nutrient);
+	}
+
+	console.log(foodData);
+
+	function getCoso() {
+		// await foodData.map((food, i) => {
+		// 	if (foodData[i].split(",") == foodData[i + 1].split(",")) {
+		// 		foodData.splice(i + 1);
+		// 	}
+		// });
+
+		return foodData.filter((food, i) => {
+			const splittedFoodA = foodData[i].description.split(", ");
+			const splittedFoodB = foodData[i + 1]?.description.split(", ");
+			if (splittedFoodA[0] == "Egg") {
+				console.log("SplitA: ", splittedFoodA);
+				console.log("SplitB: ", splittedFoodB);
+			}
+			if (splittedFoodA.length < 2) return true;
+
+		
+
+			return (
+				splittedFoodA[0] != splittedFoodB[0] ||
+				splittedFoodA[1] == "raw" ||
+				splittedFoodA[1] == "whole" ||
+				splittedFoodA[1] == "NFS"
+			);
+		});
 	}
 
 	return (
@@ -69,7 +98,7 @@ const FoodsScreen = ({ foodData }) => {
 
 			<ion-content fullscreen>
 				<SearchFoodList
-					foodData={foodData}
+					foodData={getCoso()}
 					onClickItem={(food) => {
 						setFood(food);
 						router.push("/food/" + food.fdcId);

@@ -27,8 +27,7 @@ const SearchFoodList = ({ foodData, noTitle, onClickItem }) => {
 			</ion-header>
 
 			<ion-list>
-				{foodData.surveyFoods
-					.filter((food) => {
+				{foodData?.filter((food) => {
 						search == "" && true;
 						return food.description
 							.toLowerCase()
