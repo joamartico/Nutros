@@ -13,7 +13,7 @@ const food = ({ foodData }) => {
 
 	const food = foodData.find((f) => f.fdcId == id);
 
-	console.log(food);
+
 
 	const group = "men 19-30";
 

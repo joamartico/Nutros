@@ -31,7 +31,6 @@ const FoodsScreen = ({ foodData }) => {
 		setSelectedNutrient(nutrient);
 	}
 
-	console.log(foodData);
 
 	function getCoso() {
 		// await foodData.map((food, i) => {
@@ -43,10 +42,7 @@ const FoodsScreen = ({ foodData }) => {
 		return foodData.filter((food, i) => {
 			const splittedFoodA = foodData[i].description.split(", ");
 			const splittedFoodB = foodData[i + 1]?.description.split(", ");
-			if (splittedFoodA[0] == "Egg") {
-				console.log("SplitA: ", splittedFoodA);
-				console.log("SplitB: ", splittedFoodB);
-			}
+			
 			if (splittedFoodA.length < 2 || !splittedFoodB) return true;
 
 		
