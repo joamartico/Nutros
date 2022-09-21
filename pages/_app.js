@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { defineCustomElements as ionDefineCustomElements } from "@ionic/core/loader";
+import Script from "next/script";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/core/css/core.css";
@@ -61,6 +62,21 @@ function MyApp({ Component, pageProps }) {
 				/>
 				<meta name="theme-color" content="#ffffff"></meta>
 			</Head>
+
+			<Script
+				strategy="afterInteractive"
+				src="https://www.googletagmanager.com/gtag/js?id=G-QZLETX27HH"
+			/>
+
+			<Script id="google-analytics" strategy="afterInteractive">
+				{`
+					window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+					gtag('config', 'G-QZLETX27HH');	
+				`}
+			</Script>
+
 			<Context>
 				<ion-app mode="ios">
 					<Component {...pageProps} foodData={foodData} />
