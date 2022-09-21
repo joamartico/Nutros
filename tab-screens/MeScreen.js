@@ -1,4 +1,5 @@
 import { modalController } from "@ionic/core";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
@@ -86,6 +87,10 @@ const MeScreen = ({ foodData }) => {
 
 	return (
 		<>
+			{/* <Head>
+				<title>Your Daily Nutrition - Nutros</title>
+			</Head> */}
+
 			<div ref={pageRef} class="ion-page" className="ion-page">
 				<ion-header translucent>
 					<ion-toolbar>

@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
@@ -58,6 +59,10 @@ const FoodsScreen = ({ foodData }) => {
 
 	return (
 		<>
+			{/* <Head>
+				<title>Foods - Nutros: </title>
+			</Head> */}
+
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-title>Search food</ion-title>

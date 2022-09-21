@@ -6,6 +6,7 @@ import IonSearchbar from "../../components/IonSearchbar";
 import dv from "../../dv.json";
 import NutrientItem from "../../components/NutrientItem";
 import { minerals, vitamins } from "../../nutrients";
+import Head from "next/head";
 
 const food = ({ foodData }) => {
 	const router = useRouter();
@@ -19,6 +20,10 @@ const food = ({ foodData }) => {
 
 	return (
 		<>
+			<Head>
+				<title>{food?.description} - Nutros</title>
+			</Head>
+
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">
