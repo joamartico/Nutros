@@ -1,9 +1,10 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useGlobalState from "../hooks/useGlobalState";
 import IonSearchbar from "./IonSearchbar";
 
-const SearchFoodList = ({ foodData, noTitle, onClickItem }) => {
+const SearchFoodList = ({ foodData, noTitle, onClickItem, noLink }) => {
 	const [search, setSearch] = useState("");
 	// const { setFood } = useGlobalState();
 	// const router = useRouter();
@@ -27,7 +28,8 @@ const SearchFoodList = ({ foodData, noTitle, onClickItem }) => {
 			</ion-header>
 
 			<ion-list>
-				{foodData?.filter((food) => {
+				{foodData
+					?.filter((food) => {
 						search == "" && true;
 						return food.description
 							.toLowerCase()
@@ -35,17 +37,19 @@ const SearchFoodList = ({ foodData, noTitle, onClickItem }) => {
 					})
 					.slice(0, 100)
 					.map((food) => (
-						<ion-item
-							key={food.foodCode}
-							// onClick={() => {
-							// 	setFood(food);
-							// 	router.push("/food/" + food.fdcId);
-							// }}
-							// onClick={onClickItem}
-							onClick={() => onClickItem(food)}
-						>
-							<ion-label>{food.description}</ion-label>
-						</ion-item>
+						<Link href={noLink ? '' : `/food/${food.fdcId}`}>
+							<ion-item
+								key={food.foodCode}
+								// onClick={() => {
+								// 	setFood(food);
+								// 	router.push("/food/" + food.fdcId);
+								// }}
+								// onClick={onClickItem, link}
+								onClick={() => onClickItem(food)}
+							>
+								<ion-label>{food.description}</ion-label>
+							</ion-item>
+						</Link>
 					))}
 			</ion-list>
 		</>

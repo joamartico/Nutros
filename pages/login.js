@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Background, Card, Subtitle, Title } from "../components/_styled";
 
 const Login = () => {
-	const router = useRouter()
 
 	return (
 		<Background>
@@ -12,7 +11,7 @@ const Login = () => {
 
 				<p>Your app to</p>
 
-				<ion-button strong onClick={() => router.push('/onboarding')}>Back</ion-button>
+				<ion-button strong>Back</ion-button>
 			</Card>
 		</Background>
 	);

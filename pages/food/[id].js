@@ -7,14 +7,13 @@ import dv from "../../dv.json";
 import NutrientItem from "../../components/NutrientItem";
 import { minerals, vitamins } from "../../nutrients";
 import Head from "next/head";
+import Link from "next/link";
 
 const food = ({ foodData }) => {
 	const router = useRouter();
 	const { id } = router.query;
 
 	const food = foodData.find((f) => f.fdcId == id);
-
-
 
 	const group = "men 19-30";
 
@@ -27,9 +26,11 @@ const food = ({ foodData }) => {
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">
-						<ion-button onClick={() => router.push("/")}>
-							Back
-						</ion-button>
+						<Link href='/'>
+							<ion-button>
+								Back
+							</ion-button>
+						</Link>
 					</ion-buttons>
 					<ion-title>{food?.description}</ion-title>
 				</ion-toolbar>
@@ -86,10 +87,10 @@ const food = ({ foodData }) => {
 							);
 						})
 						.map((item) => {
-							if (dv.vitamins[group][item?.nutrient.name]) {
+							if (dv.vitamins[group][item?.nutrient?.name]) {
 								return (
 									<NutrientItem
-										name={item?.nutrient.name}
+										name={item?.nutrient?.name}
 										amount={
 											item.amount *
 												(food.foodPortions[0]
@@ -138,7 +139,7 @@ const food = ({ foodData }) => {
 						})
 						.map((item) => (
 							<NutrientItem
-								name={item?.nutrient.name}
+								name={item?.nutrient?.name}
 								amount={
 									item.amount *
 										(food.foodPortions[0]?.gramWeight /
@@ -157,7 +158,7 @@ const food = ({ foodData }) => {
 
 					{food?.foodNutrients
 						.filter((item) => {
-							console.log(item?.nutrient.name, item.amount);
+							console.log(item?.nutrient?.name, item.amount);
 
 							return (
 								// parseInt(item.nutrient?.id) > 1086 &&
@@ -166,8 +167,8 @@ const food = ({ foodData }) => {
 						})
 						.map((item) => (
 							<NutrientItem
-								completeName={item?.nutrient.name}
-								dbName={item?.nutrient.name}
+								completeName={item?.nutrient?.name}
+								dbName={item?.nutrient?.name}
 								amount={
 									item.amount *
 										(food?.foodPortions[0]?.gramWeight /

@@ -1,8 +1,5 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { useState } from "react";
-import styled from "styled-components";
-import IonSearchbar from "../components/IonSearchbar";
 import IonSelect from "../components/IonSelect";
 import SearchFoodList from "../components/SearchFoodList";
 import useGlobalState from "../hooks/useGlobalState";
@@ -11,7 +8,7 @@ import { minerals, vitamins } from "../nutrients";
 const FoodsScreen = ({ foodData }) => {
 	const [selectedNutrient, setSelectedNutrient] = useState(true);
 	const { setFood } = useGlobalState();
-	const router = useRouter();
+
 
 	const nutrients = foodData[1]?.foodNutrients.map(
 		(item, i) => item.nutrient?.name
@@ -102,7 +99,7 @@ const FoodsScreen = ({ foodData }) => {
 					foodData={getCoso()}
 					onClickItem={(food) => {
 						setFood(food);
-						router.push("/food/" + food.fdcId);
+						// router.push("/food/" + food.fdcId);
 					}}
 				/>
 			</ion-content>

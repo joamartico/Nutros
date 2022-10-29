@@ -6,6 +6,10 @@ ion-select {
     width: 100%;
 }
 
+a {
+    cursor: pointer !important;
+}
+
 ion-button {
     height: 56px;
     font-size: 20px;

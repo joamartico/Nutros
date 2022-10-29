@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { Background, Card, Subtitle, Title } from "../components/_styled";
@@ -13,11 +14,18 @@ const Onboarding = () => {
 					<Title>Nutros App</Title>
 				</div>
 
-				<Description>Your web app to search and track your food nutrients</Description>
+				<Description>
+					Your web app to search and track your food nutrients.
+					<br />
+					<br />
+					Track your nutrition.
+				</Description>
 
-				<ion-button strong onClick={() => router.push("/")}>
-					Get Started
-				</ion-button>
+				<Link href="/">
+					<ion-button strong>
+						Get Started
+					</ion-button>
+				</Link>
 			</Card>
 		</Background>
 	);
@@ -26,10 +34,10 @@ const Onboarding = () => {
 export default Onboarding;
 
 const Description = styled.h2`
-  font-size: 20px;
-  color: var(--ion-color-primary);
-  margin-bottom: 5px;
-  margin-top: 3vh;
-  max-width: 500px;
-  font-weight: bold;
+	font-size: 20px;
+	color: var(--ion-color-primary);
+	margin-bottom: 5px;
+	margin-top: 3vh;
+	max-width: 500px;
+	font-weight: bold;
 `;

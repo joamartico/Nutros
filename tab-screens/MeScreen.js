@@ -1,6 +1,6 @@
 import { modalController } from "@ionic/core";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import FoodItem from "../components/FoodItem";
@@ -8,9 +8,6 @@ import PercentCircle from "../components/PercentCircle";
 import SearchFoodList from "../components/SearchFoodList";
 import dv from "../dv.json";
 import { minerals, vitamins } from "../nutrients";
-
-
-
 
 const group = "men 19-30";
 
@@ -30,7 +27,6 @@ const MeScreen = ({ foodData }) => {
 	const pageRef = useRef();
 	const modalRef = useRef();
 
-	const router = useRouter();
 
 	async function openModal(opts = {}) {
 		window.modalController = await modalController; // necesario?
@@ -63,7 +59,7 @@ const MeScreen = ({ foodData }) => {
 			currentModal.dismiss().then(() => {
 				setCurrentModal(null);
 			});
-		} 
+		}
 	}
 
 	function getDVPercent(nutrientName, nutrientType) {
@@ -116,32 +112,35 @@ const MeScreen = ({ foodData }) => {
 
 						{foods.map((food, i) => {
 							return (
-								<FoodItem
-									name={food.description}
-									amount={
-										food.foodPortions
-											? food.foodPortions[0].gramWeight
-											: ""
-									}
-									portionName={getPortionName(food)}
-									onClick={() => {
-										router.push("/food/" + food.fdcId);
-									}}
-									onAdd={() => {
-										const newFoods = [...foods];
-										newFoods[i].portions += 1;
-										setFoods(newFoods);
-									}}
-									onRemove={() => {
-										const newFoods = [...foods];
-										newFoods[i].portions -= 1;
-										if (newFoods[i].portions === 0) {
-											newFoods.splice(i, 1);
+								<Link href={`/food/${food.fdcId}`}>
+									<FoodItem
+										name={food.description}
+										amount={
+											food.foodPortions
+												? food.foodPortions[0]
+														.gramWeight
+												: ""
 										}
-										setFoods(newFoods);
-									}}
-									portions={food.portions}
-								/>
+										portionName={getPortionName(food)}
+										// onClick={() => {
+										// 	router.push("/food/" + food.fdcId);
+										// }}
+										onAdd={() => {
+											const newFoods = [...foods];
+											newFoods[i].portions += 1;
+											setFoods(newFoods);
+										}}
+										onRemove={() => {
+											const newFoods = [...foods];
+											newFoods[i].portions -= 1;
+											if (newFoods[i].portions === 0) {
+												newFoods.splice(i, 1);
+											}
+											setFoods(newFoods);
+										}}
+										portions={food.portions}
+									/>
+								</Link>
 							);
 						})}
 
@@ -167,13 +166,11 @@ const MeScreen = ({ foodData }) => {
 							})}
 						</Row>
 					</ion-list>
-						
 
 					<ion-list>
 						<ion-list-header>
 							<h2>Minerals</h2>
 						</ion-list-header>
-
 
 						<Row className="ion-padding">
 							{minerals.map((mineral, i) => {
@@ -215,6 +212,7 @@ const MeScreen = ({ foodData }) => {
 							]);
 							dismissModal();
 						}}
+						noLink={true}
 					/>
 				</ion-content>
 			</Modal>
@@ -254,11 +252,9 @@ const Row = styled.div`
 	align-items: center;
 	margin-bottom: 10px;
 	overflow-x: scroll;
-	white-space: nowrap; 
+	white-space: nowrap;
 	scrollbar-width: none;
 	::-webkit-scrollbar {
 		display: none;
 	}
-
 `;
-
