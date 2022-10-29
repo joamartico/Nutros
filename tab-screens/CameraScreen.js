@@ -29,6 +29,7 @@ const CameraScreen = ({ capturedPhoto, setCapturedPhoto }) => {
 			</ion-header>
 			<ion-content fullscreen class="ion-padding">
 				<h1>Take a photo to your Food</h1>
+				<p>(In development)</p>
 				{capturedPhoto && <img src={capturedPhoto} alt="captured photo" />}
 			</ion-content>
 		</>
