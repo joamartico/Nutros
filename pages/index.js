@@ -61,7 +61,7 @@ export default function Home({ foodData }) {
 	);
 }
 
-// SSR FETCH A API ORIGINAL (MAXIMO 200 RESULTADOS)
+// SSR FETCH A API ORIGINAL (MAXIMO 200 RESULTADOS) 
 // export async function getServerSideProps(context) {
 // 	const params = {
 // 		api_key: "X66ugLvvhHYrDgeiwTuSwPZEJAhupK2WSEEcxvaC",

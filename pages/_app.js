@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { defineCustomElements as ionDefineCustomElements } from "@ionic/core/loader";
 import Script from "next/script";
-import TagManager from 'react-gtm-module';
-
+import TagManager from "react-gtm-module";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/core/css/core.css";
@@ -33,12 +32,13 @@ function MyApp({ Component, pageProps }) {
 	});
 
 	useEffect(() => {
-		if(process.env.NEXT_PUBLIC_GTM_ID 
+		if (
+			process.env.NEXT_PUBLIC_GTM_ID
 			// && process.env.NEXT_PUBLIC_ENV == 'PROD'
-		){
-		  TagManager.initialize({ gtmId: process.env.NEXT_PUBLIC_GTM_ID});
+		) {
+			TagManager.initialize({ gtmId: process.env.NEXT_PUBLIC_GTM_ID });
 		}
-	  }, []);
+	}, []);
 
 	return (
 		<>
@@ -74,19 +74,19 @@ function MyApp({ Component, pageProps }) {
 				<meta name="theme-color" content="#ffffff"></meta>
 			</Head>
 
-			<Script
+			{/* <Script
 				strategy="afterInteractive"
 				src="https://www.googletagmanager.com/gtag/js?id=G-QZLETX27HH"
-			/>
+			/> */}
 
-			<Script id="google-analytics" strategy="afterInteractive">
+			{/* <Script id="google-analytics" strategy="afterInteractive">
 				{`
 					window.dataLayer = window.dataLayer || [];
 					function gtag(){dataLayer.push(arguments);}
 					gtag('js', new Date());
 					gtag('config', 'G-QZLETX27HH');	
 				`}
-			</Script>
+			</Script> */}
 
 			<Context>
 				<ion-app mode="ios">
