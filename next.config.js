@@ -27,4 +27,5 @@ module.exports = withPWA({
 		);
 		return config;
 	},
+	// trailingSlash: true,
 });

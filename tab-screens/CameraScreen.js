@@ -13,7 +13,7 @@ const CameraScreen = ({ capturedPhoto, setCapturedPhoto }) => {
 			resultType: CameraResultType.Uri,
 			source: CameraSource.Camera,
 			quality: 100,
-		}).then(photo => setCapturedPhoto(photo.webPath));
+		}).then((photo) => setCapturedPhoto(photo.webPath));
 	}
 
 	// useEffect(() => {
@@ -24,13 +24,21 @@ const CameraScreen = ({ capturedPhoto, setCapturedPhoto }) => {
 		<>
 			<ion-header translucent>
 				<ion-toolbar>
-					<ion-title>Photo</ion-title>
+					<ion-title>Photo your food</ion-title>
 				</ion-toolbar>
 			</ion-header>
-			<ion-content fullscreen class="ion-padding">
-				<h1>Take a photo to your Food</h1>
-				<p>In development ;)</p>
-				{capturedPhoto && <img src={capturedPhoto} alt="captured photo" />}
+			<ion-content fullscreen class='ion-padding'>
+				<ion-header collapse="condense">
+					<ion-toolbar>
+						<ion-title size="large">Photo your food</ion-title>
+					</ion-toolbar>
+				</ion-header>
+
+				<p>In development 😉</p>
+
+				{capturedPhoto && (
+					<img src={capturedPhoto} alt="captured photo" />
+				)}
 			</ion-content>
 		</>
 	);
