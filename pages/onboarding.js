@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -7,6 +8,11 @@ const Onboarding = () => {
 	const router = useRouter();
 
 	return (
+		<>
+		<Head>
+			<link rel="canonical" href="https://nutros.vercel.ap/onboarding" />
+		</Head>
+
 		<Background>
 			<Card>
 				<div>
@@ -28,6 +34,7 @@ const Onboarding = () => {
 				</Link>
 			</Card>
 		</Background>
+		</>
 	);
 };
 

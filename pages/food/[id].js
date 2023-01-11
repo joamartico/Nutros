@@ -32,7 +32,7 @@ const food = ({ foodData }) => {
 							</ion-button>
 						</Link>
 					</ion-buttons>
-					<ion-title>{food?.description}</ion-title>
+					<ion-title><h1>{food?.description}</h1></ion-title>
 				</ion-toolbar>
 			</ion-header>
 

@@ -8,6 +8,7 @@ import {
 } from "@capacitor/camera";
 import { useState } from "react";
 import MeScreen from "../tab-screens/MeScreen";
+import Head from "next/head";
 
 export default function Home({ foodData }) {
 	const [capturedPhoto, setCapturedPhoto] = useState();
@@ -21,6 +22,10 @@ export default function Home({ foodData }) {
 
 	return (
 		<>
+			<Head>
+				<link rel="canonical" href="https://nutros.vercel.app" />
+			</Head>
+			 
 			<ion-tabs>
 				<ion-tab-bar slot="bottom">
 					<ion-tab-button tab="foods">
