@@ -10,7 +10,7 @@ const Onboarding = () => {
 	return (
 		<>
 		<Head>
-			<link rel="canonical" href="https://nutros.vercel.ap/onboarding" />
+			<link rel="canonical" href="https://nutros.vercel.app/onboarding" />
 		</Head>
 
 		<Background>
