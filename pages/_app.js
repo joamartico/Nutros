@@ -45,7 +45,7 @@ function MyApp({ Component, pageProps }) {
 			<Head>
 				<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 				{/* SEO  */}
-				<title>Nutros App: Track your nutrition</title>
+				<title>Nutros App</title>
 				<meta
 					name="description"
 					content="Nutros is your web app to search and track your food nutrients."
