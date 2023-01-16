@@ -95,7 +95,6 @@ const FoodsScreen = ({ foodData }) => {
 			</ion-header>
 
 			<ion-content fullscreen>
-				<h1 style={{position: 'absolute', opacity: 0}}>Nutros</h1>
 				<SearchFoodList
 					foodData={getCoso()}
 					onClickItem={(food) => {

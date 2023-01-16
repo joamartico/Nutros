@@ -15,10 +15,9 @@ const Onboarding = () => {
 
 		<Background>
 			<Card>
-				<div>
-					<Subtitle>Welcome to</Subtitle>
-					<Title>Nutros App</Title>
-				</div>
+				{/* <div> */}
+					<Title>Welcome to Nutros !</Title>
+				{/* </div> */}
 
 				<Description>
 					Your web app to search and track your food nutrients.
