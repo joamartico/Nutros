@@ -28,16 +28,3 @@ export const Card = styled.div`
 
 `;
 
-export const Subtitle = styled.p`
-	font-size: 50px;
-	color: var(--ion-color-primary);
-	font-weight: 500;
-	height: 10px;
-`;
-
-export const Title = styled.h1`
-	font-size: 50px;
-	color: var(--ion-color-primary);
-	font-weight: 800;
-	height: 10px;
-`;

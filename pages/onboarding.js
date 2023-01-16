@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { Background, Card, Subtitle, Title } from "../components/_styled";
+import { Background, Card } from "../components/_styled";
 
 const Onboarding = () => {
 	const router = useRouter();
@@ -46,4 +46,12 @@ const Description = styled.h2`
 	margin-top: 3vh;
 	max-width: 500px;
 	font-weight: bold;
+`;
+
+
+const Title = styled.h1`
+	font-size: 50px;
+	color: var(--ion-color-primary);
+	font-weight: 800;
+	/* height: 10px; */
 `;

@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { Background, Card, Subtitle, Title } from "../components/_styled";
+import { Background, Card } from "../components/_styled";
 
 const Login = () => {
 
@@ -19,3 +19,10 @@ const Login = () => {
 
 export default Login;
 
+
+const Subtitle = styled.p`
+	font-size: 50px;
+	color: var(--ion-color-primary);
+	font-weight: 500;
+	height: 10px;
+`;
