@@ -24,7 +24,7 @@ import "../index.css";
 import Context from "../Context";
 import Head from "next/head";
 
-import foodData from "../foodData_foundation.json";
+import foodData from "../foodData_survey.json";
 
 function MyApp({ Component, pageProps }) {
 	useEffect(() => {
