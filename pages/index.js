@@ -25,7 +25,7 @@ export default function Home({ foodData }) {
 			<Head>
 				<link rel="canonical" href="https://nutros.vercel.app" />
 			</Head>
-			 
+
 			<ion-tabs>
 				<ion-tab-bar slot="bottom">
 					<ion-tab-button tab="foods">
@@ -66,12 +66,12 @@ export default function Home({ foodData }) {
 	);
 }
 
-// SSR FETCH A API ORIGINAL (MAXIMO 200 RESULTADOS) 
+// SSR FETCH A API ORIGINAL (MAXIMO 200 RESULTADOS)
 // export async function getServerSideProps(context) {
 // 	const params = {
 // 		api_key: "X66ugLvvhHYrDgeiwTuSwPZEJAhupK2WSEEcxvaC",
 // 		query: "Mango",
-// 		dataType: ["survey (FNDDS)"],
+// 		dataType: ["foundation (FNDDS)"],
 // 		pagesize: 200,
 // 	};
 // 	const res = await fetch(
