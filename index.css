@@ -8,6 +8,7 @@ ion-select {
 
 a {
     cursor: pointer !important;
+    text-decoration: none;
 }
 
 ion-button {
@@ -19,7 +20,12 @@ ion-button:active {
     opacity: 0.6 !important;
 }
 
-
+ion-content {
+    max-width: 700px;
+    position: relative;
+   left: 50%;
+   transform: translateX(-50%);
+}
 
 :root {
     /** primary **/
