@@ -22,9 +22,9 @@ export default function Home({ foodData }) {
 
 	return (
 		<>
-			<Head>
+			{/* <Head>
 				<link rel="canonical" href="https://nutros.vercel.app" />
-			</Head>
+			</Head> */}
 
 			<ion-tabs>
 				<ion-tab-bar slot="bottom">
