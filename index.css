@@ -20,11 +20,23 @@ ion-button:active {
     opacity: 0.6 !important;
 }
 
-ion-content {
-    max-width: 700px;
-    position: relative;
-   left: 50%;
-   transform: translateX(-50%);
+body {
+    background-color: #edfee2;
+}
+
+@media screen and (min-width: 700px) {
+    ion-app {
+        background-color: white;
+        max-width: 700px;
+        top: 0 !important;
+        height: 100vh !important;
+        position: absolute !important;
+        left: 50vw !important;
+        /* position: relative;
+       left: 50%; */
+       transform: translateX(-50%) !important;
+    
+    }
 }
 
 :root {
