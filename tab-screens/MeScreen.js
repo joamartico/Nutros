@@ -1,6 +1,7 @@
 import { modalController } from "@ionic/core";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import FoodItem from "../components/FoodItem";
@@ -26,6 +27,8 @@ const MeScreen = ({ foodData }) => {
 
 	const pageRef = useRef();
 	const modalRef = useRef();
+
+	const router = useRouter()
 
 
 	async function openModal(opts = {}) {
@@ -112,7 +115,7 @@ const MeScreen = ({ foodData }) => {
 
 						{foods.map((food, i) => {
 							return (
-								<Link href={`/food/${food.fdcId}`}>
+								// <Link href={`/food/${food.fdcId}`}>
 									<FoodItem
 										name={food.description}
 										amount={
@@ -122,9 +125,9 @@ const MeScreen = ({ foodData }) => {
 												: ""
 										}
 										portionName={getPortionName(food)}
-										// onClick={() => {
-										// 	router.push("/food/" + food.fdcId);
-										// }}
+										onClick={() => {
+											router.push("/food/" + food.fdcId);
+										}}
 										onAdd={() => {
 											const newFoods = [...foods];
 											newFoods[i].portions += 1;
@@ -140,7 +143,7 @@ const MeScreen = ({ foodData }) => {
 										}}
 										portions={food.portions}
 									/>
-								</Link>
+								// </Link>
 							);
 						})}
 
@@ -239,6 +242,7 @@ const AddButton = styled.div`
 	font-size: 15px;
 	font-weight: bold;
 	color: #040;
+
 `;
 
 const Modal = styled.div`
