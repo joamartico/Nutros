@@ -1,38 +1,56 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Background, Card } from "../components/_styled";
 
 const Onboarding = () => {
 	const router = useRouter();
+	const [ev, setEv] = useState();
+
+	useEffect(() => {
+		window.addEventListener("beforeinstallprompt", (event) => {
+			event.preventDefault();
+			setEv(event);
+		});
+	}, []);
 
 	return (
 		<>
-		<Head>
-			<link rel="canonical" href="https://nutros.vercel.app/onboarding" />
-		</Head>
+			<Head>
+				<link
+					rel="canonical"
+					href="https://nutros.vercel.app/onboarding"
+				/>
+			</Head>
 
-		<Background>
-			<Card>
-				{/* <div> */}
-					<Title>Welcome to Nutros !</Title>
-				{/* </div> */}
+			<Background>
+				<Card>
+					<TextContainer>
+						<Title>Welcome to Nutros !</Title>
 
-				<Description>
-					Your web app to search and track your food nutrients.
-					<br />
-					<br />
-					Track your nutrition.
-				</Description>
+						<Description>
+							Your web app to search and track your food
+							nutrients.
+							<br />
+							Track your nutrition.
+						</Description>
+					</TextContainer>
 
-				<Link href="/">
-					<ion-button strong>
-						Get Started
-					</ion-button>
-				</Link>
-			</Card>
-		</Background>
+					<ButtonsContainer>
+						<ion-button
+							strong
+							fill="outline"
+							onClick={() => ev?.prompt()}
+						>
+							Install web app
+						</ion-button>
+
+						<ion-button strong onClick={() => router.push('/')}>Get Started</ion-button>
+					</ButtonsContainer>
+				</Card>
+			</Background>
 		</>
 	);
 };
@@ -42,16 +60,33 @@ export default Onboarding;
 const Description = styled.h2`
 	font-size: 20px;
 	color: var(--ion-color-primary);
-	margin-bottom: 5px;
-	margin-top: 3vh;
+	/* margin-bottom: 5px; */
+	/* margin-top: 3vh; */
 	max-width: 500px;
 	font-weight: bold;
 `;
-
 
 const Title = styled.h1`
 	font-size: 50px;
 	color: var(--ion-color-primary);
 	font-weight: 800;
 	/* height: 10px; */
+`;
+
+const ButtonsContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 135px;
+	width: 100%;
+	margin-bottom: 60px;
+`;
+
+const TextContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 100%;
+	margin-top: auto;
+	margin-bottom: 80px;
 `;
