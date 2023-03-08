@@ -118,6 +118,7 @@ const MeScreen = ({ foodData }) => {
 								// <Link href={`/food/${food.fdcId}`}>
 									<FoodItem
 										name={food.description}
+										emoji={food.emoji}
 										amount={
 											food.foodPortions
 												? food.foodPortions[0]
@@ -207,7 +208,8 @@ const MeScreen = ({ foodData }) => {
 				<ion-content fullscreen>
 					<SearchFoodList
 						foodData={foodData}
-						noTitle
+						// noTitle
+						title={null}
 						onClickItem={(food) => {
 							setFoods((prev) => [
 								...prev,

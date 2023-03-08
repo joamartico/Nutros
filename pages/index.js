@@ -10,6 +10,7 @@ import { useState } from "react";
 import MeScreen from "../tab-screens/MeScreen";
 import Head from "next/head";
 
+
 export default function Home({ foodData }) {
 	const [capturedPhoto, setCapturedPhoto] = useState();
 	async function addNewToGallery() {
@@ -18,6 +19,44 @@ export default function Home({ foodData }) {
 			source: CameraSource.Camera,
 			quality: 100,
 		}).then((foto) => setCapturedPhoto(foto.webPath));
+	}
+
+	async function getNewFoods() {
+		const newFoods = [];
+		foodData.forEach(food => {
+			console.log('food: ', food.description)
+			console.log('emoji: ', e.suggest('eatable ' + food.description.split(', ')[0])[0]?.ref)
+			console.log('')
+			console.log('')
+			newFoods.push({
+				emoji: e.suggest('eatable ' + food.description.split(', ')[0])[0]?.ref,
+				...food,
+			})
+		})
+		console.log(newFoods)
+		return newFoods
+		// fetch(
+		// 	"https://emoji-api.com/emojis?access_key=073d7b7ba730987e23d569b4e5116449a925d35a"
+		// ).then((res) =>
+		// 	res.json().then(async (emojis) => {
+		// 		console.log(emojis);
+		// 		await foodData.forEach((food) => {
+		// 			const words = food.description.toLowerCase().split(" ");
+		// 			console.log(words[0]);
+		// 			newFoods.push({ name: food.description });
+		// 			console.log("food: ", food.description);
+		// 			console.log(
+		// 				"emoji: ",
+		// 				emojis.filter((item) => {
+		// 					const newName = item.slug.concat('ies,')
+		// 					return newName.includes('strawberries');
+		// 				})
+		// 				);
+		// 			console.log("");
+		// 		});
+		// 	})
+		// );
+		// // console.log(newFoods)
 	}
 
 	return (

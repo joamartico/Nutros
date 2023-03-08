@@ -6,9 +6,8 @@ import useGlobalState from "../hooks/useGlobalState";
 import { minerals, vitamins } from "../nutrients";
 
 const FoodsScreen = ({ foodData }) => {
-	const [selectedNutrient, setSelectedNutrient] = useState(true);
+	const [selectedNutrient, setSelectedNutrient] = useState();
 	const { setFood } = useGlobalState();
-
 
 	const nutrients = foodData[1]?.foodNutrients.map(
 		(item, i) => item.nutrient?.name
@@ -29,8 +28,7 @@ const FoodsScreen = ({ foodData }) => {
 		setSelectedNutrient(nutrient);
 	}
 
-
-	function getCoso() {
+	function getFilteredFoods() {
 		// await foodData.map((food, i) => {
 		// 	if (foodData[i].split(",") == foodData[i + 1].split(",")) {
 		// 		foodData.splice(i + 1);
@@ -40,10 +38,8 @@ const FoodsScreen = ({ foodData }) => {
 		return foodData.filter((food, i) => {
 			const splittedFoodA = foodData[i].description.split(", ");
 			const splittedFoodB = foodData[i + 1]?.description.split(", ");
-			
-			if (splittedFoodA.length < 2 || !splittedFoodB) return true;
 
-		
+			if (splittedFoodA.length < 2 || !splittedFoodB) return true;
 
 			return (
 				splittedFoodA[0] != splittedFoodB[0] ||
@@ -62,14 +58,15 @@ const FoodsScreen = ({ foodData }) => {
 
 			<ion-header translucent>
 				<ion-toolbar>
-					<ion-title>Search food</ion-title>
+					<ion-title>{selectedNutrient || "Search Food"}</ion-title>
 
 					<ion-buttons slot="end">
 						<ion-button>Order By</ion-button>
 
 						<IonSelect
 							onChange={(e) => {
-								orderFoodBy(e.target.value[0]);
+								// orderFoodBy(e.target.value[0]);
+								setSelectedNutrient(e.target.value[0]);
 							}}
 							value={selectedNutrient}
 						>
@@ -96,7 +93,36 @@ const FoodsScreen = ({ foodData }) => {
 
 			<ion-content fullscreen>
 				<SearchFoodList
-					foodData={getCoso()}
+					title={selectedNutrient || "Search Food"}
+					foodData={
+						!selectedNutrient
+							? foodData
+							: foodData
+									.filter(
+										(item) =>
+											item.foodNutrients.find(
+												(itemb) =>
+													itemb.nutrient?.name ==
+													selectedNutrient
+											)?.amount
+									)
+									.sort((a, b) => {
+										return (
+											b.foodNutrients.find(
+												(itemc) =>
+													itemc.nutrient?.name ==
+													selectedNutrient
+											)?.amount *
+												b.foodPortions[0]?.gramWeight -
+											a.foodNutrients.find(
+												(itemc) =>
+													itemc.nutrient?.name ==
+													selectedNutrient
+											)?.amount *
+												a.foodPortions[0]?.gramWeight
+										);
+									})
+					}
 					onClickItem={(food) => {
 						setFood(food);
 						// router.push("/food/" + food.fdcId);

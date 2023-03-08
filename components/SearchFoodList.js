@@ -4,7 +4,7 @@ import { useState } from "react";
 import useGlobalState from "../hooks/useGlobalState";
 import IonSearchbar from "./IonSearchbar";
 
-const SearchFoodList = ({ foodData, noTitle, onClickItem, noLink }) => {
+const SearchFoodList = ({ foodData, onClickItem, noLink, title }) => {
 	const [search, setSearch] = useState("");
 	// const { setFood } = useGlobalState();
 	// const router = useRouter();
@@ -12,9 +12,9 @@ const SearchFoodList = ({ foodData, noTitle, onClickItem, noLink }) => {
 	return (
 		<>
 			<ion-header collapse="condense" translucent>
-				{!noTitle && (
+				{title && (
 					<ion-toolbar>
-						<ion-title size="large">Search Food</ion-title>
+						<ion-title size="large">{title}</ion-title>
 					</ion-toolbar>
 				)}
 
@@ -47,7 +47,7 @@ const SearchFoodList = ({ foodData, noTitle, onClickItem, noLink }) => {
 								// onClick={onClickItem, link}
 								onClick={() => onClickItem(food)}
 							>
-								<ion-label>{food.description}</ion-label>
+								<ion-label>{food.emoji} {food.description}</ion-label>
 							</ion-item>
 						</Link>
 					))}

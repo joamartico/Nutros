@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
 const FoodItem = (props) => {
-	const { name, portionName, amount, portions, onClick, onRemove, onAdd } = props;
+	const { name, emoji, portionName, amount, portions, onClick, onRemove, onAdd } = props;
 	return (
 		<ion-item>
 			<ion-label onClick={onClick}>
-				<h2>{name}</h2>
+				<h2>{emoji} {name} </h2>
 				<p>{portions} {portionName || ""} ({(portions * amount).toFixed(1)} g)</p>
 			</ion-label>
 

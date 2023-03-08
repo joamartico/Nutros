@@ -22,7 +22,7 @@ const food = ({ foodData }) => {
 			<Head>
 				<title>{food?.description} - Nutros</title>
 			</Head>
-
+{console.log(food?.foodNutrients)}
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">
@@ -32,14 +32,14 @@ const food = ({ foodData }) => {
 							</ion-button>
 						</Link>
 					</ion-buttons>
-					<ion-title><h1>{food?.description}</h1></ion-title>
+					<ion-title><>{food?.emoji}&nbsp;&nbsp;{food?.description.split(', ')[0]}</></ion-title>
 				</ion-toolbar>
 			</ion-header>
 
 			<ion-content fullscreen>
 				<ion-header collapse="condense">
 					<ion-toolbar>
-						<ion-title size="large">{food?.description}</ion-title>
+						<ion-title size="large" style={{ height: 50}}>{food?.emoji}&nbsp;{food?.description}</ion-title>
 					</ion-toolbar>
 					<ion-toolbar>
 						<ion-text class="ion-padding">
@@ -158,7 +158,7 @@ const food = ({ foodData }) => {
 
 					{food?.foodNutrients
 						.filter((item) => {
-							console.log(item?.nutrient?.name, item.amount);
+							// console.log(item?.nutrient?.name, item.amount);
 
 							return (
 								// parseInt(item.nutrient?.id) > 1086 &&
