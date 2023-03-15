@@ -129,6 +129,16 @@ export default class MyDocument extends Document {
 					/>
 					<link
 						rel="apple-touch-startup-image"
+						href="/iPhone_14_Pro_portrait.png"
+						media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+					/>
+					<link
+						rel="apple-touch-startup-image"
+						href="/apple-splash-2688-1242.jpg"
+						media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+					/>
+					<link
+						rel="apple-touch-startup-image"
 						href="/apple-splash-828-1792.jpg"
 						media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
 					/>

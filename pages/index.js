@@ -67,22 +67,22 @@ export default function Home({ foodData }) {
 				<ion-tab-bar slot="bottom">
 					<ion-tab-button tab="foods" onClick={() => setSelectedTab('foods')}>
 						{/* <ion-label>Foods</ion-label> */}
-						<ion-icon name="fruits-icon"></ion-icon>
+						<ion-icon src="/svg/fruits-icon.svg"></ion-icon>
 					</ion-tab-button>
 
 					<ion-tab-button tab="camera" onClick={() => setSelectedTab('camera')}>
 						{/* <ion-label>Photo</ion-label> */}
-						<ion-icon name="camera"></ion-icon>
+						<ion-icon src="/svg/camera.svg"></ion-icon>
 					</ion-tab-button>
 
 					<ion-tab-button tab="track" onClick={() => setSelectedTab('track')}>
 						{/* <ion-label>Me</ion-label> */}
-						<ion-icon name="calendar"></ion-icon>
+						<ion-icon src="/svg/calendar.svg"></ion-icon>
 					</ion-tab-button>
 
 					<ion-tab-button tab="me" onClick={() => setSelectedTab('me')}>
 						{/* <ion-label>Me</ion-label> */}
-						<ion-icon name="person"></ion-icon>
+						<ion-icon src="/svg/person.svg"></ion-icon>
 					</ion-tab-button>
 				</ion-tab-bar>
 
