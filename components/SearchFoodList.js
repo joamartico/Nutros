@@ -14,7 +14,7 @@ const SearchFoodList = ({ foodData, onClickItem, noLink, title }) => {
 			<ion-header collapse="condense" translucent>
 				{title && (
 					<ion-toolbar>
-						<ion-title size="large">{title}</ion-title>
+						<h1><ion-title size="large">{title}</ion-title></h1>
 					</ion-toolbar>
 				)}
 
@@ -22,7 +22,7 @@ const SearchFoodList = ({ foodData, onClickItem, noLink, title }) => {
 					<IonSearchbar
 						value={search}
 						onChange={(e) => setSearch(e.detail.value)}
-						placeholder="Search"
+						placeholder="Search a food"
 					/>
 				</ion-toolbar>
 			</ion-header>

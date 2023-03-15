@@ -58,7 +58,7 @@ const FoodsScreen = ({ foodData }) => {
 
 			<ion-header translucent>
 				<ion-toolbar>
-					<ion-title>{selectedNutrient || "Search Food"}</ion-title>
+					<ion-title>{selectedNutrient || "Nutros"}</ion-title>
 
 					<ion-buttons slot="end">
 						<ion-button>Order By</ion-button>
@@ -93,7 +93,7 @@ const FoodsScreen = ({ foodData }) => {
 
 			<ion-content fullscreen>
 				<SearchFoodList
-					title={selectedNutrient || "Search Food"}
+					title={selectedNutrient || "Nutros"}
 					foodData={
 						!selectedNutrient
 							? foodData

@@ -7,34 +7,32 @@ import {
 	Photo,
 } from "@capacitor/camera";
 import { useState } from "react";
+import TrackScreen from "../tab-screens/TrackScreen";
 import MeScreen from "../tab-screens/MeScreen";
 import Head from "next/head";
 
-
 export default function Home({ foodData }) {
-	const [capturedPhoto, setCapturedPhoto] = useState();
-	async function addNewToGallery() {
-		Camera.getPhoto({
-			resultType: CameraResultType.Uri,
-			source: CameraSource.Camera,
-			quality: 100,
-		}).then((foto) => setCapturedPhoto(foto.webPath));
-	}
+	const [selectedTab, setSelectedTab] = useState('foods')
 
 	async function getNewFoods() {
 		const newFoods = [];
-		foodData.forEach(food => {
-			console.log('food: ', food.description)
-			console.log('emoji: ', e.suggest('eatable ' + food.description.split(', ')[0])[0]?.ref)
-			console.log('')
-			console.log('')
+		foodData.forEach((food) => {
+			console.log("food: ", food.description);
+			console.log(
+				"emoji: ",
+				e.suggest("eatable " + food.description.split(", ")[0])[0]?.ref
+			);
+			console.log("");
+			console.log("");
 			newFoods.push({
-				emoji: e.suggest('eatable ' + food.description.split(', ')[0])[0]?.ref,
+				emoji: e.suggest(
+					"eatable " + food.description.split(", ")[0]
+				)[0]?.ref,
 				...food,
-			})
-		})
-		console.log(newFoods)
-		return newFoods
+			});
+		});
+		console.log(newFoods);
+		return newFoods;
 		// fetch(
 		// 	"https://emoji-api.com/emojis?access_key=073d7b7ba730987e23d569b4e5116449a925d35a"
 		// ).then((res) =>
@@ -67,38 +65,41 @@ export default function Home({ foodData }) {
 
 			<ion-tabs>
 				<ion-tab-bar slot="bottom">
-					<ion-tab-button tab="foods">
+					<ion-tab-button tab="foods" onClick={() => setSelectedTab('foods')}>
 						{/* <ion-label>Foods</ion-label> */}
-						<ion-icon src="/svg/fruits-icon.svg"></ion-icon>
+						<ion-icon name="fruits-icon"></ion-icon>
 					</ion-tab-button>
 
-					<ion-tab-button tab="camera" onClick={addNewToGallery}>
+					<ion-tab-button tab="camera" onClick={() => setSelectedTab('camera')}>
 						{/* <ion-label>Photo</ion-label> */}
-						<ion-icon src="/svg/camera.svg"></ion-icon>
+						<ion-icon name="camera"></ion-icon>
 					</ion-tab-button>
 
-					<ion-tab-button tab="me">
+					<ion-tab-button tab="track" onClick={() => setSelectedTab('track')}>
 						{/* <ion-label>Me</ion-label> */}
-						<ion-icon src="/svg/person.svg"></ion-icon>
+						<ion-icon name="calendar"></ion-icon>
+					</ion-tab-button>
+
+					<ion-tab-button tab="me" onClick={() => setSelectedTab('me')}>
+						{/* <ion-label>Me</ion-label> */}
+						<ion-icon name="person"></ion-icon>
 					</ion-tab-button>
 				</ion-tab-bar>
 
 				<ion-tab tab="foods">
-					<FoodsScreen foodData={foodData} />
+					<FoodsScreen selectedTab={selectedTab} foodData={foodData} />
 				</ion-tab>
 
 				<ion-tab tab="camera">
-					<CameraScreen
-						capturedPhoto={capturedPhoto}
-						setCapturedPhoto={setCapturedPhoto}
-					/>
-					{capturedPhoto && (
-						<img src={capturedPhoto} alt="captured photo" />
-					)}
+					<CameraScreen selectedTab={selectedTab} foodData={foodData} />
+				</ion-tab>
+
+				<ion-tab tab="track">
+					<TrackScreen selectedTab={selectedTab} foodData={foodData} />
 				</ion-tab>
 
 				<ion-tab tab="me">
-					<MeScreen foodData={foodData} />
+					<MeScreen selectedTab={selectedTab} foodData={foodData} />
 				</ion-tab>
 			</ion-tabs>
 		</>

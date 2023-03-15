@@ -8,6 +8,8 @@ import { Background, Card } from "../components/_styled";
 const Onboarding = () => {
 	const router = useRouter();
 	const [ev, setEv] = useState();
+	const [showPWAPrompt, setShowPWAPrompt] = useState(false);
+	const [Prompt, setPrompt] = useState()
 
 	useEffect(() => {
 		window.addEventListener("beforeinstallprompt", (event) => {
@@ -15,6 +17,21 @@ const Onboarding = () => {
 			setEv(event);
 		});
 	}, []);
+
+	function IsSafari() {
+		let userAgentString = navigator.userAgent;
+
+		// Detect Chrome
+		let chromeAgent = userAgentString.indexOf("Chrome") > -1;
+
+		// Detect Safari
+		let safariAgent = userAgentString.indexOf("Safari") > -1;
+
+		// Discard Safari since it also matches Chrome
+		if (chromeAgent && safariAgent) safariAgent = false;
+
+		return safariAgent;
+	}
 
 	return (
 		<>
@@ -42,15 +59,25 @@ const Onboarding = () => {
 						<ion-button
 							strong
 							fill="outline"
-							onClick={() => ev?.prompt()}
+							onClick={async () => {
+								ev?.prompt()
+								// const { IOSPwaPrompt } = await import(
+								// 	"react-ios-pwa-prompt"
+								// );
+								// setPrompt(<IOSPwaPrompt />);
+							}}
 						>
 							Install web app
 						</ion-button>
 
-						<ion-button strong onClick={() => router.push('/')}>Get Started</ion-button>
+						<ion-button strong onClick={() => router.push("/")}>
+							Get Started
+						</ion-button>
 					</ButtonsContainer>
 				</Card>
 			</Background>
+
+			{Prompt}
 		</>
 	);
 };

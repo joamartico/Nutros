@@ -16,7 +16,7 @@ export const Card = styled.div`
 	max-width: 95vw;
 	height: 85%;
 	margin: auto;
-	border: 3px solid var(--ion-color-primary);
+	/* border: 3px solid var(--ion-color-primary); */
 	border-radius: 20px;
 	  padding-left: 4%;
   padding-right: 4%;
