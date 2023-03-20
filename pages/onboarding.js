@@ -52,7 +52,7 @@ const Onboarding = () => {
 				</Card>
 			</Background>
 
-			{Prompt}
+			{/* {Prompt} */}
 		</>
 	);
 };
