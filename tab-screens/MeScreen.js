@@ -71,7 +71,7 @@ const MeScreen = ({ foodData, selectedTab }) => {
 				</ion-header>
 
 				<TextContainer>
-					<Title>Please sign in to track your nutrition</Title>
+					<Title>Please sign in <br/> to track your nutrition</Title>
 
 					{/* <Description>
 						Your web app to search and track your food nutrients.
@@ -108,15 +108,11 @@ const Header = styled.div`
 	margin-bottom: 20px;
 `;
 
-const ButtonsContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	height: 135px;
-	width: 100%;
-	margin-bottom: 80px;
-	margin-top: 40px;
-	padding: 25px;
+const Title = styled.h1`
+	font-size: 50px;
+	color: var(--ion-color-primary);
+	font-weight: 800;
+	/* height: 10px; */
 `;
 
 const TextContainer = styled.div`
@@ -127,11 +123,16 @@ const TextContainer = styled.div`
 	margin-top: auto;
 	margin-bottom: 80px;
 	padding: 25px;
+	padding-top: 80px;
 `;
 
-const Title = styled.h1`
-	font-size: 50px;
-	color: var(--ion-color-primary);
-	font-weight: 800;
-	/* height: 10px; */
+const ButtonsContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	/* height: 135px; */
+	width: 100%;
+	margin-bottom: 80px;
+	margin-top: 40px;
+	padding: 25px;
 `;
