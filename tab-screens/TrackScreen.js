@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import FoodItem from "../components/FoodItem";
+import IonModal from "../components/IonModal";
 import PercentCircle from "../components/PercentCircle";
 import SearchFoodList from "../components/SearchFoodList";
 import dv from "../dv.json";
@@ -23,46 +24,14 @@ function getPortionName(food) {
 
 const TrackScreen = ({ foodData }) => {
 	const [foods, setFoods] = useState([]);
-	const [currentModal, setCurrentModal] = useState();
+	const [modalOpen, setModalOpen] = useState(false);
 
-	const pageRef = useRef();
 	const modalRef = useRef();
 
 	const router = useRouter();
 
-	async function openModal(opts = {}) {
-		window.modalController = await modalController; // necesario?
-		const modal = await modalController.create({
-			component: modalRef.current,
-			...opts,
-		});
-		modal.present();
+	
 
-		setCurrentModal(modal);
-	}
-
-	function openCardModal() {
-		openModal({
-			swipeToClose: true,
-			presentingElement: pageRef.current,
-		});
-	}
-
-	function openSheetModal() {
-		openModal({
-			breakpoints: [0, 0.2, 0.5, 1],
-			initialBreakpoint: 0.2,
-			swipeToClose: true,
-		});
-	}
-
-	function dismissModal() {
-		if (currentModal) {
-			currentModal.dismiss().then(() => {
-				setCurrentModal(null);
-			});
-		}
-	}
 
 	function getDVPercent(nutrientName, nutrientType) {
 		let amountSum = 0;
@@ -89,7 +58,6 @@ const TrackScreen = ({ foodData }) => {
 				<title>Todays Nutrition - Nutros</title>
 			</Head> */}
 
-			<div ref={pageRef} class="ion-page" className="ion-page">
 				<ion-header translucent>
 					<ion-toolbar>
 						<ion-title>Todays Nutrition</ion-title>
@@ -150,7 +118,9 @@ const TrackScreen = ({ foodData }) => {
 							);
 						})}
 
-						<AddButton onClick={openCardModal}>Add Food</AddButton>
+						<AddButton onClick={() => {
+							setModalOpen(prev => prev+1)
+						}}>Add Food</AddButton>
 					</ion-list>
 
 					<ion-list>
@@ -193,14 +163,14 @@ const TrackScreen = ({ foodData }) => {
 						</Row>
 					</ion-list>
 				</ion-content>
-			</div>
 
-			<Modal ref={modalRef} currentModal={currentModal ? true : false}>
+
+			<IonModal ref={modalRef}  open={modalOpen}>
 				<ion-header translucent>
 					<ion-toolbar>
 						<ion-title>Search your Food</ion-title>
 						<ion-buttons slot="end">
-							<ion-button onClick={dismissModal}>
+							<ion-button onClick={() => setModalOpen(false)}>
 								Close
 							</ion-button>
 						</ion-buttons>
@@ -217,12 +187,12 @@ const TrackScreen = ({ foodData }) => {
 								...prev,
 								{ ...food, portions: 1 },
 							]);
-							dismissModal();
+							setModalOpen(false)
 						}}
 						noLink={true}
 					/>
 				</ion-content>
-			</Modal>
+			</IonModal>
 		</>
 	);
 };

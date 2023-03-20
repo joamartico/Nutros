@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import IonModal from "../components/IonModal";
 import dv from "../dv.json";
+import useInstallPwa from "../hooks/useInstallPwa";
 
 const group = "men 19-30";
 
@@ -18,15 +19,13 @@ function getPortionName(food) {
 
 const MeScreen = ({ foodData, selectedTab }) => {
 	const [modalOpen, setModalOpen] = useState(false);
+	const { installPwa } = useInstallPwa();
 
 	const router = useRouter();
 
 	useEffect(() => {
 		if (selectedTab == "me") {
-			setModalOpen(true);
-			setInterval(() => {
-				setModalOpen(false);
-			}, 500);
+			setModalOpen((prev) => prev + 1);
 		}
 	}, [selectedTab]);
 
@@ -42,10 +41,7 @@ const MeScreen = ({ foodData, selectedTab }) => {
 				<ion-header collapse="condense">
 					<ion-toolbar>
 						<Header>
-							<div
-								style={{ height: 34, lineHeight: 1 }}
-								onClick={() => setModalOpen(true)}
-							>
+							<div style={{ height: 34, lineHeight: 1 }}>
 								Your Nutrition
 							</div>
 						</Header>
@@ -53,7 +49,47 @@ const MeScreen = ({ foodData, selectedTab }) => {
 				</ion-header>
 			</ion-content>
 
-			<IonModal open={modalOpen} />
+			<IonModal
+				open={modalOpen}
+				style={{
+					// padding: 25,
+					display: "flex",
+					flexDirection: "column",
+					justifyContent: "space-between",
+					height: "100%",
+				}}
+			>
+				<ion-header translucent>
+					<ion-toolbar>
+						{/* <ion-title>Search your Food</ion-title> */}
+						<ion-buttons slot="end">
+							<ion-button onClick={() => setModalOpen(false)}>
+								Close
+							</ion-button>
+						</ion-buttons>
+					</ion-toolbar>
+				</ion-header>
+
+				<TextContainer>
+					<Title>Please sign in to track your nutrition</Title>
+
+					{/* <Description>
+						Your web app to search and track your food nutrients.
+						<br />
+						Track your nutrition.
+					</Description> */}
+				</TextContainer>
+
+				<ButtonsContainer>
+					<ion-button strong fill="outline" onClick={installPwa}>
+						Install web app
+					</ion-button>
+
+					<ion-button strong onClick={() => router.push("/")}>
+						Get Started
+					</ion-button>
+				</ButtonsContainer>
+			</IonModal>
 		</>
 	);
 };
@@ -72,39 +108,30 @@ const Header = styled.div`
 	margin-bottom: 20px;
 `;
 
-const AddButton = styled.div`
-	background-color: var(--ion-color-primary);
-	border-radius: 12px;
-	padding: 16px;
-	width: fit-content;
-	height: 50px;
+const ButtonsContainer = styled.div`
 	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 10px;
-	margin-bottom: 20px;
-	cursor: pointer;
-	font-size: 15px;
-	font-weight: bold;
-	color: #040;
-`;
-
-const Modal = styled.div`
-	display: ${({ currentModal }) => (currentModal ? "block" : "none")};
-`;
-
-const Row = styled.div`
-	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 10px;
-	overflow-x: scroll;
-	white-space: nowrap;
-	scrollbar-width: none;
-	::-webkit-scrollbar {
-		display: none;
-	}
+	height: 135px;
+	width: 100%;
+	margin-bottom: 80px;
+	margin-top: 40px;
+	padding: 25px;
+`;
+
+const TextContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 100%;
+	margin-top: auto;
+	margin-bottom: 80px;
+	padding: 25px;
+`;
+
+const Title = styled.h1`
+	font-size: 50px;
+	color: var(--ion-color-primary);
+	font-weight: 800;
+	/* height: 10px; */
 `;

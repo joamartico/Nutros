@@ -6,6 +6,8 @@ import styled from "styled-components";
 const IonModal = (props) => {
 	const [currentModal, setCurrentModal] = useState();
 
+	console.log(props)
+
 	const pageRef = useRef();
 	const modalRef = useRef();
 
@@ -23,7 +25,7 @@ const IonModal = (props) => {
 	function openCardModal() {
 		openModal({
 			swipeToClose: true,
-			presentingElement: pageRef.current,
+			presentingElement: document.getElementById('tabs'),
 		});
 	}
 
@@ -45,15 +47,17 @@ const IonModal = (props) => {
 
     useEffect(() => {
       props.open && openCardModal()
+	  props.open == 0 && dismissModal()
     }, [props.open])
     
+
 	return (
         <>
-        <div pageRef={pageRef} class='ion-page'>
-        </div>
+        {/* <div pageRef={pageRef} class='ion-page' className="ion-page">
+        </div> */}
 
-		<Modal ref={modalRef} currentModal={currentModal ? true : false} >
-			<ion-content fullscreen>cosas</ion-content>
+		<Modal ref={modalRef} currentModal={currentModal ? true : false} style={props.style}>
+			{props.children}
 		</Modal>
         </>
 	);

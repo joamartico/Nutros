@@ -4,35 +4,16 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Background, Card } from "../components/_styled";
+import useInstallPwa from "../hooks/useInstallPwa";
 
 const Onboarding = () => {
 	const router = useRouter();
-	const [ev, setEv] = useState();
-	const [showPWAPrompt, setShowPWAPrompt] = useState(false);
-	const [Prompt, setPrompt] = useState()
+	const {installPwa} = useInstallPwa()
+	
 
-	useEffect(() => {
-		window.addEventListener("beforeinstallprompt", (event) => {
-			event.preventDefault();
-			setEv(event);
-		});
-	}, []);
+	
 
-	function IsSafari() {
-		let userAgentString = navigator.userAgent;
-
-		// Detect Chrome
-		let chromeAgent = userAgentString.indexOf("Chrome") > -1;
-
-		// Detect Safari
-		let safariAgent = userAgentString.indexOf("Safari") > -1;
-
-		// Discard Safari since it also matches Chrome
-		if (chromeAgent && safariAgent) safariAgent = false;
-
-		return safariAgent;
-	}
-
+	
 	return (
 		<>
 			<Head>
@@ -59,13 +40,7 @@ const Onboarding = () => {
 						<ion-button
 							strong
 							fill="outline"
-							onClick={async () => {
-								ev?.prompt()
-								// const { IOSPwaPrompt } = await import(
-								// 	"react-ios-pwa-prompt"
-								// );
-								// setPrompt(<IOSPwaPrompt />);
-							}}
+							onClick={installPwa}
 						>
 							Install web app
 						</ion-button>

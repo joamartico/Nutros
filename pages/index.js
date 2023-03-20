@@ -1,11 +1,5 @@
 import CameraScreen from "../tab-screens/CameraScreen";
 import FoodsScreen from "../tab-screens/FoodsScreen";
-import {
-	Camera,
-	CameraResultType,
-	CameraSource,
-	Photo,
-} from "@capacitor/camera";
 import { useState } from "react";
 import TrackScreen from "../tab-screens/TrackScreen";
 import MeScreen from "../tab-screens/MeScreen";
@@ -33,28 +27,6 @@ export default function Home({ foodData }) {
 		});
 		console.log(newFoods);
 		return newFoods;
-		// fetch(
-		// 	"https://emoji-api.com/emojis?access_key=073d7b7ba730987e23d569b4e5116449a925d35a"
-		// ).then((res) =>
-		// 	res.json().then(async (emojis) => {
-		// 		console.log(emojis);
-		// 		await foodData.forEach((food) => {
-		// 			const words = food.description.toLowerCase().split(" ");
-		// 			console.log(words[0]);
-		// 			newFoods.push({ name: food.description });
-		// 			console.log("food: ", food.description);
-		// 			console.log(
-		// 				"emoji: ",
-		// 				emojis.filter((item) => {
-		// 					const newName = item.slug.concat('ies,')
-		// 					return newName.includes('strawberries');
-		// 				})
-		// 				);
-		// 			console.log("");
-		// 		});
-		// 	})
-		// );
-		// // console.log(newFoods)
 	}
 
 	return (
@@ -63,7 +35,7 @@ export default function Home({ foodData }) {
 				<link rel="canonical" href="https://nutros.vercel.app" />
 			</Head> */}
 
-			<ion-tabs>
+			<ion-tabs id='tabs'>
 				<ion-tab-bar slot="bottom">
 					<ion-tab-button tab="foods" onClick={() => setSelectedTab('foods')}>
 						{/* <ion-label>Foods</ion-label> */}
