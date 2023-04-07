@@ -13,6 +13,10 @@ import { minerals, vitamins } from "../nutrients";
 
 const group = "men 19-30";
 
+const realDate = new Date()
+const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+
 function getPortionName(food) {
 	if (!food.portions) return "";
 	const name = food.foodPortions[0].portionDescription;
@@ -22,16 +26,15 @@ function getPortionName(food) {
 	return name;
 }
 
-const TrackScreen = ({ foodData }) => {
+const DayScreen = ({ foodData }) => {
 	const [foods, setFoods] = useState([]);
 	const [modalOpen, setModalOpen] = useState(false);
+	const [date	, setDate	] = useState(realDate)
+	const newDate = new Date(date)
 
 	const modalRef = useRef();
 
 	const router = useRouter();
-
-	
-
 
 	function getDVPercent(nutrientName, nutrientType) {
 		let amountSum = 0;
@@ -58,114 +61,129 @@ const TrackScreen = ({ foodData }) => {
 				<title>Todays Nutrition - Nutros</title>
 			</Head> */}
 
-				<ion-header translucent>
+			<ion-header translucent>
+				<ion-toolbar>
+					<ion-title>{days[newDate.getDay()]}</ion-title>
+				</ion-toolbar>
+			</ion-header>
+
+			<ion-content fullscreen>
+				<ion-header collapse="condense">
 					<ion-toolbar>
-						<ion-title>Todays Nutrition</ion-title>
+						<Header>
+							<ion-icon
+								name="chevron-back"
+								src="/svg/chevron-back.svg"
+								style={{ marginRight: 20, cursor: "pointer" }}
+								color="primary"
+								onClick={() => setDate(prev => new Date(date).setHours(-24))}
+							/>
+							<div style={{ height: 34, lineHeight: 1 }}>
+								{days[newDate.getDay()]}
+							</div>
+							<ion-icon
+								name="chevron-forward"
+								src="/svg/chevron-forward.svg"
+								style={{ marginLeft: 20, cursor: "pointer" }}
+								color="primary"
+								onClick={() => setDate(prev => new Date(date).setHours(24))}
+							/>
+						</Header>
 					</ion-toolbar>
 				</ion-header>
 
-				<ion-content fullscreen >
-					<ion-header collapse="condense">
-						<ion-toolbar>
-							<Header>
-								<ion-icon name="chevron-back" style={{marginRight: 20, cursor: 'pointer'}} color='primary'/>
-								<div style={{ height: 34, lineHeight: 1 }}>
-									Todays Nutrition
-								</div>
-								<ion-icon name="chevron-forward" style={{marginLeft: 20, cursor: 'pointer'}} color='primary' />
-							</Header>
-						</ion-toolbar>
-					</ion-header>
+				<br />
 
-					<br />
+				<ion-list>
+					<ion-list-header>
+						<h2>Ingests</h2>
+					</ion-list-header>
 
-					<ion-list>
-						<ion-list-header>
-							<h2>Ingests</h2>
-						</ion-list-header>
-
-						{foods.map((food, i) => {
-							return (
-								// <Link href={`/food/${food.fdcId}`}>
-								<FoodItem
-									name={food.description}
-									emoji={food.emoji}
-									amount={
-										food.foodPortions
-											? food.foodPortions[0].gramWeight
-											: ""
+					{foods.map((food, i) => {
+						return (
+							// <Link href={`/food/${food.fdcId}`}>
+							<FoodItem
+								name={food.description}
+								emoji={food.emoji}
+								amount={
+									food.foodPortions
+										? food.foodPortions[0].gramWeight
+										: ""
+								}
+								portionName={getPortionName(food)}
+								onClick={() => {
+									router.push("/food/" + food.fdcId);
+								}}
+								onAdd={() => {
+									const newFoods = [...foods];
+									newFoods[i].portions += 1;
+									setFoods(newFoods);
+								}}
+								onRemove={() => {
+									const newFoods = [...foods];
+									newFoods[i].portions -= 1;
+									if (newFoods[i].portions === 0) {
+										newFoods.splice(i, 1);
 									}
-									portionName={getPortionName(food)}
-									onClick={() => {
-										router.push("/food/" + food.fdcId);
-									}}
-									onAdd={() => {
-										const newFoods = [...foods];
-										newFoods[i].portions += 1;
-										setFoods(newFoods);
-									}}
-									onRemove={() => {
-										const newFoods = [...foods];
-										newFoods[i].portions -= 1;
-										if (newFoods[i].portions === 0) {
-											newFoods.splice(i, 1);
-										}
-										setFoods(newFoods);
-									}}
-									portions={food.portions}
+									setFoods(newFoods);
+								}}
+								portions={food.portions}
+							/>
+							// </Link>
+						);
+					})}
+
+					<AddButton
+						onClick={() => {
+							setModalOpen((prev) => prev + 1);
+						}}
+					>
+						Add Food
+					</AddButton>
+				</ion-list>
+
+				<ion-list>
+					<ion-list-header>
+						<h2>Vitamins</h2>
+					</ion-list-header>
+
+					<Row className="ion-padding">
+						{vitamins.map((vitamin, i) => {
+							return (
+								<PercentCircle
+									num={getDVPercent(
+										vitamin.dbName,
+										"vitamins"
+									)}
+									name={vitamin.shortName}
 								/>
-								// </Link>
 							);
 						})}
+					</Row>
+				</ion-list>
 
-						<AddButton onClick={() => {
-							setModalOpen(prev => prev+1)
-						}}>Add Food</AddButton>
-					</ion-list>
+				<ion-list>
+					<ion-list-header>
+						<h2>Minerals</h2>
+					</ion-list-header>
 
-					<ion-list>
-						<ion-list-header>
-							<h2>Vitamins</h2>
-						</ion-list-header>
+					<Row className="ion-padding">
+						{minerals.map((mineral, i) => {
+							return (
+								<PercentCircle
+									num={getDVPercent(
+										mineral.dbName,
+										"minerals"
+									)}
+									name={mineral.shortName}
+								/>
+							);
+						})}
+					</Row>
+				</ion-list>
+			</ion-content>
 
-						<Row className="ion-padding">
-							{vitamins.map((vitamin, i) => {
-								return (
-									<PercentCircle
-										num={getDVPercent(
-											vitamin.dbName,
-											"vitamins"
-										)}
-										name={vitamin.shortName}
-									/>
-								);
-							})}
-						</Row>
-					</ion-list>
-
-					<ion-list>
-						<ion-list-header>
-							<h2>Minerals</h2>
-						</ion-list-header>
-
-						<Row className="ion-padding">
-							{minerals.map((mineral, i) => {
-								return (
-									<PercentCircle
-										num={getDVPercent(
-											mineral.dbName,
-											"minerals"
-										)}
-										name={mineral.shortName}
-									/>
-								);
-							})}
-						</Row>
-					</ion-list>
-				</ion-content>
-
-
-			<IonModal ref={modalRef}  open={modalOpen}>
+			<IonModal ref={modalRef} open={modalOpen} setOpen={setModalOpen}>
 				<ion-header translucent>
 					<ion-toolbar>
 						<ion-title>Search your Food</ion-title>
@@ -187,7 +205,7 @@ const TrackScreen = ({ foodData }) => {
 								...prev,
 								{ ...food, portions: 1 },
 							]);
-							setModalOpen(false)
+							setModalOpen(false);
 						}}
 						noLink={true}
 					/>
@@ -197,8 +215,7 @@ const TrackScreen = ({ foodData }) => {
 	);
 };
 
-export default TrackScreen;
-
+export default DayScreen;
 
 const Header = styled.div`
 	display: flex;

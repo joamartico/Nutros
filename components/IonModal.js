@@ -42,6 +42,7 @@ const IonModal = (props) => {
 			currentModal.dismiss().then(() => {
 				setCurrentModal(null);
 			});
+		props.setOpen(false) // probar
 		}
 	}
 

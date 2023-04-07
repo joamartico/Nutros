@@ -14,6 +14,8 @@ const food = ({ foodData }) => {
 	const { id } = router.query;
 
 	const food = foodData.find((f) => f.fdcId == id);
+	console.log(food)
+	console.log(food?.foodNutrients)
 
 	const group = "men 19-30";
 

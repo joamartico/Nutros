@@ -1,12 +1,12 @@
 import CameraScreen from "../tab-screens/CameraScreen";
 import FoodsScreen from "../tab-screens/FoodsScreen";
 import { useState } from "react";
-import TrackScreen from "../tab-screens/TrackScreen";
+import DayScreen from "../tab-screens/DayScreen";
 import MeScreen from "../tab-screens/MeScreen";
 import Head from "next/head";
 
 export default function Home({ foodData }) {
-	const [selectedTab, setSelectedTab] = useState('foods')
+	const [selectedTab, setSelectedTab] = useState("foods");
 
 	async function getNewFoods() {
 		const newFoods = [];
@@ -35,39 +35,57 @@ export default function Home({ foodData }) {
 				<link rel="canonical" href="https://nutros.vercel.app" />
 			</Head> */}
 
-			<ion-tabs id='tabs'>
+			<ion-tabs id="tabs">
 				<ion-tab-bar slot="bottom">
-					<ion-tab-button tab="foods" onClick={() => setSelectedTab('foods')}>
+					<ion-tab-button
+						tab="foods"
+						onClick={() => setSelectedTab("foods")}
+					>
 						{/* <ion-label>Foods</ion-label> */}
 						<ion-icon src="/svg/fruits-icon.svg"></ion-icon>
 					</ion-tab-button>
 
-					<ion-tab-button tab="camera" onClick={() => setSelectedTab('camera')}>
+					<ion-tab-button
+						tab="camera"
+						onClick={() => setSelectedTab("camera")}
+					>
 						{/* <ion-label>Photo</ion-label> */}
 						<ion-icon src="/svg/camera.svg"></ion-icon>
 					</ion-tab-button>
 
-					<ion-tab-button tab="track" onClick={() => setSelectedTab('track')}>
+					<ion-tab-button
+						tab="track"
+						onClick={() => setSelectedTab("track")}
+					>
 						{/* <ion-label>Me</ion-label> */}
 						<ion-icon src="/svg/calendar.svg"></ion-icon>
 					</ion-tab-button>
 
-					<ion-tab-button tab="me" onClick={() => setSelectedTab('me')}>
+					<ion-tab-button
+						tab="me"
+						onClick={() => setSelectedTab("me")}
+					>
 						{/* <ion-label>Me</ion-label> */}
 						<ion-icon src="/svg/person.svg"></ion-icon>
 					</ion-tab-button>
 				</ion-tab-bar>
 
 				<ion-tab tab="foods">
-					<FoodsScreen selectedTab={selectedTab} foodData={foodData} />
+					<FoodsScreen
+						selectedTab={selectedTab}
+						foodData={foodData}
+					/>
 				</ion-tab>
 
 				<ion-tab tab="camera">
-					<CameraScreen selectedTab={selectedTab} foodData={foodData} />
+					<CameraScreen
+						selectedTab={selectedTab}
+						foodData={foodData}
+					/>
 				</ion-tab>
 
 				<ion-tab tab="track">
-					<TrackScreen selectedTab={selectedTab} foodData={foodData} />
+					<DayScreen selectedTab={selectedTab} foodData={foodData} />
 				</ion-tab>
 
 				<ion-tab tab="me">

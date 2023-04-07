@@ -51,6 +51,7 @@ const MeScreen = ({ foodData, selectedTab }) => {
 
 			<IonModal
 				open={modalOpen}
+				setOpen={setModalOpen}
 				style={{
 					// padding: 25,
 					display: "flex",
