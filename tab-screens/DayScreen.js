@@ -18,13 +18,13 @@ const group = "men 19-30";
 
 const realDate = new Date();
 const days = [
+	"Sunday",
 	"Monday",
 	"Tuesday",
 	"Wednesday",
 	"Thursday",
 	"Friday",
 	"Saturday",
-	"Sunday",
 ];
 
 function getPortionName(food) {
@@ -94,6 +94,7 @@ const DayScreen = ({ foodData }) => {
 							/>
 							<div style={{ height: 34, lineHeight: 1 }}>
 								{days[newDate.getDay()]}
+								{console.log(newDate.getDay())}
 							</div>
 							<ion-icon
 								name="chevron-forward"
