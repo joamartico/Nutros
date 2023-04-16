@@ -2,10 +2,13 @@ import CameraScreen from "../tab-screens/CameraScreen";
 import FoodsScreen from "../tab-screens/FoodsScreen";
 import { useState } from "react";
 import DayScreen from "../tab-screens/DayScreen";
-import MeScreen from "../tab-screens/MeScreen";
+import UserScreen from "../tab-screens/UserScreen";
 import Head from "next/head";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import firebaseApp from "../firebase";
+export const db = getFirestore(firebaseApp);
 
-export default function Home({ foodData }) {
+export default function Home({ foodData, userData }) {
 	const [selectedTab, setSelectedTab] = useState("foods");
 
 	async function getNewFoods() {
@@ -41,23 +44,20 @@ export default function Home({ foodData }) {
 						tab="foods"
 						onClick={() => setSelectedTab("foods")}
 					>
-						{/* <ion-label>Foods</ion-label> */}
 						<ion-icon src="/svg/fruits-icon.svg"></ion-icon>
 					</ion-tab-button>
 
-					<ion-tab-button
+					{/* <ion-tab-button
 						tab="camera"
 						onClick={() => setSelectedTab("camera")}
 					>
-						{/* <ion-label>Photo</ion-label> */}
 						<ion-icon src="/svg/camera.svg"></ion-icon>
-					</ion-tab-button>
+					</ion-tab-button> */}
 
 					<ion-tab-button
 						tab="track"
 						onClick={() => setSelectedTab("track")}
 					>
-						{/* <ion-label>Me</ion-label> */}
 						<ion-icon src="/svg/calendar.svg"></ion-icon>
 					</ion-tab-button>
 
@@ -65,7 +65,6 @@ export default function Home({ foodData }) {
 						tab="me"
 						onClick={() => setSelectedTab("me")}
 					>
-						{/* <ion-label>Me</ion-label> */}
 						<ion-icon src="/svg/person.svg"></ion-icon>
 					</ion-tab-button>
 				</ion-tab-bar>
@@ -77,19 +76,19 @@ export default function Home({ foodData }) {
 					/>
 				</ion-tab>
 
-				<ion-tab tab="camera">
+				{/* <ion-tab tab="camera">
 					<CameraScreen
 						selectedTab={selectedTab}
 						foodData={foodData}
 					/>
-				</ion-tab>
+				</ion-tab> */}
 
 				<ion-tab tab="track">
-					<DayScreen selectedTab={selectedTab} foodData={foodData} />
+					<DayScreen selectedTab={selectedTab} foodData={foodData} userData={userData}/>
 				</ion-tab>
 
 				<ion-tab tab="me">
-					<MeScreen selectedTab={selectedTab} foodData={foodData} />
+					<UserScreen selectedTab={selectedTab} foodData={foodData} userData={userData}/>
 				</ion-tab>
 			</ion-tabs>
 		</>
@@ -124,3 +123,14 @@ export default function Home({ foodData }) {
 // 	console.log(foodData);
 // 	return { props: { foodData } };
 // }
+
+
+export async function getServerSideProps(context) {
+	const userDoc = await getDoc(doc(db, 'users', 'joamartico@gmail.com'));
+
+	return {
+		props: {
+			userData: userDoc?.data() ?? null,
+		},
+	};
+}

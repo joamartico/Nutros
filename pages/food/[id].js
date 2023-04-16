@@ -14,8 +14,8 @@ const food = ({ foodData }) => {
 	const { id } = router.query;
 
 	const food = foodData.find((f) => f.fdcId == id);
-	console.log(food)
-	console.log(food?.foodNutrients)
+	console.log(food);
+	console.log(food?.foodNutrients);
 
 	const group = "men 19-30";
 
@@ -24,24 +24,29 @@ const food = ({ foodData }) => {
 			<Head>
 				<title>{food?.description} - Nutros</title>
 			</Head>
-{console.log(food?.foodNutrients)}
+			{console.log(food?.foodNutrients)}
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">
-						<Link href='/'>
-							<ion-button>
-								Back
-							</ion-button>
+						<Link href="/">
+							<ion-button>Back</ion-button>
 						</Link>
 					</ion-buttons>
-					<ion-title><>{food?.emoji}&nbsp;&nbsp;{food?.description.split(', ')[0]}</></ion-title>
+					<ion-title>
+						<>
+							{food?.emoji}&nbsp;&nbsp;
+							{food?.description.split(", ")[0]}
+						</>
+					</ion-title>
 				</ion-toolbar>
 			</ion-header>
 
 			<ion-content fullscreen>
 				<ion-header collapse="condense">
 					<ion-toolbar>
-						<ion-title size="large" style={{ height: 50}}>{food?.emoji}&nbsp;{food?.description}</ion-title>
+						<ion-title size="large" style={{ height: 50 }}>
+							{food?.emoji}&nbsp;{food?.description}
+						</ion-title>
 					</ion-toolbar>
 					<ion-toolbar>
 						<ion-text class="ion-padding">

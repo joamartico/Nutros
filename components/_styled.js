@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const Background = styled.div`
 	width: 100%;
 	height: 100%;
-	background: red;
 	display: flex;
 	background: var(--ion-color-secondary);
 `;

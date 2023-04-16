@@ -10,12 +10,22 @@ import PercentCircle from "../components/PercentCircle";
 import SearchFoodList from "../components/SearchFoodList";
 import dv from "../dv.json";
 import { minerals, vitamins } from "../nutrients";
+import { db } from "../pages";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const group = "men 19-30";
 
-const realDate = new Date()
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
+const realDate = new Date();
+const days = [
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday",
+	"Sunday",
+];
 
 function getPortionName(food) {
 	if (!food.portions) return "";
@@ -29,8 +39,8 @@ function getPortionName(food) {
 const DayScreen = ({ foodData }) => {
 	const [foods, setFoods] = useState([]);
 	const [modalOpen, setModalOpen] = useState(false);
-	const [date	, setDate	] = useState(realDate)
-	const newDate = new Date(date)
+	const [date, setDate] = useState(realDate);
+	const newDate = new Date(date);
 
 	const modalRef = useRef();
 
@@ -76,7 +86,11 @@ const DayScreen = ({ foodData }) => {
 								src="/svg/chevron-back.svg"
 								style={{ marginRight: 20, cursor: "pointer" }}
 								color="primary"
-								onClick={() => setDate(prev => new Date(date).setHours(-24))}
+								onClick={() =>
+									setDate((prev) =>
+										new Date(date).setHours(-24)
+									)
+								}
 							/>
 							<div style={{ height: 34, lineHeight: 1 }}>
 								{days[newDate.getDay()]}
@@ -86,7 +100,11 @@ const DayScreen = ({ foodData }) => {
 								src="/svg/chevron-forward.svg"
 								style={{ marginLeft: 20, cursor: "pointer" }}
 								color="primary"
-								onClick={() => setDate(prev => new Date(date).setHours(24))}
+								onClick={() =>
+									setDate((prev) =>
+										new Date(date).setHours(24)
+									)
+								}
 							/>
 						</Header>
 					</ion-toolbar>
@@ -162,7 +180,7 @@ const DayScreen = ({ foodData }) => {
 					</Row>
 				</ion-list>
 
-				<ion-list>
+				<ion-list style={{ marginTop: -30 }}>
 					<ion-list-header>
 						<h2>Minerals</h2>
 					</ion-list-header>
@@ -195,7 +213,7 @@ const DayScreen = ({ foodData }) => {
 					</ion-toolbar>
 				</ion-header>
 
-				<ion-content fullscreen>
+				<ion-content style={{ position: 'absolute', top: 44}}>
 					<SearchFoodList
 						foodData={foodData}
 						// noTitle
@@ -206,6 +224,19 @@ const DayScreen = ({ foodData }) => {
 								{ ...food, portions: 1 },
 							]);
 							setModalOpen(false);
+							const auth = getAuth();
+							addDoc(
+								collection(
+									db,
+									`users/${auth.currentUser?.email}/${
+										newDate.toISOString().split("T")[0]
+									}/`
+								),
+								{
+									food,
+									portions: 1,
+								}
+							);
 						}}
 						noLink={true}
 					/>
@@ -246,10 +277,6 @@ const AddButton = styled.div`
 	font-size: 15px;
 	font-weight: bold;
 	color: #040;
-`;
-
-const Modal = styled.div`
-	display: ${({ currentModal }) => (currentModal ? "block" : "none")};
 `;
 
 const Row = styled.div`

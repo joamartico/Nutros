@@ -68,6 +68,9 @@ const FoodsScreen = ({ foodData }) => {
 								// orderFoodBy(e.target.value[0]);
 								setSelectedNutrient(e.target.value[0]);
 							}}
+							translucent
+							multiple="true"
+							interface="alert"
 							value={selectedNutrient}
 						>
 							{vitamins.map((vitamin) => (

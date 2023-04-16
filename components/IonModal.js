@@ -6,9 +6,6 @@ import styled from "styled-components";
 const IonModal = (props) => {
 	const [currentModal, setCurrentModal] = useState();
 
-	console.log(props)
-
-	const pageRef = useRef();
 	const modalRef = useRef();
 
 	async function openModal(opts = {}) {
@@ -25,7 +22,7 @@ const IonModal = (props) => {
 	function openCardModal() {
 		openModal({
 			swipeToClose: true,
-			presentingElement: document.getElementById('tabs'),
+			presentingElement: document.getElementById("tabs"),
 		});
 	}
 
@@ -42,31 +39,34 @@ const IonModal = (props) => {
 			currentModal.dismiss().then(() => {
 				setCurrentModal(null);
 			});
-		props.setOpen(false) // probar
+			props.setOpen(false); // probar
 		}
 	}
 
-    useEffect(() => {
-      props.open && openCardModal()
-	  props.open == 0 && dismissModal()
-    }, [props.open])
-    
+	useEffect(() => {
+		props.open && openCardModal();
+		props.open == 0 && dismissModal();
+	}, [props.open]);
 
 	return (
-        <>
-        {/* <div pageRef={pageRef} class='ion-page' className="ion-page">
+		<>
+			{/* <div pageRef={pageRef} class='ion-page' className="ion-page">
         </div> */}
 
-		<Modal ref={modalRef} currentModal={currentModal ? true : false} style={props.style}>
-			{props.children}
-		</Modal>
-        </>
+			<Modal
+				ref={modalRef}
+				currentModal={currentModal ? true : false}
+				style={props.style}
+			>
+				{props.children}
+			</Modal>
+		</>
 	);
 };
-
 
 export default IonModal;
 
 const Modal = styled.div`
-	display: ${({ currentModal }) => (currentModal ? "block" : "none")};
+	display: ${({ currentModal }) => (currentModal ? "flex" : "none")};
+	padding-bottom: env(safe-area-inset-bottom);
 `;

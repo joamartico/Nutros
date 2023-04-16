@@ -89,7 +89,7 @@ function MyApp({ Component, pageProps }) {
 			</Script> */}
 
 			<Context>
-				<ion-app mode="ios">
+				<ion-app mode="ios" id='ionapp'>
 					<Component {...pageProps} foodData={foodData} />
 				</ion-app>
 			</Context>

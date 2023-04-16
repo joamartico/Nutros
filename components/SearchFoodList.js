@@ -47,7 +47,7 @@ const SearchFoodList = ({ foodData, onClickItem, noLink, title }) => {
 								// onClick={onClickItem, link}
 								onClick={() => onClickItem(food)}
 							>
-								<ion-label>{food.emoji} {food.description}</ion-label>
+								<ion-label>{food.emoji}&nbsp;&nbsp;{food.description}</ion-label>
 							</ion-item>
 						</Link>
 					))}

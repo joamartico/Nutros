@@ -1,10 +1,10 @@
-ion-select {
+/* ion-select {
     background-color: transparent !important;
     color: transparent !important;
     position: absolute;
     top: 0;
     width: 100%;
-}
+} */
 
 a {
     cursor: pointer !important;
@@ -29,22 +29,34 @@ body {
     background-color: #D8F2C7;
 }
 
-ion-app {
-    background-color: white;
+ion-backdrop {
+    opacity: 0.4;
 }
 
-@media screen and (min-width: 700px) {
+ion-app {
+    background: white;
+}
+
+@media screen and (min-width:  1000px) {
     ion-app {
         /* max-width: 700px; */
-        max-width: 600px;
+        box-shadow: 0 10px 25px 0 rgba(0,0,0,.08);
+        width: 450px;
+        height: 90vh;
         border-radius: 12px;
         top: 0 !important;
-        height: 100vh !important;
         position: absolute !important;
         left: 50vw !important;
-        /* position: relative;
-       left: 50%; */
-       transform: translateX(-50%) !important;
+        transform: translate(-50%, 5%);
+
+        width: 500px;
+        height: 94vh;
+        transform: translate(-50%, 3%);
+    }
+
+    ion-modal {
+        --width: 90% !important;
+        --height: 90% !important;
     }
 }
 

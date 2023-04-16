@@ -3,22 +3,16 @@ import styled from "styled-components";
 import { Background, Card } from "../components/_styled";
 
 const Login = () => {
-
 	return (
-		<Background>
-			<Card>
+		<>
+			<ion-content class='ion-padding'>
 				<Subtitle>Login</Subtitle>
-
-				<p>Your app to</p>
-
-				<ion-button strong>Back</ion-button>
-			</Card>
-		</Background>
+			</ion-content>
+		</>
 	);
 };
 
 export default Login;
-
 
 const Subtitle = styled.p`
 	font-size: 50px;
