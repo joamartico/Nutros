@@ -1,15 +1,27 @@
 import CameraScreen from "../tab-screens/CameraScreen";
 import FoodsScreen from "../tab-screens/FoodsScreen";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DayScreen from "../tab-screens/DayScreen";
 import UserScreen from "../tab-screens/UserScreen";
 import Head from "next/head";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import firebaseApp from "../firebase";
+import useAuth from "../hooks/useAuth";
+import { getAuth } from "firebase/auth";
 export const db = getFirestore(firebaseApp);
 
-export default function Home({ foodData, userData }) {
+export default function Home({ foodData }) {
 	const [selectedTab, setSelectedTab] = useState("foods");
+	const [userData, setUserData] = useState();
+	const user = useAuth();
+
+	useEffect(() => {
+		if (!user) return;
+		getDoc(doc(db, "users", user?.email)).then((userDoc) => {
+			console.log("xx ", userDoc.data());
+			setUserData(userDoc.data());
+		});
+	}, [user]);
 
 	async function getNewFoods() {
 		const newFoods = [];
@@ -84,11 +96,19 @@ export default function Home({ foodData, userData }) {
 				</ion-tab> */}
 
 				<ion-tab tab="track">
-					<DayScreen selectedTab={selectedTab} foodData={foodData} userData={userData}/>
+					<DayScreen
+						selectedTab={selectedTab}
+						foodData={foodData}
+						userData={userData}
+					/>
 				</ion-tab>
 
 				<ion-tab tab="me">
-					<UserScreen selectedTab={selectedTab} foodData={foodData} userData={userData}/>
+					<UserScreen
+						selectedTab={selectedTab}
+						foodData={foodData}
+						userData={userData}
+					/>
 				</ion-tab>
 			</ion-tabs>
 		</>
@@ -124,13 +144,15 @@ export default function Home({ foodData, userData }) {
 // 	return { props: { foodData } };
 // }
 
-
 export async function getServerSideProps(context) {
-	const userDoc = await getDoc(doc(db, 'users', 'joamartico@gmail.com'));
+	const authuser = await getAuth(firebaseApp);
+	console.log("authuser: ", authuser.currentUser);
+
+	// const userDoc = await getDoc(doc(db, "users", "joamartico@gmail.com"));
 
 	return {
 		props: {
-			userData: userDoc?.data() ?? null,
+			// userData: userDoc?.data() ?? null,
 		},
 	};
 }

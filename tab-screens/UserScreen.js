@@ -95,7 +95,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 			<ion-content>
 				<ion-list>
 					<ion-list-header>
-						<ion-label>About you</ion-label>
+						<ion-label>About you {userData?.gender}</ion-label>
 					</ion-list-header>
 
 					<ion-item style={{ cursor: "pointer" }}>

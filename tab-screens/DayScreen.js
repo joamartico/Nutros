@@ -2,7 +2,7 @@ import { modalController } from "@ionic/core";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import FoodItem from "../components/FoodItem";
 import IonModal from "../components/IonModal";
@@ -11,12 +11,19 @@ import SearchFoodList from "../components/SearchFoodList";
 import dv from "../dv.json";
 import { minerals, vitamins } from "../nutrients";
 import { db } from "../pages";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import {
+	addDoc,
+	collection,
+	doc,
+	getDocs,
+	increment,
+	setDoc,
+	updateDoc,
+} from "firebase/firestore";
+import useAuth from "../hooks/useAuth";
 
 const group = "men 19-30";
 
-const realDate = new Date();
 const days = [
 	"Sunday",
 	"Monday",
@@ -39,12 +46,26 @@ function getPortionName(food) {
 const DayScreen = ({ foodData }) => {
 	const [foods, setFoods] = useState([]);
 	const [modalOpen, setModalOpen] = useState(false);
-	const [date, setDate] = useState(realDate);
-	const newDate = new Date(date);
-
+	const user = useAuth();
 	const modalRef = useRef();
-
 	const router = useRouter();
+	const [date, setDate] = useState(new Date());
+	const formattedDate = date.toLocaleDateString("sv");
+	console.log(formattedDate);
+
+	useEffect(() => {
+		if (!user) return;
+		getDocs(collection(db, `users/${user?.email}/`, formattedDate)).then(
+			(snapshot) => {
+				setFoods(snapshot.docs.map((doc) => doc.data()));
+				console.log(snapshot.docs.map((doc) => doc.data()));
+			}
+		);
+	}, [user, date]);
+
+	useEffect(() => {
+		console.log(formattedDate);
+	}, [date]);
 
 	function getDVPercent(nutrientName, nutrientType) {
 		let amountSum = 0;
@@ -73,7 +94,7 @@ const DayScreen = ({ foodData }) => {
 
 			<ion-header translucent>
 				<ion-toolbar>
-					<ion-title>{days[newDate.getDay()]}</ion-title>
+					<ion-title>{days[date.getDay()]}</ion-title>
 				</ion-toolbar>
 			</ion-header>
 
@@ -87,14 +108,17 @@ const DayScreen = ({ foodData }) => {
 								style={{ marginRight: 20, cursor: "pointer" }}
 								color="primary"
 								onClick={() =>
-									setDate((prev) =>
-										new Date(date).setHours(-24)
+									setDate(
+										(prev) =>
+											new Date(
+												prev.getTime() -
+													24 * 60 * 60 * 1000
+											)
 									)
 								}
 							/>
 							<div style={{ height: 34, lineHeight: 1 }}>
-								{days[newDate.getDay()]}
-								{console.log(newDate.getDay())}
+								{days[date.getDay()]}
 							</div>
 							<ion-icon
 								name="chevron-forward"
@@ -102,8 +126,12 @@ const DayScreen = ({ foodData }) => {
 								style={{ marginLeft: 20, cursor: "pointer" }}
 								color="primary"
 								onClick={() =>
-									setDate((prev) =>
-										new Date(date).setHours(24)
+									setDate(
+										(prev) =>
+											new Date(
+												prev.getTime() +
+													24 * 60 * 60 * 1000
+											)
 									)
 								}
 							/>
@@ -137,6 +165,16 @@ const DayScreen = ({ foodData }) => {
 									const newFoods = [...foods];
 									newFoods[i].portions += 1;
 									setFoods(newFoods);
+									updateDoc(
+										doc(
+											db,
+											`users/${user?.email}/${formattedDate}/`,
+											food.description
+										),
+										{
+											portions: increment(1),
+										}
+									);
 								}}
 								onRemove={() => {
 									const newFoods = [...foods];
@@ -145,6 +183,16 @@ const DayScreen = ({ foodData }) => {
 										newFoods.splice(i, 1);
 									}
 									setFoods(newFoods);
+									updateDoc(
+										doc(
+											db,
+											`users/${user?.email}/${formattedDate}/`,
+											food.description
+										),
+										{
+											portions: increment(-1),
+										}
+									);
 								}}
 								portions={food.portions}
 							/>
@@ -214,10 +262,9 @@ const DayScreen = ({ foodData }) => {
 					</ion-toolbar>
 				</ion-header>
 
-				<ion-content style={{ position: 'absolute', top: 44}}>
+				<ion-content style={{ position: "absolute", top: 44 }}>
 					<SearchFoodList
 						foodData={foodData}
-						// noTitle
 						title={null}
 						onClickItem={(food) => {
 							setFoods((prev) => [
@@ -225,16 +272,14 @@ const DayScreen = ({ foodData }) => {
 								{ ...food, portions: 1 },
 							]);
 							setModalOpen(false);
-							const auth = getAuth();
-							addDoc(
-								collection(
+							setDoc(
+								doc(
 									db,
-									`users/${auth.currentUser?.email}/${
-										newDate.toISOString().split("T")[0]
-									}/`
+									`users/${user?.email}/${formattedDate}/`,
+									food.description
 								),
 								{
-									food,
+									...food,
 									portions: 1,
 								}
 							);

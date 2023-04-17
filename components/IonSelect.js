@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 
 const IonSelect = (props) => {
 	const ref = useRef();
-	const [pickerValue, setPickerValue] = useState(props.defaultValue);
+	const [pickerValue, setPickerValue] = useState();
 
 	async function openPicker() {
 		const picker = await pickerController.create({
@@ -86,7 +86,7 @@ const IonSelect = (props) => {
 						marginLeft: "auto",
 					}}
 					placeholder={props.placeholder}
-					value={pickerValue}
+					value={pickerValue || props.defaultValue}
 				>
 					{props.options?.map((option) => (
 						<ion-select-option value={option}>
