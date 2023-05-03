@@ -6,21 +6,19 @@ import { getMessaging, getToken } from "firebase/messaging";
 import IonSelect from "../components/IonSelect";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import {
-	addDoc,
-	collection,
 	doc,
-	getFirestore,
 	setDoc,
-	updateDoc,
-	getDoc,
 } from "firebase/firestore";
 import { db } from "../pages";
+
+const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+const API_URL = "https://api.openai.com/v1/chat/completions";
 
 const group = "men 19-30";
 
 function getPortionName(food) {
 	if (!food.portions) return "";
-	const name = food.foodPortions[0].portionDescription;
+	const name = food.foodPortions[0]?.portionDescription;
 	if (name?.startsWith("1 ")) {
 		return name.substring(2);
 	}
@@ -29,6 +27,8 @@ function getPortionName(food) {
 
 const UserScreen = ({ selectedTab, userData }) => {
 	const [modalOpen, setModalOpen] = useState(false);
+	const [promptValue, setPromptValue] = useState("");
+	const [response, setResponse] = useState("");
 
 	const { installPwa } = useInstallPwa();
 
@@ -44,7 +44,69 @@ const UserScreen = ({ selectedTab, userData }) => {
 		if (selectedTab == "me" && !auth.currentUser) {
 			setModalOpen((prev) => prev + 1);
 		}
+
+
+		// get user birthday by google auth
+		const user = auth.currentUser;
+		const userBirthday = user?.birthday;
+		console.log("userBirthday: ", userBirthday);
+
 	}, [selectedTab]);
+
+	async function askToGpt() {
+		const response = await fetch(API_URL, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${OPENAI_API_KEY}`,
+			},
+			body: JSON.stringify({
+				model: "gpt-3.5-turbo",
+				messages: [
+					{
+						role: "system",
+						content:
+							"you are a nutrition assistant bot. Help the user achieve his goals through nutrition. Be short and concise. Recommend the user some foods and explain why.",
+					},
+					{ role: "user", content: promptValue },
+				],
+				stream: true,
+				temperature: 0.2,
+				// stop: ["\ninfo:"],
+			}),
+		});
+
+		const reader = response.body.getReader();
+		const decoder = new TextDecoder("utf-8");
+
+		while (true) {
+			const { value, done } = await reader.read();
+
+			if (done) {
+				// setResponse((prev) => prev.concat("<br/><br/>"));
+
+				break;
+			}
+
+			const chunk = await decoder.decode(value);
+
+			const data = chunk
+				.split("\n")
+				.map((line) => line.replace("data: ", ""));
+
+			data.forEach((line) => {
+				try {
+					const json = JSON.parse(line);
+					console.log("json: ", json);
+					const token = json.choices[0]?.delta?.content;
+
+					token && setResponse((prev) => prev.concat(token));
+				} catch (err) {
+					console.log(err);
+				}
+			});
+		}
+	}
 
 	return (
 		<>
@@ -95,7 +157,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 			<ion-content>
 				<ion-list>
 					<ion-list-header>
-						<ion-label>About you {userData?.gender}</ion-label>
+						<ion-label>About you</ion-label>
 					</ion-list-header>
 
 					<ion-item style={{ cursor: "pointer" }}>
@@ -146,8 +208,23 @@ const UserScreen = ({ selectedTab, userData }) => {
 					<TextArea
 						placeholder="Write what you want to achieve..."
 						autoGrow
+						value={promptValue}
+						onChange={(e) => setPromptValue(e.target.value)}
 					/>
-					<Button>Get Recommendation</Button>
+					<Button onClick={askToGpt}>Get Recommendation</Button>
+					
+					<ion-item lines="none">
+							{response && (
+								<ion-text>
+									<p
+										dangerouslySetInnerHTML={{
+											__html: response,
+										}}
+									/>
+								</ion-text>
+							)}
+						</ion-item>
+										
 				</ion-list>
 			</ion-content>
 

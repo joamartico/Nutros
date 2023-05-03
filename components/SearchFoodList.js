@@ -39,6 +39,8 @@ const SearchFoodList = ({ foodData, onClickItem, noLink, title }) => {
 					.map((food) => (
 						<Link href={noLink ? '' : `/food/${food.fdcId}`}>
 							<ion-item
+								button
+								detail="false"
 								key={food.foodCode}
 								// onClick={() => {
 								// 	setFood(food);

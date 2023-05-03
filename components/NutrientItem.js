@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-const NutrientItem = ({ group, completeName, dbName, amount, unitName }) => {
-	const nutrientPercentage = ((amount / group[dbName]) * 100)?.toFixed(1);
+const NutrientItem = ({ recommendedAmount, completeName, dbName, amount, unitName }) => {
+	const nutrientPercentage = ((amount / recommendedAmount) * 100)?.toFixed(1);
 
 	function getColor(percentage) {
 		if (percentage > 10) {
@@ -22,7 +22,7 @@ const NutrientItem = ({ group, completeName, dbName, amount, unitName }) => {
 				</p>
 			</ion-label>
 
-			{!amount || !nutrientPercentage || !group[dbName] ? (
+			{!amount || !nutrientPercentage || !recommendedAmount ? (
 				""
 			) : (
 				<ion-note slot="end" color={getColor(nutrientPercentage)}>

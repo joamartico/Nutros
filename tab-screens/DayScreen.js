@@ -36,7 +36,7 @@ const days = [
 
 function getPortionName(food) {
 	if (!food.portions) return "";
-	const name = food.foodPortions[0].portionDescription;
+	const name = food.foodPortions[0]?.portionDescription;
 	if (name?.startsWith("1 ")) {
 		return name.substring(2);
 	}
@@ -51,21 +51,16 @@ const DayScreen = ({ foodData }) => {
 	const router = useRouter();
 	const [date, setDate] = useState(new Date());
 	const formattedDate = date.toLocaleDateString("sv");
-	console.log(formattedDate);
 
 	useEffect(() => {
 		if (!user) return;
 		getDocs(collection(db, `users/${user?.email}/`, formattedDate)).then(
 			(snapshot) => {
 				setFoods(snapshot.docs.map((doc) => doc.data()));
-				console.log(snapshot.docs.map((doc) => doc.data()));
 			}
 		);
 	}, [user, date]);
 
-	useEffect(() => {
-		console.log(formattedDate);
-	}, [date]);
 
 	function getDVPercent(nutrientName, nutrientType) {
 		let amountSum = 0;
@@ -74,14 +69,14 @@ const DayScreen = ({ foodData }) => {
 				if (item.nutrient?.name === nutrientName) {
 					amountSum +=
 						item.amount *
-						(food.foodPortions[0].gramWeight / 100) *
+						((food.foodPortions[0]?.gramWeight || 100) / 100) *
 						food.portions;
 				}
 			});
 		});
 
 		return (
-			(amountSum / dv[nutrientType][group][nutrientName]) *
+			(amountSum / dv[group][nutrientName]) *
 			100
 		).toFixed(0);
 	}
@@ -154,7 +149,7 @@ const DayScreen = ({ foodData }) => {
 								emoji={food.emoji}
 								amount={
 									food.foodPortions
-										? food.foodPortions[0].gramWeight
+										? (food.foodPortions[0]?.gramWeight || 100)
 										: ""
 								}
 								portionName={getPortionName(food)}

@@ -14,8 +14,67 @@ const food = ({ foodData }) => {
 	const { id } = router.query;
 
 	const food = foodData.find((f) => f.fdcId == id);
-	console.log(food);
-	console.log(food?.foodNutrients);
+	// console.log(food);
+	// console.log(food?.foodNutrients);
+
+	let omega3 = 0;
+	let omega6 = 0;
+
+	const nutrientsHaveN3 = food?.foodNutrients.find((item) =>
+		item?.nutrient?.name.includes("n-3")
+	);
+
+	const nutrientsHaveN6 = food?.foodNutrients.find((item) =>
+		item?.nutrient?.name.includes("n-6")
+	);
+
+	food?.foodNutrients.map((item) => {
+		if (nutrientsHaveN3) {
+			// OMEGA 3
+			if (item?.nutrient?.name.includes("n-3")) {
+				omega3 = omega3 + item?.amount;
+			}
+		} else {
+			if (
+				item?.nutrient?.name.includes("PUFA 18:3") || // ALA
+				item?.nutrient?.name.includes("PUFA 18:4") || // SDA
+				item?.nutrient?.name.includes("PUFA 20:5") || // EPA
+				item?.nutrient?.name.includes("PUFA 22:5") || // DPA
+				item?.nutrient?.name.includes("PUFA 22:6") // DHA
+			) {
+				console.log('contains omega3')
+				omega3 = omega3 + item.amount;
+			}
+		}
+
+		if (nutrientsHaveN6) {
+			// OMEGA 6
+			if (item?.nutrient?.name.includes("n-6")) {
+				omega6 = omega6 + item?.amount;
+			}
+		} else {
+			if (
+				item?.nutrient?.name.includes("PUFA 18:2") || // LA
+				// item?.nutrient?.name.includes("PUFA 18:3") || // GLA
+				item?.nutrient?.name.includes("PUFA 20:3") || // DGLA
+				item?.nutrient?.name.includes("PUFA 20:4") // AA
+			) {
+				omega6 = omega6 + item.amount;
+			}
+		}
+
+		if (item?.nutrient?.name.includes("PUFA")) {
+			console.log("   ");
+			console.log(
+				item?.nutrient?.name +
+					",  " +
+					item.amount +
+					" " +
+					item?.nutrient?.unitName
+			);
+			console.log(item);
+		}
+	});
 
 	const group = "men 19-30";
 
@@ -63,7 +122,7 @@ const food = ({ foodData }) => {
 
 				<ion-list>
 					<ion-list-header>
-						<h2>Vitamins</h2>
+						Vitamins
 					</ion-list-header>
 
 					{vitamins.map((vitamin) => {
@@ -75,12 +134,12 @@ const food = ({ foodData }) => {
 							<NutrientItem
 								dbName={vitamin.dbName}
 								completeName={vitamin.completeName}
-								group={dv.vitamins[group]}
 								amount={
 									nutrient?.amount *
 										(food?.foodPortions[0]?.gramWeight /
 											100) || nutrient?.amount
 								}
+								recommendedAmount={dv[group][vitamin.dbName]}
 								unitName={nutrient?.nutrient.unitName}
 							/>
 						);
@@ -105,7 +164,6 @@ const food = ({ foodData }) => {
 													100) || item.amount
 										}
 										unitName={item?.nutrient.unitName}
-										group={dv.vitamins[group]}
 									/>
 								);
 							}
@@ -114,7 +172,7 @@ const food = ({ foodData }) => {
 
 				<ion-list>
 					<ion-list-header>
-						<h2>Minerals</h2>
+						Minerals
 					</ion-list-header>
 
 					{minerals.map((mineral) => {
@@ -126,12 +184,12 @@ const food = ({ foodData }) => {
 							<NutrientItem
 								dbName={mineral.dbName}
 								completeName={mineral.completeName}
-								group={dv.minerals[group]}
 								amount={
 									nutrient?.amount *
 										(food?.foodPortions[0]?.gramWeight /
 											100) || nutrient?.amount
 								}
+								recommendedAmount={dv[group][mineral.dbName]}
 								unitName={nutrient?.nutrient.unitName}
 							/>
 						);
@@ -153,14 +211,45 @@ const food = ({ foodData }) => {
 											100) || item.amount
 								}
 								unitName={item?.nutrient.unitName}
-								group={dv.minerals[group]}
 							/>
 						))} */}
 				</ion-list>
 
 				<ion-list>
 					<ion-list-header>
-						<h2>General</h2>
+						Fats
+					</ion-list-header>
+
+					<NutrientItem
+						name="Omega-3"
+						completeName="Omega-3"
+						dbName="Omega-3"
+						amount={
+							omega3 *
+								(food?.foodPortions[0]?.gramWeight / 100) ||
+							omega3
+						}
+						unitName={"g"}
+						recommendedAmount={dv[group]["Omega-3"]}
+					/>
+
+					<NutrientItem
+						name="Omega-6"
+						completeName="Omega-6"
+						dbName="Omega-6"
+						amount={
+							omega6 *
+								(food?.foodPortions[0]?.gramWeight / 100) ||
+							omega6
+						}
+						recommendedAmount={dv[group]["Omega-6"]}
+						unitName={"g"}
+					/>
+				</ion-list>
+
+				<ion-list>
+					<ion-list-header>
+						General
 					</ion-list-header>
 
 					{food?.foodNutrients
@@ -182,7 +271,7 @@ const food = ({ foodData }) => {
 											100) || item.amount
 								}
 								unitName={item?.nutrient.unitName}
-								group={dv.minerals[group]}
+								// recommendedAmount={100}
 							/>
 						))}
 				</ion-list>
