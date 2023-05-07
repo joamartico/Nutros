@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import IonModal from "../components/IonModal";
 import useInstallPwa from "../hooks/useInstallPwa";
@@ -14,9 +14,6 @@ import firebaseApp from "../firebase";
 
 const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const API_URL = "https://api.openai.com/v1/chat/completions";
-
-const group = "men 19-30";
-
 
 
 const UserScreen = ({ selectedTab, userData }) => {
@@ -38,13 +35,6 @@ const UserScreen = ({ selectedTab, userData }) => {
 		if (selectedTab == "me" && !auth.currentUser) {
 			setModalOpen((prev) => prev + 1);
 		}
-
-
-		// get user birthday by google auth
-		const user = auth.currentUser;
-		const userBirthday = user?.birthday;
-		console.log("userBirthday: ", userBirthday);
-
 	}, [selectedTab]);
 
 	async function askToGpt() {
@@ -104,11 +94,6 @@ const UserScreen = ({ selectedTab, userData }) => {
 
 	return (
 		<>
-			{/* <ion-header translucent>
-				<ion-toolbar>
-					<ion-title>Todays Nutrition</ion-title>
-				</ion-toolbar>
-			</ion-header> */}
 
 			<ion-header>
 				<ion-toolbar>
@@ -171,7 +156,6 @@ const UserScreen = ({ selectedTab, userData }) => {
 									{ merge: true }
 								);
 							}}
-							// defaultValue='Female'
 						/>
 					</ion-item>
 
@@ -191,7 +175,6 @@ const UserScreen = ({ selectedTab, userData }) => {
 									{ merge: true }
 								);
 							}}
-							// defaultValue='Female'
 						/>
 					</ion-item>
 

@@ -82,9 +82,7 @@ const food = ({ foodData }) => {
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">
-						<Link href="/">
-							<ion-button>Back</ion-button>
-						</Link>
+							<ion-button onClick={() => router.back()}>Back</ion-button>
 					</ion-buttons>
 					<ion-title>
 						<>

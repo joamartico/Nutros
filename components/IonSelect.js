@@ -38,9 +38,9 @@ const IonSelect = (props) => {
 		ref?.current?.addEventListener("ionChange", props.onChange);
 
 		// cleanup this component
-		return () => {
-			ref?.current?.removeEventListener("ionChange", props.onChange);
-		};
+		// return () => {
+		// 	ref?.current?.removeEventListener("ionChange", props.onChange);
+		// };
 	}, []);
 
 	if (props.interface != "picker") {
@@ -64,6 +64,7 @@ const IonSelect = (props) => {
 						: {}
 				}
 				placeholder={props.placeholder}
+				value={props.value}
 			>
 				{props.children}
 			</ion-select>
