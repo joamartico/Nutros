@@ -8,47 +8,37 @@ import { minerals, vitamins } from "../nutrients";
 const FoodsScreen = ({ foodData }) => {
 	const [selectedNutrient, setSelectedNutrient] = useState();
 
-	async function orderFoodBy(nutrient) {
-		await foodData.sort((a, b) => {
-			return (
-				b.foodNutrients.find((item) => item.nutrient?.name === nutrient)
-					?.amount *
-					(b.foodPortions[0]?.gramWeight / 100) -
-				a.foodNutrients.find((item) => item.nutrient?.name === nutrient)
-					?.amount *
-					(a.foodPortions[0]?.gramWeight / 100)
+
+	const orderedFoods = foodData
+		.sort((a, b) => {
+			const aNutrientObj = a.foodNutrients.find(
+				(item) =>
+					item.nutrient && item.nutrient.name === selectedNutrient
 			);
-		});
-		setSelectedNutrient(nutrient);
-	}
+			const bNutrientObj = b.foodNutrients.find(
+				(item) =>
+					item.nutrient && item.nutrient.name === selectedNutrient
+			);
 
-	function getFilteredFoods() {
-		// await foodData.map((food, i) => {
-		// 	if (foodData[i].split(",") == foodData[i + 1].split(",")) {
-		// 		foodData.splice(i + 1);
-		// 	}
-		// });
+			const aAmount = aNutrientObj ? aNutrientObj.amount : 0;
+			const bAmount = bNutrientObj ? bNutrientObj.amount : 0;
 
-		return foodData.filter((food, i) => {
-			const splittedFoodA = foodData[i].description.split(", ");
-			const splittedFoodB = foodData[i + 1]?.description.split(", ");
-
-			if (splittedFoodA.length < 2 || !splittedFoodB) return true;
+			const aGramWeight =
+				a.foodPortions[0] && a.foodPortions[0].gramWeight
+					? a.foodPortions[0].gramWeight
+					: 100;
+			const bGramWeight =
+				b.foodPortions[0] && b.foodPortions[0].gramWeight
+					? b.foodPortions[0].gramWeight
+					: 100;
 
 			return (
-				splittedFoodA[0] != splittedFoodB[0] ||
-				splittedFoodA[1] == "raw" ||
-				splittedFoodA[1] == "whole" ||
-				splittedFoodA[1] == "NFS"
+				bAmount * (bGramWeight / 100) - aAmount * (aGramWeight / 100)
 			);
 		});
-	}
 
 	return (
 		<>
-			{/* <Head>
-				<title>Foods - Nutros: </title>
-			</Head> */}
 
 			<ion-header translucent>
 				<ion-toolbar>
@@ -59,7 +49,6 @@ const FoodsScreen = ({ foodData }) => {
 
 						<IonSelect
 							onChange={(e) => {
-								// orderFoodBy(e.target.value[0]);
 								setSelectedNutrient(e.target.value[0]);
 							}}
 							translucent
@@ -91,35 +80,7 @@ const FoodsScreen = ({ foodData }) => {
 			<ion-content fullscreen>
 				<SearchFoodList
 					title={selectedNutrient || "Nutros"}
-					foodData={
-						!selectedNutrient
-							? foodData
-							: foodData
-									.filter(
-										(item) =>
-											item.foodNutrients.find(
-												(itemb) =>
-													itemb.nutrient?.name ==
-													selectedNutrient
-											)?.amount
-									)
-									.sort((a, b) => {
-										return (
-											b.foodNutrients.find(
-												(itemc) =>
-													itemc.nutrient?.name ==
-													selectedNutrient
-											)?.amount *
-												b.foodPortions[0]?.gramWeight -
-											a.foodNutrients.find(
-												(itemc) =>
-													itemc.nutrient?.name ==
-													selectedNutrient
-											)?.amount *
-												a.foodPortions[0]?.gramWeight
-										);
-									})
-					}
+					foodData={!selectedNutrient ? foodData : orderedFoods}
 				/>
 			</ion-content>
 		</>
