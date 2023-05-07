@@ -10,20 +10,14 @@ import {
 	setDoc,
 } from "firebase/firestore";
 import { db } from "../pages";
+import firebaseApp from "../firebase";
 
 const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const API_URL = "https://api.openai.com/v1/chat/completions";
 
 const group = "men 19-30";
 
-function getPortionName(food) {
-	if (!food.portions) return "";
-	const name = food.foodPortions[0]?.portionDescription;
-	if (name?.startsWith("1 ")) {
-		return name.substring(2);
-	}
-	return name;
-}
+
 
 const UserScreen = ({ selectedTab, userData }) => {
 	const [modalOpen, setModalOpen] = useState(false);
@@ -32,7 +26,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 
 	const { installPwa } = useInstallPwa();
 
-	const auth = getAuth();
+	const auth = getAuth(firebaseApp);
 
 	async function signIn() {
 		const provider = new GoogleAuthProvider();

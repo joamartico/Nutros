@@ -24,7 +24,7 @@ import "../index.css";
 import Context from "../Context";
 import Head from "next/head";
 
-import foodData from "../foodData_foundation.json";
+import foodData from "../public/foodData_foundation.json";
 
 function MyApp({ Component, pageProps }) {
 	useEffect(() => {
@@ -89,7 +89,7 @@ function MyApp({ Component, pageProps }) {
 			</Script> */}
 
 			<Context>
-				<ion-app mode="ios" id='ionapp'>
+				<ion-app mode="ios" id="ionapp">
 					<Component {...pageProps} foodData={foodData} />
 				</ion-app>
 			</Context>

@@ -35,8 +35,3 @@ const NutrientItem = ({ recommendedAmount, completeName, dbName, amount, unitNam
 
 export default NutrientItem;
 
-const AmountText = styled.span`
-	font-size: 0.9rem !important;
-	color: #999 !important;
-	margin-left: 10px;
-`;

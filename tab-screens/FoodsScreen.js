@@ -7,12 +7,6 @@ import { minerals, vitamins } from "../nutrients";
 
 const FoodsScreen = ({ foodData }) => {
 	const [selectedNutrient, setSelectedNutrient] = useState();
-	const { setFood } = useGlobalState();
-
-	const nutrients = foodData[1]?.foodNutrients.map(
-		(item, i) => item.nutrient?.name
-	);
-	// .slice(0, 44);
 
 	async function orderFoodBy(nutrient) {
 		await foodData.sort((a, b) => {
@@ -126,10 +120,6 @@ const FoodsScreen = ({ foodData }) => {
 										);
 									})
 					}
-					onClickItem={(food) => {
-						setFood(food);
-						// router.push("/food/" + food.fdcId);
-					}}
 				/>
 			</ion-content>
 		</>

@@ -1,8 +1,5 @@
-import { modalController } from "@ionic/core";
-import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import FoodItem from "../components/FoodItem";
 import IonModal from "../components/IonModal";
@@ -12,7 +9,6 @@ import dv from "../dv.json";
 import { minerals, vitamins } from "../nutrients";
 import { db } from "../pages";
 import {
-	addDoc,
 	collection,
 	doc,
 	getDocs,

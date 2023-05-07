@@ -1,9 +1,7 @@
-import CameraScreen from "../tab-screens/CameraScreen";
 import FoodsScreen from "../tab-screens/FoodsScreen";
 import { useEffect, useState } from "react";
 import DayScreen from "../tab-screens/DayScreen";
 import UserScreen from "../tab-screens/UserScreen";
-import Head from "next/head";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import firebaseApp from "../firebase";
 import useAuth from "../hooks/useAuth";
@@ -18,7 +16,6 @@ export default function Home({ foodData }) {
 	useEffect(() => {
 		if (!user) return;
 		getDoc(doc(db, "users", user?.email)).then((userDoc) => {
-			console.log("xx ", userDoc.data());
 			setUserData(userDoc.data());
 		});
 	}, [user]);

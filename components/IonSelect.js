@@ -10,12 +10,12 @@ const IonSelect = (props) => {
 			columns: [
 				{
 					name: "gender",
-					options: props.options?.map(option => {
+					options: props.options?.map((option) => {
 						return {
 							text: option,
 							value: option,
-						}
-					})
+						};
+					}),
 				},
 			],
 			buttons: [
@@ -26,8 +26,7 @@ const IonSelect = (props) => {
 				{
 					text: "Confirm",
 					handler: (value) => {
-						setPickerValue(value.gender.text)
-						// props.onChange && props.onChange(value.gender.text)
+						setPickerValue(value.gender.text);
 					},
 				},
 			],
@@ -90,7 +89,7 @@ const IonSelect = (props) => {
 				>
 					{props.options?.map((option) => (
 						<ion-select-option value={option}>
-							{option}	
+							{option}
 						</ion-select-option>
 					))}
 				</ion-select>
@@ -100,4 +99,3 @@ const IonSelect = (props) => {
 };
 
 export default IonSelect;
-

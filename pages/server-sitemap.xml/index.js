@@ -1,5 +1,5 @@
 import { getServerSideSitemap } from "next-sitemap";
-import foodData from "../../foodData_survey.json";
+import foodData from "../../public/foodData_survey.json";
 
 export async function getServerSideProps(context) {
 	const fields = foodData?.map((food) => ({

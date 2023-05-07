@@ -1,20 +1,36 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
-import useGlobalState from "../hooks/useGlobalState";
 import IonSearchbar from "./IonSearchbar";
+import { convertToUrl } from "../utils/functions";
 
 const SearchFoodList = ({ foodData, onClickItem, noLink, title }) => {
 	const [search, setSearch] = useState("");
-	// const { setFood } = useGlobalState();
-	// const router = useRouter();
+
+	const exactlyFoods = foodData?.filter((food) => {
+		let [foodName, ...foodDescription] = food.description.split(",");
+
+		return foodName.toLowerCase().includes(search.toLowerCase());
+	});
+
+	const otherFoods = foodData?.filter((food) => {
+		let [foodName, ...foodDescription] = food.description.split(",");
+
+		return foodDescription
+			.join(",")
+			.toLowerCase()
+			.includes(search.toLowerCase());
+	});
+
+	const foods = [...exactlyFoods, ...otherFoods];
 
 	return (
 		<>
 			<ion-header collapse="condense" translucent>
 				{title && (
 					<ion-toolbar>
-						<h1><ion-title size="large">{title}</ion-title></h1>
+						<h1>
+							<ion-title size="large">{title}</ion-title>
+						</h1>
 					</ion-toolbar>
 				)}
 
@@ -28,31 +44,26 @@ const SearchFoodList = ({ foodData, onClickItem, noLink, title }) => {
 			</ion-header>
 
 			<ion-list>
-				{foodData
-					?.filter((food) => {
-						search == "" && true;
-						return food.description
-							.toLowerCase()
-							.includes(search.toLowerCase());
-					})
-					.slice(0, 100)
-					.map((food) => (
-						<Link href={noLink ? '' : `/food/${food.fdcId}`}>
-							<ion-item
-								button
-								detail="false"
-								key={food.foodCode}
-								// onClick={() => {
-								// 	setFood(food);
-								// 	router.push("/food/" + food.fdcId);
-								// }}
-								// onClick={onClickItem, link}
-								onClick={() => onClickItem(food)}
-							>
-								<ion-label>{food.emoji}&nbsp;&nbsp;{food.description}</ion-label>
-							</ion-item>
-						</Link>
-					))}
+				{foods.slice(0, 100).map((food) => (
+					<Link
+						href={
+							noLink
+								? ""
+								: `/food/${convertToUrl(food.description)}`
+						}
+					>
+						<ion-item
+							button
+							detail="false"
+							key={food.foodCode}
+							onClick={() => onClickItem && onClickItem(food)}
+						>
+							<ion-label>
+								{food.emoji}&nbsp;&nbsp;{food.description}
+							</ion-label>
+						</ion-item>
+					</Link>
+				))}
 			</ion-list>
 		</>
 	);
