@@ -5,16 +5,12 @@ import useInstallPwa from "../hooks/useInstallPwa";
 import { getMessaging, getToken } from "firebase/messaging";
 import IonSelect from "../components/IonSelect";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import {
-	doc,
-	setDoc,
-} from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../pages";
 import firebaseApp from "../firebase";
 
 const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const API_URL = "https://api.openai.com/v1/chat/completions";
-
 
 const UserScreen = ({ selectedTab, userData }) => {
 	const [modalOpen, setModalOpen] = useState(false);
@@ -27,8 +23,11 @@ const UserScreen = ({ selectedTab, userData }) => {
 
 	async function signIn() {
 		const provider = new GoogleAuthProvider();
-		await signInWithPopup(auth, provider);
-		setModalOpen(false);
+		signInWithPopup(auth, provider).then((result) => {
+			console.log(result.user.email);
+			document.cookie = `user=${result.user.email}`;
+			setModalOpen(false);
+		});
 	}
 
 	useEffect(() => {
@@ -94,7 +93,6 @@ const UserScreen = ({ selectedTab, userData }) => {
 
 	return (
 		<>
-
 			<ion-header>
 				<ion-toolbar>
 					<ion-buttons slot="start">
@@ -189,19 +187,18 @@ const UserScreen = ({ selectedTab, userData }) => {
 						onChange={(e) => setPromptValue(e.target.value)}
 					/>
 					<Button onClick={askToGpt}>Get Recommendation</Button>
-					
+
 					<ion-item lines="none">
-							{response && (
-								<ion-text>
-									<p
-										dangerouslySetInnerHTML={{
-											__html: response,
-										}}
-									/>
-								</ion-text>
-							)}
-						</ion-item>
-										
+						{response && (
+							<ion-text>
+								<p
+									dangerouslySetInnerHTML={{
+										__html: response,
+									}}
+								/>
+							</ion-text>
+						)}
+					</ion-item>
 				</ion-list>
 			</ion-content>
 

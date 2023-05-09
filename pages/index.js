@@ -5,7 +5,10 @@ import UserScreen from "../tab-screens/UserScreen";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import firebaseApp from "../firebase";
 import useAuth from "../hooks/useAuth";
-import { getAuth } from "firebase/auth";
+import fs from "fs";
+import path from "path";
+import { shuffleArray } from "../utils/functions";
+
 export const db = getFirestore(firebaseApp);
 
 export default function Home({ foodData }) {
@@ -20,26 +23,6 @@ export default function Home({ foodData }) {
 		});
 	}, [user]);
 
-	async function getNewFoods() {
-		const newFoods = [];
-		foodData.forEach((food) => {
-			console.log("food: ", food.description);
-			console.log(
-				"emoji: ",
-				e.suggest("eatable " + food.description.split(", ")[0])[0]?.ref
-			);
-			console.log("");
-			console.log("");
-			newFoods.push({
-				emoji: e.suggest(
-					"eatable " + food.description.split(", ")[0]
-				)[0]?.ref,
-				...food,
-			});
-		});
-		console.log(newFoods);
-		return newFoods;
-	}
 
 	return (
 		<>
@@ -112,43 +95,23 @@ export default function Home({ foodData }) {
 	);
 }
 
-// SSR FETCH A API ORIGINAL (MAXIMO 200 RESULTADOS)
-// export async function getServerSideProps(context) {
-// 	const params = {
-// 		api_key: "X66ugLvvhHYrDgeiwTuSwPZEJAhupK2WSEEcxvaC",
-// 		query: "Mango",
-// 		dataType: ["foundation (FNDDS)"],
-// 		pagesize: 200,
-// 	};
-// 	const res = await fetch(
-// 		`https://api.nal.usda.gov/fdc/v1/foods/list?api_key=${encodeURIComponent(
-// 			"X66ugLvvhHYrDgeiwTuSwPZEJAhupK2WSEEcxvaC"
-// 		)}
-// 		&dataType=${encodeURIComponent(
-// 			params.dataType
-// 		)}&pageSize=${encodeURIComponent(params.pagesize)}`
-// 	);
-// 	const foodData = await res.json();
-// 	console.log(foodData);
-// 	return { props: { foodData } };
-// }
-
-// SSR FETCH A API PROPIA (no funca, muy lento para vercel)
-// export async function getServerSideProps(context) {
-// 	const res = await fetch("https://nutros.vercel.app/api/foods");
-// 	const foodData = await res.json();
-// 	console.log(foodData);
-// 	return { props: { foodData } };
-// }
 
 export async function getServerSideProps(context) {
-	const authuser = await getAuth(firebaseApp);
-	console.log("authuser: ", authuser.currentUser);
+	const cookies = context.req.headers.cookie.split('; ');
+	console.log("cookies: ", cookies);
+	// const authuser = await getAuth(firebaseApp);
 
-	// const userDoc = await getDoc(doc(db, "users", "joamartico@gmail.com"));
+	const filePath = path.join(process.cwd(), "public", "foodData_foundation.json");
+  const fileContents = fs.readFileSync(filePath, "utf-8");
+  const foodData = JSON.parse(fileContents);
+
+  // const randomOrderFoods = foodData.sort(() => Math.random() - Math.random());
+	const randomOrderFoods = shuffleArray(foodData);
 
 	return {
 		props: {
+			foodData: randomOrderFoods,
+			cookies: cookies || null,
 			// userData: userDoc?.data() ?? null,
 		},
 	};

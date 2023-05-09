@@ -4,6 +4,7 @@ import SearchFoodList from "../components/SearchFoodList";
 import { minerals, vitamins } from "../nutrients";
 import { useRouter } from "next/router";
 
+
 const FoodsScreen = ({ foodData }) => {
 	const router = useRouter();
 	const [selectedNutrient, setSelectedNutrient] = useState(
@@ -20,7 +21,7 @@ const FoodsScreen = ({ foodData }) => {
 		}
 	}, [selectedNutrient, router]);
 
-	const orderedFoods = foodData.sort((a, b) => {
+	foodData.sort((a, b) => {
 		const aNutrientObj = a.foodNutrients.find(
 			(item) => item.nutrient && item.nutrient.name === selectedNutrient
 		);
@@ -56,8 +57,10 @@ const FoodsScreen = ({ foodData }) => {
 
 						<IonSelect
 							onChange={(e) => {
-								console.log('etargetval ', e.target.value);
 								setSelectedNutrient(e.target.value);
+								if(!e.target.value){
+									foodData.sort(() => Math.random() - Math.random());
+								}
 							}}
 							translucent
 							multiple="true"
@@ -80,7 +83,7 @@ const FoodsScreen = ({ foodData }) => {
 			<ion-content fullscreen>
 				<SearchFoodList
 					title={selectedNutrient || "Nutros"}
-					foodData={!selectedNutrient ? foodData : orderedFoods}
+					foodData={foodData}
 				/>
 			</ion-content>
 		</>

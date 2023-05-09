@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const NutrientItem = ({ recommendedAmount, completeName, dbName, amount, unitName }) => {
+const NutrientItem = ({ recommendedAmount, completeName, amount, unitName, onClick }) => {
 	const nutrientPercentage = ((amount / recommendedAmount) * 100)?.toFixed(1);
 
 	function getColor(percentage) {
@@ -13,7 +13,7 @@ const NutrientItem = ({ recommendedAmount, completeName, dbName, amount, unitNam
 	}
 
 	return (
-		<ion-item>
+		<ion-item onClick={onClick}>
 			<ion-label>
 				<h2>{completeName}</h2>
 

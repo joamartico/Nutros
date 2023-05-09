@@ -3,14 +3,13 @@ import dv from "../../dv.json";
 import NutrientItem from "../../components/NutrientItem";
 import { minerals, vitamins } from "../../nutrients";
 import Head from "next/head";
-import Link from "next/link";
 import { convertToUrl } from "../../utils/functions";
+import fs from "fs";
+import path from "path";
 
-const food = ({ foodData }) => {
+
+const food = ({ food }) => {
 	const router = useRouter();
-	const { description } = router.query;
-
-	const food = foodData.find((f) => convertToUrl(f.description).includes(description));
 
 	let omega3 = 0;
 	let omega6 = 0;
@@ -56,18 +55,6 @@ const food = ({ foodData }) => {
 			) {
 				omega6 = omega6 + item.amount;
 			}
-		}
-
-		if (item?.nutrient?.name.includes("PUFA")) {
-			console.log("   ");
-			console.log(
-				item?.nutrient?.name +
-					",  " +
-					item.amount +
-					" " +
-					item?.nutrient?.unitName
-			);
-			console.log(item);
 		}
 	});
 
@@ -134,6 +121,7 @@ const food = ({ foodData }) => {
 								}
 								recommendedAmount={dv[group][vitamin.dbName]}
 								unitName={nutrient?.nutrient.unitName}
+								onClick={() => console.log(nutrient)}
 							/>
 						);
 					})}
@@ -184,6 +172,7 @@ const food = ({ foodData }) => {
 								}
 								recommendedAmount={dv[group][mineral.dbName]}
 								unitName={nutrient?.nutrient.unitName}
+								onClick={() => console.log(nutrient?.nutrient)}
 							/>
 						);
 					})}
@@ -274,3 +263,25 @@ const food = ({ foodData }) => {
 };
 
 export default food;
+
+
+export async function getServerSideProps(context) {
+	const cookies = context.req.headers.cookie.split('; ');
+	console.log("cookies: ", cookies);
+	// const authuser = await getAuth(firebaseApp);
+	const routeQuery = context.query.description
+	console.log('routeQuery: ', routeQuery);
+
+	const filePath = path.join(process.cwd(), "public", "foodData_foundation.json");
+  const fileContents = fs.readFileSync(filePath, "utf-8");
+  const foodData = JSON.parse(fileContents);
+	const food = foodData.find((f) => convertToUrl(f.description).includes(routeQuery));
+
+
+	return {
+		props: {
+			food,
+			cookies: cookies || null,
+		},
+	};
+}
