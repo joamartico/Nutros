@@ -96,23 +96,42 @@ export default function Home({ foodData }) {
 }
 
 
-export async function getServerSideProps(context) {
-	const cookies = context.req.headers.cookie?.split('; ');
-	console.log("cookies: ", cookies);
-	// const authuser = await getAuth(firebaseApp);
+// export async function getStaticProps(context) {
+// 	const cookies = context.req.headers.cookie?.split('; ');
+// 	console.log("cookies: ", cookies);
+// 	// const authuser = await getAuth(firebaseApp);
 
-	const filePath = path.join(process.cwd(), "public", "foodData_foundation.json");
+// 	const filePath = path.join(process.cwd(), "public", "foodData_foundation.json");
+//   const fileContents = fs.readFileSync(filePath, "utf-8");
+//   const foodData = JSON.parse(fileContents);
+
+//   // const randomOrderFoods = foodData.sort(() => Math.random() - Math.random());
+// 	const randomOrderFoods = shuffleArray(foodData);
+
+// 	return {
+// 		props: {
+// 			foodData: randomOrderFoods,
+// 			cookies: cookies || null,
+// 			// userData: userDoc?.data() ?? null,
+// 		},
+// 	};
+// }
+
+
+export async function getStaticProps() {
+  const filePath = path.join(process.cwd(), "public", "foodData_foundation.json");
   const fileContents = fs.readFileSync(filePath, "utf-8");
   const foodData = JSON.parse(fileContents);
 
-  // const randomOrderFoods = foodData.sort(() => Math.random() - Math.random());
-	const randomOrderFoods = shuffleArray(foodData);
+  const randomOrderFoods = shuffleArray(foodData);
 
-	return {
-		props: {
-			foodData: randomOrderFoods,
-			cookies: cookies || null,
-			// userData: userDoc?.data() ?? null,
-		},
-	};
+  return {
+    props: {
+      foodData: randomOrderFoods,
+      // Remove the cookies line
+      // cookies: cookies || null,
+    },
+    // Optionally, you can add a revalidate property to specify how often (in seconds) the page should be regenerated
+    revalidate: 60 * 60 * 24, // 24 hours
+  };
 }

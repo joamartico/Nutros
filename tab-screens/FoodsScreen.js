@@ -14,7 +14,7 @@ const FoodsScreen = ({ foodData }) => {
 	useEffect(() => {
 		if (selectedNutrient && router.query.nutrient !== selectedNutrient) {
 			router.push(
-				{ query: { ...router.query, nutrient: selectedNutrient?.toLocaleLowerCase() } },
+				{ query: { ...router.query, nutrient: selectedNutrient} },
 				undefined,
 				{ shallow: true }
 			);
