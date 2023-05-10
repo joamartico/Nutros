@@ -97,7 +97,7 @@ export default function Home({ foodData }) {
 
 
 export async function getServerSideProps(context) {
-	const cookies = context.req.headers.cookie.split('; ');
+	const cookies = context.req.headers.cookie?.split('; ');
 	console.log("cookies: ", cookies);
 	// const authuser = await getAuth(firebaseApp);
 
