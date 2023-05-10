@@ -7,7 +7,6 @@ import { convertToUrl } from "../../utils/functions";
 import fs from "fs";
 import path from "path";
 
-
 const food = ({ food }) => {
 	const router = useRouter();
 
@@ -36,7 +35,7 @@ const food = ({ food }) => {
 				item?.nutrient?.name.includes("PUFA 22:5") || // DPA
 				item?.nutrient?.name.includes("PUFA 22:6") // DHA
 			) {
-				console.log('contains omega3')
+				console.log("contains omega3");
 				omega3 = omega3 + item.amount;
 			}
 		}
@@ -69,7 +68,9 @@ const food = ({ food }) => {
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">
-							<ion-button onClick={() => router.back()}>Back</ion-button>
+						<ion-button onClick={() => router.back()}>
+							Back
+						</ion-button>
 					</ion-buttons>
 					<ion-title>
 						<>
@@ -83,10 +84,13 @@ const food = ({ food }) => {
 			<ion-content fullscreen>
 				<ion-header collapse="condense">
 					<ion-toolbar>
-						<ion-title size="large" style={{ height: 50 }}>
-							{food?.emoji}&nbsp;{food?.description}
-						</ion-title>
+						<h1>
+							<ion-title size="large" style={{ height: 50 }}>
+								{food?.emoji}&nbsp;{food?.description}
+							</ion-title>
+						</h1>
 					</ion-toolbar>
+
 					<ion-toolbar>
 						<ion-text class="ion-padding">
 							<span class="ion-text-capitalize">
@@ -101,9 +105,7 @@ const food = ({ food }) => {
 				</ion-header>
 
 				<ion-list>
-					<ion-list-header>
-						Vitamins
-					</ion-list-header>
+					<ion-list-header>Vitamins</ion-list-header>
 
 					{vitamins.map((vitamin) => {
 						const nutrient = food?.foodNutrients.find(
@@ -152,9 +154,7 @@ const food = ({ food }) => {
 				</ion-list>
 
 				<ion-list>
-					<ion-list-header>
-						Minerals
-					</ion-list-header>
+					<ion-list-header>Minerals</ion-list-header>
 
 					{minerals.map((mineral) => {
 						const nutrient = food?.foodNutrients.find(
@@ -198,9 +198,7 @@ const food = ({ food }) => {
 				</ion-list>
 
 				<ion-list>
-					<ion-list-header>
-						Fats
-					</ion-list-header>
+					<ion-list-header>Fats</ion-list-header>
 
 					<NutrientItem
 						name="Omega-3"
@@ -230,9 +228,7 @@ const food = ({ food }) => {
 				</ion-list>
 
 				<ion-list>
-					<ion-list-header>
-						General
-					</ion-list-header>
+					<ion-list-header>General</ion-list-header>
 
 					{food?.foodNutrients
 						.filter((item) => {
@@ -264,19 +260,23 @@ const food = ({ food }) => {
 
 export default food;
 
-
 export async function getServerSideProps(context) {
-	const cookies = context.req.headers.cookie.split('; ');
+	const cookies = context.req.headers.cookie?.split("; ");
 	console.log("cookies: ", cookies);
 	// const authuser = await getAuth(firebaseApp);
-	const routeQuery = context.query.description
-	console.log('routeQuery: ', routeQuery);
+	const routeQuery = context.query.description;
+	console.log("routeQuery: ", routeQuery);
 
-	const filePath = path.join(process.cwd(), "public", "foodData_foundation.json");
-  const fileContents = fs.readFileSync(filePath, "utf-8");
-  const foodData = JSON.parse(fileContents);
-	const food = foodData.find((f) => convertToUrl(f.description).includes(routeQuery));
-
+	const filePath = path.join(
+		process.cwd(),
+		"public",
+		"foodData_foundation.json"
+	);
+	const fileContents = fs.readFileSync(filePath, "utf-8");
+	const foodData = JSON.parse(fileContents);
+	const food = foodData.find((f) =>
+		convertToUrl(f.description).includes(routeQuery)
+	);
 
 	return {
 		props: {
