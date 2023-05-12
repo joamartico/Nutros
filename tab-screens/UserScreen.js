@@ -144,8 +144,16 @@ const UserScreen = ({ selectedTab, userData }) => {
 									onChange={(e) => {
 										alert(e.detail.value);
 
-										e.detail.value == "signOut" &&
+										if (e.detail.value == "signOut") {
 											auth?.signOut();
+											setCookie(null, "user", "", {
+												path: "/",
+											});
+											gender = null;
+											age = null;
+											maternalStatus = null;
+											setUserData(null);
+										}
 									}}
 								>
 									<ion-select-option value={"signOut"}>
