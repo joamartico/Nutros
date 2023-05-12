@@ -7,22 +7,22 @@ import firebaseApp from "../firebase";
 import useAuth from "../hooks/useAuth";
 import { shuffleArray } from "../utils/functions";
 import foundationFoodData from "../public/foodData_foundation.json";
+import { getAuth } from "firebase/auth";
 const foodNames = foundationFoodData.map(food => food.description);
 
 
 export const db = getFirestore(firebaseApp);
 
-export default function Home({ shuffledFoodNames }) {
+export default function Home({ shuffledFoodNames, cookies, userData }) {
 	const [selectedTab, setSelectedTab] = useState("foods");
-	const [userData, setUserData] = useState();
 	const user = useAuth();
 
-	useEffect(() => {
-		if (!user) return;
-		getDoc(doc(db, "users", user?.email)).then((userDoc) => {
-			setUserData(userDoc.data());
-		});
-	}, [user]);
+	// useEffect(() => {
+	// 	if (!user) return;
+	// 	getDoc(doc(db, "users", user?.email)).then((userDoc) => {
+	// 		setUserData(userDoc.data());
+	// 	});
+	// }, [user]);
 
 	const foodDataMap = foundationFoodData.reduce((acc, food) => {
 		acc[food.description] = food;
@@ -104,12 +104,24 @@ export default function Home({ shuffledFoodNames }) {
 	);
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx) {
 	const shuffledFoodNames = shuffleArray(foodNames);
+	const cookies = ctx.req.headers.cookie?.split("; ");
+	const userCookie = cookies?.find((cookie) => cookie.startsWith("user=")).split("=")[1].replace(/%40/g, '@');
+	// console.log('USERCOOKIE: ', userCookie)
+	const auth = getAuth(firebaseApp);
+	// const userCookie = user?.split("=")[1];
+	// const user = auth.currentUser;
+	let userData = userCookie
+		? await getDoc(doc(db, "users", userCookie))
+		: null;
+	userData = userData?.data() || null;
 
 	return {
 			props: {
 					shuffledFoodNames,
+					cookies,
+					userData
 			},
 	};
 }

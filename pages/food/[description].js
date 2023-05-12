@@ -3,18 +3,22 @@ import dv from "../../dv.json";
 import NutrientItem from "../../components/NutrientItem";
 import { minerals, vitamins } from "../../nutrients";
 import Head from "next/head";
-import { convertToUrl } from "../../utils/functions";
+import { convertToUrl, getFoodPortion } from "../../utils/functions";
 // import fs from "fs";
 // import path from "path";
 import foodData from "../../public/foodData_foundation.json";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "..";
 
-const food = ({}) => {
+const food = ({ userData }) => {
 	const router = useRouter();
 	const { description } = router.query;
 
 	const food = foodData.find((f) =>
 		convertToUrl(f.description).includes(description)
 	);
+
+	console.log("food", food);
 
 	let omega3 = 0;
 	let omega6 = 0;
@@ -63,14 +67,20 @@ const food = ({}) => {
 		}
 	});
 
-	const group = "men 19-30";
+	const group = userData?.group || "men 19-30";
+
+	const foodPortion = getFoodPortion(food)
+
+	
+
+	console.log("foodPortion", foodPortion);
 
 	return (
 		<>
 			<Head>
 				<title>{food?.description} - Nutros</title>
 			</Head>
-			{console.log(food?.foodNutrients)}
+			{/* {console.log(food?.foodNutrients)} */}
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">
@@ -100,12 +110,12 @@ const food = ({}) => {
 					<ion-toolbar>
 						<ion-text class="ion-padding">
 							<span class="ion-text-capitalize">
-								{food?.foodPortions[0]?.portionDescription ||
-									food?.foodPortions[0]?.measureUnit.name ||
-									food?.foodPortions[0]?.modifier ||
+								{foodPortion?.portionDescription ||
+									foodPortion?.measureUnit.name ||
+									foodPortion?.modifier ||
 									"Portion"}{" "}
 							</span>
-							({food?.foodPortions[0]?.gramWeight || 100} grams)
+							({foodPortion?.gramWeight || 100} grams)
 						</ion-text>
 					</ion-toolbar>
 				</ion-header>
@@ -124,8 +134,8 @@ const food = ({}) => {
 								completeName={vitamin.completeName}
 								amount={
 									nutrient?.amount *
-										(food?.foodPortions[0]?.gramWeight /
-											100) || nutrient?.amount
+										(foodPortion?.gramWeight / 100) ||
+									nutrient?.amount
 								}
 								recommendedAmount={dv[group][vitamin.dbName]}
 								unitName={nutrient?.nutrient.unitName}
@@ -173,8 +183,8 @@ const food = ({}) => {
 								completeName={mineral.completeName}
 								amount={
 									nutrient?.amount *
-										(food?.foodPortions[0]?.gramWeight /
-											100) || nutrient?.amount
+										(foodPortion?.gramWeight / 100) ||
+									nutrient?.amount
 								}
 								recommendedAmount={dv[group][mineral.dbName]}
 								unitName={nutrient?.nutrient.unitName}
@@ -211,9 +221,7 @@ const food = ({}) => {
 						completeName="Omega-3"
 						dbName="Omega-3"
 						amount={
-							omega3 *
-								(food?.foodPortions[0]?.gramWeight / 100) ||
-							omega3
+							omega3 * (foodPortion?.gramWeight / 100) || omega3
 						}
 						unitName={"g"}
 						recommendedAmount={dv[group]["Omega-3"]}
@@ -224,9 +232,7 @@ const food = ({}) => {
 						completeName="Omega-6"
 						dbName="Omega-6"
 						amount={
-							omega6 *
-								(food?.foodPortions[0]?.gramWeight / 100) ||
-							omega6
+							omega6 * (foodPortion?.gramWeight / 100) || omega6
 						}
 						recommendedAmount={dv[group]["Omega-6"]}
 						unitName={"g"}
@@ -251,8 +257,8 @@ const food = ({}) => {
 								dbName={item?.nutrient?.name}
 								amount={
 									item.amount *
-										(food?.foodPortions[0]?.gramWeight /
-											100) || item.amount
+										(foodPortion?.gramWeight / 100) ||
+									item.amount
 								}
 								unitName={item?.nutrient.unitName}
 								// recommendedAmount={100}
@@ -265,6 +271,28 @@ const food = ({}) => {
 };
 
 export default food;
+
+export async function getServerSideProps(ctx) {
+	const cookies = ctx.req.headers.cookie?.split("; ");
+	const userCookie = cookies
+		?.find((cookie) => cookie.startsWith("user="))
+		.split("=")[1]
+		.replace(/%40/g, "@");
+	// console.log('USERCOOKIE: ', userCookie)
+	// const auth = getAuth(firebaseApp);
+	// const userCookie = user?.split("=")[1];
+	// const user = auth.currentUser;
+	let userData = userCookie
+		? await getDoc(doc(db, "users", userCookie))
+		: null;
+	userData = userData?.data() || null;
+
+	return {
+		props: {
+			userData,
+		},
+	};
+}
 
 // export async function getServerSideProps(context) {
 // 	const cookies = context.req.headers.cookie?.split("; ");

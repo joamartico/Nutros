@@ -3,7 +3,7 @@ import IonSelect from "../components/IonSelect";
 import SearchFoodList from "../components/SearchFoodList";
 import { minerals, vitamins } from "../nutrients";
 import { useRouter } from "next/router";
-
+import { getFoodPortion } from "../utils/functions";
 
 const FoodsScreen = ({ foodData }) => {
 	const router = useRouter();
@@ -11,12 +11,10 @@ const FoodsScreen = ({ foodData }) => {
 		router.query.nutrient || null
 	);
 
-
-
 	useEffect(() => {
 		if (selectedNutrient && router.query.nutrient !== selectedNutrient) {
 			router.push(
-				{ query: { ...router.query, nutrient: selectedNutrient} },
+				{ query: { ...router.query, nutrient: selectedNutrient } },
 				undefined,
 				{ shallow: true }
 			);
@@ -35,13 +33,9 @@ const FoodsScreen = ({ foodData }) => {
 		const bAmount = bNutrientObj ? bNutrientObj.amount : 0;
 
 		const aGramWeight =
-			a.foodPortions[0] && a.foodPortions[0].gramWeight
-				? a.foodPortions[0].gramWeight
-				: 100;
+			a.foodPortions[0] ? (getFoodPortion(a).gramWeight) : 100
 		const bGramWeight =
-			b.foodPortions[0] && b.foodPortions[0].gramWeight
-				? b.foodPortions[0].gramWeight
-				: 100;
+			b.foodPortions[0] ? (getFoodPortion(b).gramWeight) : 100
 
 		return bAmount * (bGramWeight / 100) - aAmount * (aGramWeight / 100);
 	});
@@ -60,8 +54,10 @@ const FoodsScreen = ({ foodData }) => {
 						<IonSelect
 							onChange={(e) => {
 								setSelectedNutrient(e.target.value);
-								if(!e.target.value){
-									foodData.sort(() => Math.random() - Math.random());
+								if (!e.target.value) {
+									foodData.sort(
+										() => Math.random() - Math.random()
+									);
 								}
 							}}
 							translucent

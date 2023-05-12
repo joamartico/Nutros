@@ -18,7 +18,6 @@ import {
 } from "firebase/firestore";
 import useAuth from "../hooks/useAuth";
 
-const group = "men 19-30";
 
 const days = [
 	"Sunday",
@@ -39,7 +38,7 @@ function getPortionName(food) {
 	return name;
 }
 
-const DayScreen = ({ foodData }) => {
+const DayScreen = ({ foodData, userData }) => {
 	const [foods, setFoods] = useState([]);
 	const [modalOpen, setModalOpen] = useState(false);
 	const user = useAuth();
@@ -72,7 +71,7 @@ const DayScreen = ({ foodData }) => {
 		});
 
 		return (
-			(amountSum / dv[group][nutrientName]) *
+			(amountSum / dv[userData?.group || 'men 19-30'][nutrientName]) *
 			100
 		).toFixed(0);
 	}

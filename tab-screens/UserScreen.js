@@ -8,12 +8,12 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../pages";
 import firebaseApp from "../firebase";
-import { setCookie } from 'nookies';
+import { setCookie } from "nookies";
 
 import groups from "../dv.json";
 // console.log(groups);
-// const groupsKeys = Object.keys(groups);
-// console.log(groupsKeys)
+const groupsKeys = Object.keys(groups);
+console.log(groupsKeys);
 const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const API_URL = "https://api.openai.com/v1/chat/completions";
 
@@ -21,6 +21,12 @@ const UserScreen = ({ selectedTab, userData }) => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [promptValue, setPromptValue] = useState("");
 	const [response, setResponse] = useState("");
+	var age = userData?.age;
+	var gender = userData?.gender;
+	var maternalStatus = userData?.maternalStatus;
+	const [showMaternalInput, setShowMaternalInput] = useState(
+		gender == 'Women'
+	);
 
 	const { installPwa } = useInstallPwa();
 
@@ -31,10 +37,10 @@ const UserScreen = ({ selectedTab, userData }) => {
 		signInWithPopup(auth, provider).then((result) => {
 			console.log(result.user.email);
 			// document.cookie = `user=${result.user.email}`;
-			setCookie(null, 'user', result.user.email, {
-				path: '/',
+			setCookie(null, "user", result.user.email, {
+				path: "/",
 			});
-			
+
 			setModalOpen(false);
 		});
 	}
@@ -100,11 +106,9 @@ const UserScreen = ({ selectedTab, userData }) => {
 		}
 	}
 
-
-	function getGroupByGenderAndAge(gender, age) {
-		console.log('userdata', userData)
-		const ageRange = age.replace(" months", "").replace(" years", "");
-		const menOrWomen = gender && (gender == 'Male' ? 'men' : 'women')
+	function getGroupByGenderAndAge(_gender, _age, _maternalStatus) {
+		const ageRange = _age.replace(" months", "").replace(" years", "");
+		const menOrWomen = _gender && _gender.toLowerCase()
 
 		if (age.includes("months")) {
 			return "infant " + ageRange;
@@ -112,6 +116,13 @@ const UserScreen = ({ selectedTab, userData }) => {
 		if (ageRange == "1-3" || ageRange == "4-8") {
 			return "child " + ageRange;
 		}
+		if (_gender == "Women" && _maternalStatus == "Pregnant") {
+			return "pregnant " + ageRange;
+		}
+		if (_gender == "Women" && _maternalStatus == "Lactating") {
+			return "nursing mother " + ageRange;
+		}
+
 		return menOrWomen + " " + ageRange;
 	}
 
@@ -167,16 +178,27 @@ const UserScreen = ({ selectedTab, userData }) => {
 						<IonSelect
 							placeholder="Select gender"
 							interface="picker"
-							options={["Male", "Female"]}
+							options={["Men", "Women"]}
 							defaultValue={userData?.gender}
 							onChange={(option) => {
+								gender = option.detail.value;
+								gender == "Women"
+									? setShowMaternalInput(true)
+									: setShowMaternalInput(false);
+								const group = getGroupByGenderAndAge(
+									gender,
+									age,
+									maternalStatus
+								);
 								setDoc(
 									doc(db, "users", auth.currentUser?.email),
 									{
-										gender: option.detail.value,
+										gender,
+										group,
 									},
 									{ merge: true }
 								);
+								console.log("group: ", group);
 							}}
 						/>
 					</ion-item>
@@ -201,21 +223,57 @@ const UserScreen = ({ selectedTab, userData }) => {
 							]}
 							defaultValue={userData?.age}
 							onChange={(option) => {
+								age = option.detail.value;
+								const group = getGroupByGenderAndAge(
+									gender,
+									age,
+									maternalStatus
+								);
 								setDoc(
 									doc(db, "users", auth.currentUser?.email),
 									{
-										age: option.detail.value,
+										age,
+										group,
 									},
 									{ merge: true }
-								);
-								const group = getGroupByGenderAndAge(
-									userData?.gender,
-									option.detail.value
 								);
 								console.log("group: ", group);
 							}}
 						/>
 					</ion-item>
+
+					{showMaternalInput && (
+						<ion-item style={{ cursor: "pointer" }}>
+							<ion-label>Maternal Status</ion-label>
+							<IonSelect
+								placeholder="Select"
+								interface="picker"
+								options={["None", "Pregnant", "Lactating"]}
+								defaultValue={userData?.maternalStatus}
+								onChange={(option) => {
+									maternalStatus = option.detail.value;
+									const group = getGroupByGenderAndAge(
+										gender,
+										age,
+										maternalStatus
+									);
+									setDoc(
+										doc(
+											db,
+											"users",
+											auth.currentUser?.email
+										),
+										{
+											maternalStatus,
+											group,
+										},
+										{ merge: true }
+									);
+									console.log("group: ", group);
+								}}
+							/>
+						</ion-item>
+					)}
 
 					<ion-list-header style={{ marginTop: 10 }}>
 						<ion-label>Your goal</ion-label>

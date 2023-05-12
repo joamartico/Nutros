@@ -11,6 +11,16 @@ export function shuffleArray(array) {
   return result;
 }
 
+export function getFoodPortion(food) {
+  return (
+    food?.foodPortions.find(
+      (item) =>
+        item?.measureUnit?.name == "each" ||
+        item?.portionDescription == "1 fruit"
+    ) || food?.foodPortions[0]
+  );
+}
+
 
 function getPortionName(food) {
 	if (!food.portions) return "";
