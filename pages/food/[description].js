@@ -69,9 +69,7 @@ const food = ({ userData }) => {
 
 	const group = userData?.group || "men 19-30";
 
-	const foodPortion = getFoodPortion(food)
-
-	
+	const foodPortion = getFoodPortion(food);
 
 	console.log("foodPortion", foodPortion);
 
@@ -276,7 +274,7 @@ export async function getServerSideProps(ctx) {
 	const cookies = ctx.req.headers.cookie?.split("; ");
 	const userCookie = cookies
 		?.find((cookie) => cookie.startsWith("user="))
-		.split("=")[1]
+		?.split("=")[1]
 		.replace(/%40/g, "@");
 	// console.log('USERCOOKIE: ', userCookie)
 	// const auth = getAuth(firebaseApp);
