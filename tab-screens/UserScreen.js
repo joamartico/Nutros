@@ -152,7 +152,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 											gender = null;
 											age = null;
 											maternalStatus = null;
-											setUserData(null);
+											// setUserData(null);
 										}
 									}}
 								>
