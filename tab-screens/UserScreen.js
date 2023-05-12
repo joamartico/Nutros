@@ -21,7 +21,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 	var gender = userData?.gender;
 	var maternalStatus = userData?.maternalStatus;
 	const [showMaternalInput, setShowMaternalInput] = useState(
-		gender == 'Women'
+		gender == "Women"
 	);
 
 	const { installPwa } = useInstallPwa();
@@ -104,7 +104,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 
 	function getGroupByGenderAndAge(_gender, _age, _maternalStatus) {
 		const ageRange = _age.replace(" months", "").replace(" years", "");
-		const menOrWomen = _gender && _gender.toLowerCase()
+		const menOrWomen = _gender && _gender.toLowerCase();
 
 		if (age.includes("months")) {
 			return "infant " + ageRange;
@@ -141,10 +141,12 @@ const UserScreen = ({ selectedTab, userData }) => {
 								<IonSelect
 									interface="action-sheet"
 									translucent
-									onChange={(e) =>
+									onChange={(e) => {
+										alert(e.detail.value);
+
 										e.detail.value == "signOut" &&
-										auth.signOut()
-									}
+											auth?.signOut();
+									}}
 								>
 									<ion-select-option value={"signOut"}>
 										Sign Out
