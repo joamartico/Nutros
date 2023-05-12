@@ -7,10 +7,12 @@ import firebaseApp from "../firebase";
 import useAuth from "../hooks/useAuth";
 import { shuffleArray } from "../utils/functions";
 import foundationFoodData from "../public/foodData_foundation.json";
+const foodNames = foundationFoodData.map(food => food.description);
+
 
 export const db = getFirestore(firebaseApp);
 
-export default function Home({ foodData }) {
+export default function Home({ shuffledFoodNames }) {
 	const [selectedTab, setSelectedTab] = useState("foods");
 	const [userData, setUserData] = useState();
 	const user = useAuth();
@@ -21,6 +23,15 @@ export default function Home({ foodData }) {
 			setUserData(userDoc.data());
 		});
 	}, [user]);
+
+	const foodDataMap = foundationFoodData.reduce((acc, food) => {
+		acc[food.description] = food;
+		return acc;
+	}, {});
+
+	const foodData = shuffledFoodNames.map(
+		(foodName) => foodDataMap[foodName]
+	);
 
 	return (
 		<>
@@ -94,16 +105,15 @@ export default function Home({ foodData }) {
 }
 
 export async function getServerSideProps() {
-	const randomFood = foundationFoodData.sort(
-		() => Math.random() - Math.random()
-	);
+	const shuffledFoodNames = shuffleArray(foodNames);
 
 	return {
-		props: {
-			foodData: randomFood,
-		},
+			props: {
+					shuffledFoodNames,
+			},
 	};
 }
+
 
 // export async function getStaticProps() {
 //   const filePath = path.join(process.cwd(), "public", "foodData_foundation.json");
