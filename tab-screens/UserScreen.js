@@ -10,10 +10,6 @@ import { db } from "../pages";
 import firebaseApp from "../firebase";
 import { setCookie } from "nookies";
 
-import groups from "../dv.json";
-// console.log(groups);
-const groupsKeys = Object.keys(groups);
-console.log(groupsKeys);
 const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const API_URL = "https://api.openai.com/v1/chat/completions";
 

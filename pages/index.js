@@ -107,7 +107,7 @@ export default function Home({ shuffledFoodNames, cookies, userData }) {
 export async function getServerSideProps(ctx) {
 	const shuffledFoodNames = shuffleArray(foodNames);
 	const cookies = ctx.req.headers.cookie?.split("; ");
-	const userCookie = cookies?.find((cookie) => cookie.startsWith("user=")).split("=")[1].replace(/%40/g, '@');
+	const userCookie = cookies?.find((cookie) => cookie.startsWith("user="))?.split("=")[1].replace(/%40/g, '@');
 	// console.log('USERCOOKIE: ', userCookie)
 	const auth = getAuth(firebaseApp);
 	// const userCookie = user?.split("=")[1];
