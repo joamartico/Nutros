@@ -11,10 +11,7 @@ const FoodsScreen = ({ foodData }) => {
 		router.query.nutrient || null
 	);
 
-	useEffect(() => {
-		foodData.sort(() => Math.random() - Math.random());
-	}, [])
-	
+
 
 	useEffect(() => {
 		if (selectedNutrient && router.query.nutrient !== selectedNutrient) {

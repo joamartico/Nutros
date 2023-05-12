@@ -5,9 +5,8 @@ import UserScreen from "../tab-screens/UserScreen";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import firebaseApp from "../firebase";
 import useAuth from "../hooks/useAuth";
-import fs from "fs";
-import path from "path";
 import { shuffleArray } from "../utils/functions";
+import foundationFoodData from "../public/foodData_foundation.json";
 
 export const db = getFirestore(firebaseApp);
 
@@ -22,7 +21,6 @@ export default function Home({ foodData }) {
 			setUserData(userDoc.data());
 		});
 	}, [user]);
-
 
 	return (
 		<>
@@ -95,43 +93,29 @@ export default function Home({ foodData }) {
 	);
 }
 
+export async function getServerSideProps() {
+	const randomFood = foundationFoodData.sort(
+		() => Math.random() - Math.random()
+	);
 
-// export async function getStaticProps(context) {
-// 	const cookies = context.req.headers.cookie?.split('; ');
-// 	console.log("cookies: ", cookies);
-// 	// const authuser = await getAuth(firebaseApp);
+	return {
+		props: {
+			foodData: randomFood,
+		},
+	};
+}
 
-// 	const filePath = path.join(process.cwd(), "public", "foodData_foundation.json");
+// export async function getStaticProps() {
+//   const filePath = path.join(process.cwd(), "public", "foodData_foundation.json");
 //   const fileContents = fs.readFileSync(filePath, "utf-8");
 //   const foodData = JSON.parse(fileContents);
 
-//   // const randomOrderFoods = foodData.sort(() => Math.random() - Math.random());
-// 	const randomOrderFoods = shuffleArray(foodData);
+//   const randomOrderFoods = shuffleArray(foodData);
 
-// 	return {
-// 		props: {
-// 			foodData: randomOrderFoods,
-// 			cookies: cookies || null,
-// 			// userData: userDoc?.data() ?? null,
-// 		},
-// 	};
+//   return {
+//     props: {
+//       foodData: randomOrderFoods,
+//     },
+//     revalidate: 60 * 60 * 2, // 2 hours
+//   };
 // }
-
-
-export async function getStaticProps() {
-  const filePath = path.join(process.cwd(), "public", "foodData_foundation.json");
-  const fileContents = fs.readFileSync(filePath, "utf-8");
-  const foodData = JSON.parse(fileContents);
-
-  const randomOrderFoods = shuffleArray(foodData);
-
-  return {
-    props: {
-      foodData: randomOrderFoods,
-      // Remove the cookies line
-      // cookies: cookies || null,
-    },
-    // Optionally, you can add a revalidate property to specify how often (in seconds) the page should be regenerated
-    revalidate: 60 * 60 * 24, // 24 hours
-  };
-}

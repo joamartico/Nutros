@@ -8,7 +8,12 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../pages";
 import firebaseApp from "../firebase";
+import { setCookie } from 'nookies';
 
+import groups from "../dv.json";
+// console.log(groups);
+// const groupsKeys = Object.keys(groups);
+// console.log(groupsKeys)
 const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const API_URL = "https://api.openai.com/v1/chat/completions";
 
@@ -25,7 +30,11 @@ const UserScreen = ({ selectedTab, userData }) => {
 		const provider = new GoogleAuthProvider();
 		signInWithPopup(auth, provider).then((result) => {
 			console.log(result.user.email);
-			document.cookie = `user=${result.user.email}`;
+			// document.cookie = `user=${result.user.email}`;
+			setCookie(null, 'user', result.user.email, {
+				path: '/',
+			});
+			
 			setModalOpen(false);
 		});
 	}
@@ -89,6 +98,21 @@ const UserScreen = ({ selectedTab, userData }) => {
 				}
 			});
 		}
+	}
+
+
+	function getGroupByGenderAndAge(gender, age) {
+		console.log('userdata', userData)
+		const ageRange = age.replace(" months", "").replace(" years", "");
+		const menOrWomen = gender && (gender == 'Male' ? 'men' : 'women')
+
+		if (age.includes("months")) {
+			return "infant " + ageRange;
+		}
+		if (ageRange == "1-3" || ageRange == "4-8") {
+			return "child " + ageRange;
+		}
+		return menOrWomen + " " + ageRange;
 	}
 
 	return (
@@ -162,7 +186,19 @@ const UserScreen = ({ selectedTab, userData }) => {
 						<IonSelect
 							placeholder="Select age"
 							interface="picker"
-							options={["Child", "Teenager", "Adult", "Elderly"]}
+							// options={["Child", "Teenager", "Adult", "Elderly"]}
+							options={[
+								"0-6 months",
+								"7-12 months",
+								"1-3 years",
+								"4-8 years",
+								"9-13 years",
+								"14-18 years",
+								"19-30 years",
+								"31-50 years",
+								"51-70 years",
+								"+70 years",
+							]}
 							defaultValue={userData?.age}
 							onChange={(option) => {
 								setDoc(
@@ -172,6 +208,11 @@ const UserScreen = ({ selectedTab, userData }) => {
 									},
 									{ merge: true }
 								);
+								const group = getGroupByGenderAndAge(
+									userData?.gender,
+									option.detail.value
+								);
+								console.log("group: ", group);
 							}}
 						/>
 					</ion-item>
