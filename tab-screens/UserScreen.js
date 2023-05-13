@@ -102,10 +102,10 @@ const UserScreen = ({ selectedTab, userData }) => {
 	}
 
 	function getGroupByGenderAndAge(_gender, _age, _maternalStatus) {
-		const ageRange = _age.replace(" months", "").replace(" years", "");
+		const ageRange = _age && _age.replace(" months", "").replace(" years", "");
 		const menOrWomen = _gender && _gender.toLowerCase();
 
-		if (age.includes("months")) {
+		if (age?.includes("months")) {
 			return "infant " + ageRange;
 		}
 		if (ageRange == "1-3" || ageRange == "4-8") {
@@ -159,13 +159,14 @@ const UserScreen = ({ selectedTab, userData }) => {
 									interface="action-sheet"
 									translucent
 									onChange={(e) => {
-										alert(e.detail.value);
-
 										if (e.detail.value == "signOut") {
 											auth?.signOut();
 											setCookie(null, "user", "", {
 												path: "/",
 											});
+											setGender(null);
+											setAge(null);
+											setMaternalStatus(null);
 											// gender = null;
 											// age = null;
 											// maternalStatus = null;
