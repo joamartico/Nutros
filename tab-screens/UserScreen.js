@@ -131,10 +131,10 @@ const UserScreen = ({ selectedTab, userData }) => {
 		setDoc(
 			doc(db, "users", auth.currentUser?.email),
 			{
-				gender,
-				age,
-				maternalStatus,
-				group,
+				gender: gender || '',
+				age: age || '',
+				maternalStatus: maternalStatus || '',
+				group: group || '',
 			}
 			// { merge: true }
 		);
