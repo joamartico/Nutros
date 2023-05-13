@@ -17,11 +17,10 @@ const UserScreen = ({ selectedTab, userData }) => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [promptValue, setPromptValue] = useState("");
 	const [response, setResponse] = useState("");
-	var age = userData?.age;
-	var gender = userData?.gender;
-	var maternalStatus = userData?.maternalStatus;
-	const [showMaternalInput, setShowMaternalInput] = useState(
-		gender == "Women"
+	const [age, setAge] = useState(userData?.age);
+	const [gender, setGender] = useState(userData?.gender);
+	const [maternalStatus, setMaternalStatus] = useState(
+		userData?.maternalStatus
 	);
 
 	const { installPwa } = useInstallPwa();
@@ -113,14 +112,32 @@ const UserScreen = ({ selectedTab, userData }) => {
 			return "child " + ageRange;
 		}
 		if (_gender == "Women" && _maternalStatus == "Pregnant") {
+			if (ageRange == "9-13" || ageRange == "14-18") return null;
 			return "pregnant " + ageRange;
 		}
 		if (_gender == "Women" && _maternalStatus == "Lactating") {
+			if (ageRange == "9-13" || ageRange == "14-18") return null;
 			return "nursing mother " + ageRange;
 		}
 
 		return menOrWomen + " " + ageRange;
 	}
+
+	useEffect(() => {
+		if (!db || !auth.currentUser) return;
+		const group = getGroupByGenderAndAge(gender, age, maternalStatus);
+		setDoc(
+			doc(db, "users", auth.currentUser?.email),
+			{
+				gender,
+				age,
+				maternalStatus,
+				group,
+			}
+			// { merge: true }
+		);
+		console.log("group: ", group);
+	}, [gender, age, maternalStatus, db, auth.currentUser]);
 
 	return (
 		<>
@@ -149,10 +166,9 @@ const UserScreen = ({ selectedTab, userData }) => {
 											setCookie(null, "user", "", {
 												path: "/",
 											});
-											gender = null;
-											age = null;
-											maternalStatus = null;
-											// setUserData(null);
+											// gender = null;
+											// age = null;
+											// maternalStatus = null;
 										}
 									}}
 								>
@@ -187,24 +203,8 @@ const UserScreen = ({ selectedTab, userData }) => {
 							options={["Men", "Women"]}
 							defaultValue={userData?.gender}
 							onChange={(option) => {
-								gender = option.detail.value;
-								gender == "Women"
-									? setShowMaternalInput(true)
-									: setShowMaternalInput(false);
-								const group = getGroupByGenderAndAge(
-									gender,
-									age,
-									maternalStatus
-								);
-								setDoc(
-									doc(db, "users", auth.currentUser?.email),
-									{
-										gender,
-										group,
-									},
-									{ merge: true }
-								);
-								console.log("group: ", group);
+								const newGender = option.detail.value;
+								setGender(newGender);
 							}}
 						/>
 					</ion-item>
@@ -229,26 +229,13 @@ const UserScreen = ({ selectedTab, userData }) => {
 							]}
 							defaultValue={userData?.age}
 							onChange={(option) => {
-								age = option.detail.value;
-								const group = getGroupByGenderAndAge(
-									gender,
-									age,
-									maternalStatus
-								);
-								setDoc(
-									doc(db, "users", auth.currentUser?.email),
-									{
-										age,
-										group,
-									},
-									{ merge: true }
-								);
-								console.log("group: ", group);
+								const newAge = option.detail.value;
+								setAge(newAge);
 							}}
 						/>
 					</ion-item>
 
-					{showMaternalInput && (
+					{gender == "Women" && (
 						<ion-item style={{ cursor: "pointer" }}>
 							<ion-label>Maternal Status</ion-label>
 							<IonSelect
@@ -257,25 +244,9 @@ const UserScreen = ({ selectedTab, userData }) => {
 								options={["None", "Pregnant", "Lactating"]}
 								defaultValue={userData?.maternalStatus}
 								onChange={(option) => {
-									maternalStatus = option.detail.value;
-									const group = getGroupByGenderAndAge(
-										gender,
-										age,
-										maternalStatus
-									);
-									setDoc(
-										doc(
-											db,
-											"users",
-											auth.currentUser?.email
-										),
-										{
-											maternalStatus,
-											group,
-										},
-										{ merge: true }
-									);
-									console.log("group: ", group);
+									const newMaternalStatus =
+										option.detail.value;
+									setMaternalStatus(newMaternalStatus);
 								}}
 							/>
 						</ion-item>
