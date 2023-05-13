@@ -105,6 +105,8 @@ const UserScreen = ({ selectedTab, userData }) => {
 		const ageRange = _age && _age.replace(" months", "").replace(" years", "");
 		const menOrWomen = _gender && _gender.toLowerCase();
 
+		if(!ageRange || !menOrWomen) return;
+
 		if (age?.includes("months")) {
 			return "infant " + ageRange;
 		}
