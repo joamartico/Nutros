@@ -10,7 +10,6 @@ import foundationFoodData from "../public/foodData_foundation.json";
 import { getAuth } from "firebase/auth";
 const foodNames = foundationFoodData.map(food => food.description);
 
-
 export const db = getFirestore(firebaseApp);
 
 export default function Home({ shuffledFoodNames, cookies, userData }) {
