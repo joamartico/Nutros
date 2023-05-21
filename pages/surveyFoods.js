@@ -1,87 +1,115 @@
-import useAuth from "../hooks/useAuth";
+import { useEffect, useState } from "react";
+import IonSelect from "../components/IonSelect";
 import SearchFoodList from "../components/SearchFoodList";
-import foodData_survey from "../public/foodData_survey.json";
-import foodData_foundation from "../public/foodData_foundation.json";
+import { minerals, vitamins } from "../nutrients";
+import Router, { useRouter } from "next/router";
+import { getFoodPortion } from "../utils/functions";
+import foodData from "../public/foodData_survey.json";
 
-const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-const API_URL = "https://api.openai.com/v1/chat/completions";
+const FoodsScreen = () => {
+	const router = useRouter();
+	const [selectedNutrient, setSelectedNutrient] = useState(
+		router.query.nutrient || null
+	);
 
-let newFoodData = foodData_foundation;
+	useEffect(() => {
+		if (selectedNutrient && router.query.nutrient !== selectedNutrient) {
+			router.push(
+				{ query: { ...router.query, nutrient: selectedNutrient } },
+				undefined,
+				{ shallow: true }
+			);
+		}
+	}, [selectedNutrient, router]);
 
-const surveyFoods = () => {
-	const user = useAuth();
+	foodData.sort((a, b) => {
+		const aNutrientObj = a.foodNutrients.find(
+			(item) => item.nutrient && item.nutrient.name === selectedNutrient
+		);
+		const bNutrientObj = b.foodNutrients.find(
+			(item) => item.nutrient && item.nutrient.name === selectedNutrient
+		);
 
-	async function getEmoji(foodName) {
-		const response = await fetch(API_URL, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${OPENAI_API_KEY}`,
-			},
-			body: JSON.stringify({
-				model: "gpt-3.5-turbo",
-				max_tokens: 3,
-				messages: [
-					{
-						role: "system",
-						content:
-							"return only one emoji that represents the food",
-					},
-					{ role: "user", content: "tomato" },
-					{ role: "assistant", content: "🍅" },
-					{ role: "user", content: "orange juice" },
-					{ role: "assistant", content: "🍊" },
-					{ role: "user", content: foodName },
-				],
-				temperature: 0.2,
-			}),
+		const aAmount = aNutrientObj ? aNutrientObj.amount : 0;
+		const bAmount = bNutrientObj ? bNutrientObj.amount : 0;
+
+		const aGramWeight = a.foodPortions[0]
+			? getFoodPortion(a).gramWeight
+			: 100;
+		const bGramWeight = b.foodPortions[0]
+			? getFoodPortion(b).gramWeight
+			: 100;
+
+		return bAmount * (bGramWeight / 100) - aAmount * (aGramWeight / 100);
+	});
+
+	const allNutrients = [...vitamins, ...minerals];
+
+	const newfoods = foodData
+		// .sort((a, b) => {
+		// 	const nameA = a.description.toUpperCase();
+		// 	const nameB = b.description.toUpperCase();
+
+		// 	if (nameA < nameB) {
+		// 		return -1;
+		// 	}
+		// 	if (nameA > nameB) {
+		// 		return 1;
+		// 	}
+		// 	return 0;
+		// })
+		.filter((food, i) => {
+			const nameA = food.description.split(",")[0];
+			const nameB = foodData[i + 1]?.description.split(",")[0];
+			return nameA !== nameB;
 		});
 
-		const data = await response.json();
-		const emoji = data.choices[0].message.content;
-		return emoji;
-	}
-
-	async function addFoodToFoundationJson(food) {
-		const newFoodEmoji = await getEmoji(food.description);
-		console.log(newFoodEmoji);
-		food.emoji = newFoodEmoji;
-		newFoodData = [...newFoodData, food];
-		console.log(newFoodData);
-		navigator.clipboard.writeText(JSON.stringify(newFoodData, null, 2));
-
-		fetch("/api/addFood", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(food),
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				console.log("Success:", data);
-			})
-			.catch((error) => {
-				console.error("Error:", error);
-			});
-	}
 
 	return (
-		<ion-content fullscreen>
-			<SearchFoodList
-				title={"Nutros"}
-				foodData={foodData_survey}
-				noLink
-				onClickItem={(food) => {
-					if (user.email === "joamartico@gmail.com") {
-						confirm("Add " + food.description + " to json?")
-							? addFoodToFoundationJson(food)
-							: console.log("bye");
-					}
-				}}
-			/>
-		</ion-content>
+		<>
+			<ion-header translucent>
+				<ion-toolbar>
+					<ion-title>{selectedNutrient || "Nutros"}</ion-title>
+
+					<ion-buttons slot="end">
+						<ion-button>Order By</ion-button>
+
+						<IonSelect
+							onChange={(e) => {
+								setSelectedNutrient(e.target.value);
+								if (!e.target.value) {
+									foodData.sort(
+										() => Math.random() - Math.random()
+									);
+								}
+							}}
+							translucent
+							multiple="true"
+							interface="alert"
+							value={selectedNutrient}
+						>
+							{allNutrients.map((nutrient) => (
+								<ion-select-option
+									key={nutrient.shortName}
+									value={nutrient.dbName}
+								>
+									{nutrient.completeName}
+								</ion-select-option>
+							))}
+						</IonSelect>
+					</ion-buttons>
+				</ion-toolbar>
+			</ion-header>
+
+			<ion-content fullscreen>
+				<SearchFoodList
+					title={selectedNutrient || "Nutros"}
+					foodData={foodData}
+					survey={true}
+				/>
+			</ion-content>
+		</>
 	);
 };
 
-export default surveyFoods;
+export default FoodsScreen;

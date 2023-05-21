@@ -15,7 +15,7 @@ const food = ({ userData }) => {
 	const { description } = router.query;
 
 	const food = foodData.find((f) =>
-		convertToUrl(f.description).includes(description)
+		convertToUrl(f.description) == description
 	);
 
 	console.log("food", food);

@@ -1,5 +1,5 @@
 import FoodsScreen from "../tab-screens/FoodsScreen";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DayScreen from "../tab-screens/DayScreen";
 import UserScreen from "../tab-screens/UserScreen";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
@@ -15,7 +15,6 @@ export const db = getFirestore(firebaseApp);
 
 export default function Home({ shuffledFoodNames, cookies, userData }) {
 	const [selectedTab, setSelectedTab] = useState("foods");
-	const user = useAuth();
 
 	// useEffect(() => {
 	// 	if (!user) return;

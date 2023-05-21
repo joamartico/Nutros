@@ -3,7 +3,7 @@ import { useState } from "react";
 import IonSearchbar from "./IonSearchbar";
 import { convertToUrl } from "../utils/functions";
 
-const SearchFoodList = ({ foodData, onClickItem, noLink, title }) => {
+const SearchFoodList = ({ foodData, onClickItem, noLink, title, survey }) => {
 	const [search, setSearch] = useState("");
 
 	const exactlyFoods = foodData?.filter((food) => {
@@ -49,7 +49,7 @@ const SearchFoodList = ({ foodData, onClickItem, noLink, title }) => {
 						href={
 							noLink
 								? ""
-								: `/food/${convertToUrl(food.description)}`
+								: `/${survey ? 'surveyFood' : 'food'}/${convertToUrl(food.description)}`
 						}
 					>
 						<ion-item

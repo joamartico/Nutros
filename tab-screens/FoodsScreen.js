@@ -22,6 +22,7 @@ const FoodsScreen = ({ foodData }) => {
 	}, [selectedNutrient, router]);
 
 	foodData.sort((a, b) => {
+		if(!a.foodPortions || !b.foodPortions) return 1
 		const aNutrientObj = a.foodNutrients.find(
 			(item) => item.nutrient && item.nutrient.name === selectedNutrient
 		);
