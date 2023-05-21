@@ -76,7 +76,7 @@ const food = ({ userData }) => {
 	return (
 		<>
 			<Head>
-				<title>{food?.description} - Nutros</title>
+				<title>{food?.emoji} {food?.description} Nutrients: Vitamins and Minerals | Nutros</title>
 			</Head>
 			{/* {console.log(food?.foodNutrients)} */}
 			<ion-header translucent>
