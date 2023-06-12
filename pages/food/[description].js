@@ -76,8 +76,11 @@ const food = ({ userData }) => {
 	return (
 		<>
 			<Head>
-				<title>{food?.emoji} {food?.description} Nutrients: Vitamins and Minerals | Nutros</title>
+				<title>{food?.emoji} {food?.description} nutrients: vitamins and minerals | Nutros</title>
+				<meta name="description" content={`Discover the nutrients of ${food?.emoji} ${food?.description} and how much you need to eat to get the recommended daily value of vitamins and minerals.`} />
+				<link rel="canonical" href={`https://nutros.vercel.app/food/${convertToUrl(food?.description)}`} />
 			</Head>
+
 			{/* {console.log(food?.foodNutrients)} */}
 			<ion-header translucent>
 				<ion-toolbar>

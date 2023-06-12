@@ -8,6 +8,7 @@ import useAuth from "../hooks/useAuth";
 import { shuffleArray } from "../utils/functions";
 import foundationFoodData from "../public/foodData_foundation.json";
 import { getAuth } from "firebase/auth";
+import Head from "next/head";
 const foodNames = foundationFoodData.map(food => food.description);
 
 export const db = getFirestore(firebaseApp);
@@ -33,10 +34,8 @@ export default function Home({ shuffledFoodNames, cookies, userData }) {
 
 	return (
 		<>
-			{/* <Head>
-				<link rel="canonical" href="https://nutros.vercel.app" />
-			</Head> */}
 
+			
 			<ion-tabs id="tabs">
 				<ion-tab-bar slot="bottom">
 					<ion-tab-button
