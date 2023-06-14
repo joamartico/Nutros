@@ -9,14 +9,19 @@ import { convertToUrl, getFoodPortion } from "../../utils/functions";
 import foodData from "../../public/foodData_foundation.json";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "..";
+import IonSelect from "../../components/IonSelect";
+import { useState } from "react";
 
 const food = ({ userData }) => {
 	const router = useRouter();
 	const { description } = router.query;
-
-	const food = foodData.find((f) =>
-		convertToUrl(f.description) == description
+	const food = foodData.find(
+		(f) => convertToUrl(f.description) == description
 	);
+	const foodPortion = getFoodPortion(food);
+
+	const [portion, setPortion] = useState(foodPortion)
+
 
 	console.log("food", food);
 
@@ -69,16 +74,26 @@ const food = ({ userData }) => {
 
 	const group = userData?.group || "men 19-30";
 
-	const foodPortion = getFoodPortion(food);
 
-	console.log("foodPortion", foodPortion);
+	console.log("foodPortion", portion);
 
 	return (
 		<>
 			<Head>
-				<title>{food?.emoji} {food?.description} nutrients: vitamins and minerals | Nutros</title>
-				<meta name="description" content={`Discover the nutrients of ${food?.emoji} ${food?.description} and how much you need to eat to get the recommended daily value of vitamins and minerals.`} />
-				<link rel="canonical" href={`https://nutros.vercel.app/food/${convertToUrl(food?.description)}`} />
+				<title>
+					{food?.emoji} {food?.description} nutrients: vitamins and
+					minerals | Nutros
+				</title>
+				<meta
+					name="description"
+					content={`Discover the nutrients of ${food?.emoji} ${food?.description} and how much you need to eat to get the recommended daily value of vitamins and minerals.`}
+				/>
+				<link
+					rel="canonical"
+					href={`https://nutros.vercel.app/food/${convertToUrl(
+						food?.description
+					)}/`}
+				/>
 			</Head>
 
 			{/* {console.log(food?.foodNutrients)} */}
@@ -109,15 +124,59 @@ const food = ({ userData }) => {
 					</ion-toolbar>
 
 					<ion-toolbar>
-						<ion-text class="ion-padding">
+						<IonSelect
+							value={portion?.gramWeight || "100"}
+							placeholder="Select portion"
+							style={{
+								width: "fit-content",
+								paddingLeft: 15,
+								textTransform: "capitalize",
+							}}
+							onChange={(e) => {
+								console.log("e", e.detail.value);
+								setPortion({
+									...portion,
+									gramWeight: e.detail.value,
+								});
+							}}
+							interface="alert"
+						>
+							{food.foodPortions?.map((portion) => (
+								<ion-select-option
+									value={portion.gramWeight}
+									style={{ textTransform: "capitalize" }}
+								>
+									<span
+										class="ion-text-capitalize"
+										style={{ textTransform: "capitalize" }}
+									>
+										{portion.portionDescription?.replace(
+											/\([^()]*\)/g,
+											""
+										) ||
+											portion.measureUnit.name ||
+											portion.modifier}{" "}
+										({portion.gramWeight} grams)
+									</span>
+								</ion-select-option>
+							))}
+							<ion-select-option value="100">
+								Portion (100 grams)
+							</ion-select-option>
+							<ion-select-option value="50">
+								Portion (50 grams)
+							</ion-select-option>
+						</IonSelect>
+						{/* </ion-item> */}
+						{/* <ion-text class="ion-padding">
 							<span class="ion-text-capitalize">
 								{foodPortion?.portionDescription ||
 									foodPortion?.measureUnit.name ||
 									foodPortion?.modifier ||
 									"Portion"}{" "}
 							</span>
-							({foodPortion?.gramWeight || 100} grams)
-						</ion-text>
+							({portion?.gramWeight || 100} grams)
+						</ion-text> */}
 					</ion-toolbar>
 				</ion-header>
 
@@ -135,7 +194,7 @@ const food = ({ userData }) => {
 								completeName={vitamin.completeName}
 								amount={
 									nutrient?.amount *
-										(foodPortion?.gramWeight / 100) ||
+										(portion?.gramWeight / 100) ||
 									nutrient?.amount
 								}
 								recommendedAmount={dv[group][vitamin.dbName]}
@@ -184,7 +243,7 @@ const food = ({ userData }) => {
 								completeName={mineral.completeName}
 								amount={
 									nutrient?.amount *
-										(foodPortion?.gramWeight / 100) ||
+										(portion?.gramWeight / 100) ||
 									nutrient?.amount
 								}
 								recommendedAmount={dv[group][mineral.dbName]}
@@ -222,7 +281,7 @@ const food = ({ userData }) => {
 						completeName="Omega-3"
 						dbName="Omega-3"
 						amount={
-							omega3 * (foodPortion?.gramWeight / 100) || omega3
+							omega3 * (portion?.gramWeight / 100) || omega3
 						}
 						unitName={"g"}
 						recommendedAmount={dv[group]["Omega-3"]}
@@ -233,7 +292,7 @@ const food = ({ userData }) => {
 						completeName="Omega-6"
 						dbName="Omega-6"
 						amount={
-							omega6 * (foodPortion?.gramWeight / 100) || omega6
+							omega6 * (portion?.gramWeight / 100) || omega6
 						}
 						recommendedAmount={dv[group]["Omega-6"]}
 						unitName={"g"}
@@ -258,7 +317,7 @@ const food = ({ userData }) => {
 								dbName={item?.nutrient?.name}
 								amount={
 									item.amount *
-										(foodPortion?.gramWeight / 100) ||
+										(portion?.gramWeight / 100) ||
 									item.amount
 								}
 								unitName={item?.nutrient.unitName}

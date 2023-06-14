@@ -11,6 +11,12 @@ a {
     text-decoration: none;
 }
 
+
+button {
+    text-transform: capitalize !important;
+}
+
+
 /* a ion-item:hover {
     background: #e5e5e5 !important;
     --background: #e5e5e5 !important;

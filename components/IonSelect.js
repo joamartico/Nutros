@@ -61,7 +61,7 @@ const IonSelect = (props) => {
 								top: 0,
 								width: "100%",
 						  }
-						: {}
+						: props.style
 				}
 				placeholder={props.placeholder}
 				value={props.value}

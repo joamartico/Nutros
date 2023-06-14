@@ -20,12 +20,22 @@ const API_URL = "https://api.openai.com/v1/chat/completions";
 
 function getFoodPortion(food) {
 	if (!food?.foodMeasures) return null;
+
+	const regularPortion = food?.foodMeasures?.find((nutrient) =>
+		nutrient?.disseminationText?.toLowerCase().includes("regular")
+	);
+
+	if (regularPortion) return regularPortion;
+
 	const portion1 = food?.foodMeasures?.find(
 		(nutrient) => nutrient?.rank == 1
 	);
 
-	if (portion1?.gramWeight > 15 && portion1?.gramWeight < 350)
-		return portion1;
+	if (portion1?.gramWeight > 15 && portion1?.gramWeight < 350) {
+		if (food?.description?.toLowerCase().includes("oil")) {
+			if (portion1?.gramWeight < 100) return portion1;
+		} else return portion1;
+	}
 
 	const portion2 = food?.foodMeasures?.find(
 		(nutrient) => nutrient?.rank == 2
@@ -166,7 +176,7 @@ const food = ({ userData, food }) => {
 			foodPortions: food.foodMeasures.map((portion) => ({
 				sequenceNumber: portion.rank,
 				gramWeight: portion.gramWeight,
-				measureUnit: {name: portion.disseminationText}
+				measureUnit: { name: portion.disseminationText },
 			})),
 			foodNutrients: food.foodNutrients.map((nutrient) => ({
 				amount: nutrient.value,
@@ -175,10 +185,10 @@ const food = ({ userData, food }) => {
 					name: nutrient.nutrientName,
 					id: nutrient.foodNutrientId,
 					rank: nutrient.rank,
-				}
+				},
 			})),
 		};
-		console.log('newFood', newFood)
+		console.log("newFood", newFood);
 		// food.emoji = newFoodEmoji;
 
 		// newFoodData = [...newFoodData, newFood];
