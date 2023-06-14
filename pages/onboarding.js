@@ -19,14 +19,14 @@ const Onboarding = () => {
 			<Head>
 				<link
 					rel="canonical"
-					href="https://nutros.vercel.app/onboarding"
+					href="https://nutros.vercel.app/onboarding/"
 				/>
 			</Head>
 
-			<Background>
-				<Card>
+
+				<Padding>
 					<TextContainer>
-						<Title>Welcome to Nutros !</Title>
+						<Title>Welcome to Nutros</Title>
 
 						<Description>
 							Your web app to search and track your food
@@ -49,15 +49,22 @@ const Onboarding = () => {
 							Get Started
 						</ion-button>
 					</ButtonsContainer>
-				</Card>
-			</Background>
-
-			{/* {Prompt} */}
-		</>
+				</Padding>
+			</>
 	);
 };
 
 export default Onboarding;
+
+const Padding = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+	padding: 0 20px;
+`;
 
 const Description = styled.h2`
 	font-size: 20px;
@@ -82,6 +89,7 @@ const ButtonsContainer = styled.div`
 	height: 135px;
 	width: 100%;
 	margin-bottom: 60px;
+	margin-top: 40px;
 `;
 
 const TextContainer = styled.div`
