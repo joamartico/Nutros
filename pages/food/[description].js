@@ -20,8 +20,7 @@ const food = ({ userData }) => {
 	);
 	const foodPortion = getFoodPortion(food);
 
-	const [portion, setPortion] = useState(foodPortion)
-
+	const [portion, setPortion] = useState(foodPortion);
 
 	console.log("food", food);
 
@@ -74,7 +73,6 @@ const food = ({ userData }) => {
 
 	const group = userData?.group || "men 19-30";
 
-
 	console.log("foodPortion", portion);
 
 	return (
@@ -100,9 +98,12 @@ const food = ({ userData }) => {
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">
-						<ion-button onClick={() => router.back()}>
-							Back
-						</ion-button>
+						<a href="/">
+							<ion-button>
+								<ion-icon src="/svg/chevron-back.svg" />
+								All Foods
+							</ion-button>
+						</a>
 					</ion-buttons>
 					<ion-title>
 						<>
@@ -280,9 +281,7 @@ const food = ({ userData }) => {
 						name="Omega-3"
 						completeName="Omega-3"
 						dbName="Omega-3"
-						amount={
-							omega3 * (portion?.gramWeight / 100) || omega3
-						}
+						amount={omega3 * (portion?.gramWeight / 100) || omega3}
 						unitName={"g"}
 						recommendedAmount={dv[group]["Omega-3"]}
 					/>
@@ -291,9 +290,7 @@ const food = ({ userData }) => {
 						name="Omega-6"
 						completeName="Omega-6"
 						dbName="Omega-6"
-						amount={
-							omega6 * (portion?.gramWeight / 100) || omega6
-						}
+						amount={omega6 * (portion?.gramWeight / 100) || omega6}
 						recommendedAmount={dv[group]["Omega-6"]}
 						unitName={"g"}
 					/>
@@ -316,8 +313,7 @@ const food = ({ userData }) => {
 								completeName={item?.nutrient?.name}
 								dbName={item?.nutrient?.name}
 								amount={
-									item.amount *
-										(portion?.gramWeight / 100) ||
+									item.amount * (portion?.gramWeight / 100) ||
 									item.amount
 								}
 								unitName={item?.nutrient.unitName}
