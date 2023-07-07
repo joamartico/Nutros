@@ -1,7 +1,7 @@
 {
     "infant 0-6": {
         "Vitamin A, RAE": 400,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 4,
         "Vitamin K (phylloquinone)": 2,
         "Vitamin C, total ascorbic acid": 40,
@@ -33,7 +33,7 @@
     },
     "infant 7-12": {
         "Vitamin A, RAE": 500,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 5,
         "Vitamin K (phylloquinone)": 2.5,
         "Vitamin C, total ascorbic acid": 50,
@@ -65,7 +65,7 @@
     },
     "child 1-3": {
         "Vitamin A, RAE": 300,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 6,
         "Vitamin K (phylloquinone)": 30,
         "Vitamin C, total ascorbic acid": 15,
@@ -97,7 +97,7 @@
     },
     "child 4-8": {
         "Vitamin A, RAE": 400,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 7,
         "Vitamin K (phylloquinone)": 55,
         "Vitamin C, total ascorbic acid": 25,
@@ -129,7 +129,7 @@
     },
     "men 9-13": {
         "Vitamin A, RAE": 600,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 11,
         "Vitamin K (phylloquinone)": 60,
         "Vitamin C, total ascorbic acid": 45,
@@ -161,7 +161,7 @@
     },
     "men 14-18": {
         "Vitamin A, RAE": 900,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 15,
         "Vitamin K (phylloquinone)": 75,
         "Vitamin C, total ascorbic acid": 75,
@@ -193,7 +193,7 @@
     },
     "men 19-30": {
         "Vitamin A, RAE": 900,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 15,
         "Vitamin K (phylloquinone)": 120,
         "Vitamin C, total ascorbic acid": 90,
@@ -225,7 +225,7 @@
     },
     "men 31-50": {
         "Vitamin A, RAE": 900,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 15,
         "Vitamin K (phylloquinone)": 120,
         "Vitamin C, total ascorbic acid": 90,
@@ -257,7 +257,7 @@
     },
     "men 51-70": {
         "Vitamin A, RAE": 900,
-        "Vitamin D (D2 + D3)": 10,
+        "Vitamin D (D2 + D3)": 30,
         "Vitamin E (alpha-tocopherol)": 15,
         "Vitamin K (phylloquinone)": 120,
         "Vitamin C, total ascorbic acid": 90,
@@ -321,7 +321,7 @@
     },
     "women 9-13": {
         "Vitamin A, RAE": 600,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 11,
         "Vitamin K (phylloquinone)": 60,
         "Vitamin C, total ascorbic acid": 45,
@@ -353,7 +353,7 @@
     },
     "women 14-18": {
         "Vitamin A, RAE": 700,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 15,
         "Vitamin K (phylloquinone)": 75,
         "Vitamin C, total ascorbic acid": 65,
@@ -385,7 +385,7 @@
     },
     "women 19-30": {
         "Vitamin A, RAE": 700,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 15,
         "Vitamin K (phylloquinone)": 90,
         "Vitamin C, total ascorbic acid": 75,
@@ -417,7 +417,7 @@
     },
     "women 31-50": {
         "Vitamin A, RAE": 700,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 15,
         "Vitamin K (phylloquinone)": 90,
         "Vitamin C, total ascorbic acid": 75,
@@ -449,7 +449,7 @@
     },
     "women 51-70": {
         "Vitamin A, RAE": 700,
-        "Vitamin D (D2 + D3)": 10,
+        "Vitamin D (D2 + D3)": 30,
         "Vitamin E (alpha-tocopherol)": 15,
         "Vitamin K (phylloquinone)": 90,
         "Vitamin C, total ascorbic acid": 75,
@@ -513,7 +513,7 @@
     },
     "pregnant 19-30": {
         "Vitamin A, RAE": 770,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 15,
         "Vitamin K (phylloquinone)": 90,
         "Vitamin C, total ascorbic acid": 85,
@@ -545,7 +545,7 @@
     },
     "pregnant 31-50": {
         "Vitamin A, RAE": 770,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 15,
         "Vitamin K (phylloquinone)": 90,
         "Vitamin C, total ascorbic acid": 85,
@@ -577,7 +577,7 @@
     },
     "nursing mother 18": {
         "Vitamin A, RAE": 1200,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 19,
         "Vitamin K (phylloquinone)": 75,
         "Vitamin C, total ascorbic acid": 115,
@@ -609,7 +609,7 @@
     },
     "nursing mother 19-30": {
         "Vitamin A, RAE": 1300,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 19,
         "Vitamin K (phylloquinone)": 90,
         "Vitamin C, total ascorbic acid": 120,
@@ -641,7 +641,7 @@
     },
     "nursing mother 31-50": {
         "Vitamin A, RAE": 1300,
-        "Vitamin D (D2 + D3)": 5,
+        "Vitamin D (D2 + D3)": 15,
         "Vitamin E (alpha-tocopherol)": 19,
         "Vitamin K (phylloquinone)": 90,
         "Vitamin C, total ascorbic acid": 120,
