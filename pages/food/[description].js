@@ -11,6 +11,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "..";
 import IonSelect from "../../components/IonSelect";
 import { useState } from "react";
+import useAuth from "../../hooks/useAuth";
 
 const food = ({ userData }) => {
 	const router = useRouter();
@@ -74,6 +75,25 @@ const food = ({ userData }) => {
 	const group = userData?.group || "men 19-30";
 
 	console.log("foodPortion", portion);
+
+	const user = useAuth();
+	async function removeFoodFromFoundationJson(food) {
+		fetch("/api/removeFood", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(food),
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				console.log("Success:", data);
+				router.push("/");
+			})
+			.catch((error) => {
+				console.error("Error:", error);
+			});
+	}
 
 	return (
 		<>
@@ -182,6 +202,23 @@ const food = ({ userData }) => {
 				</ion-header>
 
 				<ion-list>
+					{user?.email === "joamartico@gmail.com" && (
+						<ion-item>
+							<ion-button
+								onClick={() => {
+									confirm(
+										"Remove " +
+											food.description +
+											" from json?"
+									)
+										? removeFoodFromFoundationJson(food)
+										: console.log("bye");
+								}}
+							>
+								Remove from JSON
+							</ion-button>
+						</ion-item>
+					)}
 					<ion-list-header>Vitamins</ion-list-header>
 
 					{vitamins.map((vitamin) => {

@@ -260,15 +260,12 @@ const food = ({ userData, food }) => {
 					{user?.email === "joamartico@gmail.com" && (
 						<ion-item>
 							<ion-button
-								// size="small"
 								onClick={() => {
-									// if (user.email === "joamartico@gmail.com") {
 									confirm(
 										"Add " + food.description + " to json?"
 									)
 										? addFoodToFoundationJson(food)
 										: console.log("bye");
-									// }
 								}}
 							>
 								Add to JSON
