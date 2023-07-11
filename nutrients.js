@@ -5,7 +5,7 @@ export const vitamins = [
 		dbName: "Vitamin A, RAE",
 		unit: "µg",
 		description:
-			"Vitamin A is key for good vision, a healthy immune system, and cell growth. It plays a crucial role in heart, lung, kidney, and other organ function.",
+			"Vitamin A is key for good vision, a healthy immune system, and cell growth. It plays a crucial role in heart, lung, kidney, and other organ function. It also improves the absorption of zinc.",
 	},
 	{
 		completeName: "Vitamin B1 (Thiamin)",
@@ -61,7 +61,7 @@ export const vitamins = [
 		dbName: "Vitamin C, total ascorbic acid",
 		unit: "mg",
 		description:
-			"Vitamin C is a powerful antioxidant that can strengthen the body's natural defenses, and it's needed for the production of collagen, L-carnitine, and some neurotransmitters.",
+			"Vitamin C is a powerful antioxidant that can strengthen the body's natural defenses, and it's needed for the production of collagen, L-carnitine, and some neurotransmitters. It also improves the absorption of plant-based iron.",
 	},
 	{
 		completeName: "Vitamin D",
@@ -69,7 +69,7 @@ export const vitamins = [
 		dbName: "Vitamin D (D2 + D3)",
 		unit: "µg",
 		description:
-			"Vitamin D helps regulate the absorption of calcium and phosphorus, crucial for bone and teeth health. It also supports immune system function and has been shown to boost testosterone levels in men.",
+			"Vitamin D helps regulate the absorption of calcium and phosphorus. It also supports immune system function and can boost testosterone levels in men.",
 	},
 	{
 		completeName: "Vitamin E",
@@ -128,7 +128,7 @@ export const minerals = [
 		dbName: "Magnesium, Mg",
 		unit: "mg",
 		description:
-			"Magnesium is involved in numerous processes including energy production, DNA replication, protein synthesis, and nerve function. Additionally, it enhances the absorption of vitamin D.",
+			"Magnesium is involved in numerous processes including energy production, DNA replication, protein synthesis, and nerve function. Additionally, it enhances the absorption of vitamin D, K and calcium.",
 	},
 	{
 		completeName: "Potassium",
@@ -160,6 +160,6 @@ export const minerals = [
 		dbName: "Zinc, Zn",
 		unit: "mg",
 		description:
-			"Zinc is essential for cell growth, wound healing, carbohydrate metabolism, and sensory functions like taste and smell. It plays a crucial role in male fertility, testosterone production, and immune system function.",
+			"Zinc is essential for cell growth, wound healing, carbohydrate metabolism, and sensory functions like taste and smell. It plays a crucial role in male fertility, testosterone production, and immune system function. It also improves the absorption of vitamin A.",
 	},
 ];
