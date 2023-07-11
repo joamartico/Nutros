@@ -3,7 +3,7 @@ import { useState } from "react";
 import IonSearchbar from "./IonSearchbar";
 import { convertToUrl } from "../utils/functions";
 
-const SearchFoodList = ({ foodData, onClickItem, noLink, title, survey }) => {
+const SearchFoodList = ({ foodData, onClickItem, noLink, title, description, survey,  }) => {
 	const [search, setSearch] = useState("");
 
 	const exactlyFoods = foodData?.filter((food) => {
@@ -32,6 +32,14 @@ const SearchFoodList = ({ foodData, onClickItem, noLink, title, survey }) => {
 							<ion-title size="large">{title}</ion-title>
 						</h1>
 					</ion-toolbar>
+				)}
+
+				{description && (
+					<ion-item lines="none">
+						<ion-label class="ion-text-wrap">
+							{description}
+						</ion-label>
+					</ion-item>
 				)}
 
 				<ion-toolbar display="true">

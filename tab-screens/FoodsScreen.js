@@ -4,8 +4,9 @@ import SearchFoodList from "../components/SearchFoodList";
 import { minerals, vitamins } from "../nutrients";
 import { useRouter } from "next/router";
 import { getFoodPortion } from "../utils/functions";
+import dv from "../dv.json";
 
-const FoodsScreen = ({ foodData }) => {
+const FoodsScreen = ({ foodData, userData }) => {
 	const router = useRouter();
 	const [selectedNutrient, setSelectedNutrient] = useState(
 		router.query.nutrient || null
@@ -22,7 +23,7 @@ const FoodsScreen = ({ foodData }) => {
 	}, [selectedNutrient, router]);
 
 	foodData.sort((a, b) => {
-		if(!a.foodPortions || !b.foodPortions) return 1
+		if (!a.foodPortions || !b.foodPortions) return 1;
 		const aNutrientObj = a.foodNutrients.find(
 			(item) => item.nutrient && item.nutrient.name === selectedNutrient
 		);
@@ -33,15 +34,26 @@ const FoodsScreen = ({ foodData }) => {
 		const aAmount = aNutrientObj ? aNutrientObj.amount : 0;
 		const bAmount = bNutrientObj ? bNutrientObj.amount : 0;
 
-		const aGramWeight =
-			a.foodPortions[0] ? (getFoodPortion(a).gramWeight) : 100
-		const bGramWeight =
-			b.foodPortions[0] ? (getFoodPortion(b).gramWeight) : 100
+		const aGramWeight = a.foodPortions[0]
+			? getFoodPortion(a).gramWeight
+			: 100;
+		const bGramWeight = b.foodPortions[0]
+			? getFoodPortion(b).gramWeight
+			: 100;
 
 		return bAmount * (bGramWeight / 100) - aAmount * (aGramWeight / 100);
 	});
 
 	const allNutrients = [...vitamins, ...minerals];
+
+	const nutrient = allNutrients.find(
+		(nutrient) => nutrient.dbName === selectedNutrient
+	);
+
+	const unit = nutrient?.unit || "";
+	const description = nutrient?.description || "";
+
+	const group = userData?.group || "men 19-30";
 
 	return (
 		<>
@@ -62,7 +74,7 @@ const FoodsScreen = ({ foodData }) => {
 								}
 							}}
 							translucent
-							multiple="true"
+							multiple="false"
 							interface="alert"
 							value={selectedNutrient}
 						>
@@ -82,6 +94,11 @@ const FoodsScreen = ({ foodData }) => {
 			<ion-content fullscreen>
 				<SearchFoodList
 					title={selectedNutrient || "Nutros"}
+					description={
+						selectedNutrient &&
+						`${description}
+						You need ${dv[group][selectedNutrient]} ${unit} per day`
+					}
 					foodData={foodData}
 				/>
 			</ion-content>
