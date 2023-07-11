@@ -128,7 +128,7 @@ export const minerals = [
 		dbName: "Magnesium, Mg",
 		unit: "mg",
 		description:
-			"Magnesium is involved in numerous processes including energy production, DNA replication, protein synthesis, and nerve function. Additionally, it enhances the absorption of vitamin D, K and calcium.",
+			"Magnesium is involved in numerous processes including sleep regulation, energy production, DNA replication, protein synthesis, and nerve function. Additionally, it enhances the absorption of vitamin D, K and calcium.",
 	},
 	{
 		completeName: "Potassium",
