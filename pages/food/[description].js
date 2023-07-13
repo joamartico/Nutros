@@ -121,6 +121,8 @@ const food = ({ userData }) => {
 						{/* <a href="/"> */}
 						<ion-button
 							onClick={() => {
+								console.log('document.referrer', document.referrer)
+								console.log('window.location.origin', window.location.origin)
 								if (
 									document.referrer.includes(
 										window.location.origin
