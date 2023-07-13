@@ -102,6 +102,7 @@ const Scrollbar = styled.div`
 	position: absolute;
 	bottom: 0;
 	transition: opacity 0.2s ease-in-out;
+	overflow: hidden;
 `;
 
 const ScrollThumb = styled.div`
