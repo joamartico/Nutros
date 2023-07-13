@@ -118,6 +118,9 @@ const food = ({ userData }) => {
 			</Head>
 
 			{/* {console.log(food?.foodNutrients)} */}
+			{food.foodNutrients.map(item => {
+				console.log(item.nutrient, item.amount);
+			})}
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">

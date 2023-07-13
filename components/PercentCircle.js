@@ -34,6 +34,11 @@ const Center = styled.a`
 	margin-right: 25px;
 	text-decoration: none;
 	color: black;
+	cursor: pointer;
+	transition: opacity 0.1s;
+	&:active {
+		opacity: 0.6;
+	}
 `;
 
 const ExtCircle = styled.div`

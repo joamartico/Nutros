@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 import useAuth from "../hooks/useAuth";
 import ScrollRow from "../components/ScrollRow";
+import { convertToUrl } from "../utils/functions";
 
 const days = [
 	"Sunday",
@@ -46,7 +47,6 @@ const DayScreen = ({ foodData, userData }) => {
 	const router = useRouter();
 	const [date, setDate] = useState(new Date());
 	const formattedDate = date.toLocaleDateString("sv");
-
 
 	useEffect(() => {
 		if (!user) return;
@@ -150,7 +150,10 @@ const DayScreen = ({ foodData, userData }) => {
 								}
 								portionName={getPortionName(food)}
 								onClick={() => {
-									router.push("/food/" + food.fdcId);
+									router.push(
+										"/food/" +
+											convertToUrl(food.description)
+									);
 								}}
 								onAdd={() => {
 									const newFoods = [...foods];
