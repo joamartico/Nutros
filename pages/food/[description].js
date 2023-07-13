@@ -119,10 +119,22 @@ const food = ({ userData }) => {
 				<ion-toolbar>
 					<ion-buttons slot="start">
 						{/* <a href="/"> */}
-							<ion-button onClick={() => router.back()}>
-								<ion-icon src="/svg/chevron-back.svg" />
-								All Foods
-							</ion-button>
+						<ion-button
+							onClick={() => {
+								if (
+									document.referrer.includes(
+										window.location.origin
+									)
+								) {
+									router.back();
+								} else {
+									router.push("/");
+								}
+							}}
+						>
+							<ion-icon src="/svg/chevron-back.svg" />
+							All Foods
+						</ion-button>
 						{/* </a> */}
 					</ion-buttons>
 					<ion-title>
