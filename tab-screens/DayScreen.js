@@ -17,7 +17,7 @@ import {
 	updateDoc,
 } from "firebase/firestore";
 import useAuth from "../hooks/useAuth";
-import { convertToUrl } from "../utils/functions";
+import ScrollRow from "../components/ScrollRow";
 
 const days = [
 	"Sunday",
@@ -46,6 +46,7 @@ const DayScreen = ({ foodData, userData }) => {
 	const router = useRouter();
 	const [date, setDate] = useState(new Date());
 	const formattedDate = date.toLocaleDateString("sv");
+
 
 	useEffect(() => {
 		if (!user) return;
@@ -204,7 +205,7 @@ const DayScreen = ({ foodData, userData }) => {
 						<h2>Vitamins</h2>
 					</ion-list-header>
 
-					<Row className="ion-padding">
+					<ScrollRow>
 						{vitamins.map((vitamin, i) => {
 							return (
 								<PercentCircle
@@ -217,7 +218,7 @@ const DayScreen = ({ foodData, userData }) => {
 								/>
 							);
 						})}
-					</Row>
+					</ScrollRow>
 				</ion-list>
 
 				<ion-list style={{ marginTop: -30 }}>
@@ -225,7 +226,7 @@ const DayScreen = ({ foodData, userData }) => {
 						<h2>Minerals</h2>
 					</ion-list-header>
 
-					<Row className="ion-padding">
+					<ScrollRow>
 						{minerals.map((mineral, i) => {
 							return (
 								<PercentCircle
@@ -238,7 +239,7 @@ const DayScreen = ({ foodData, userData }) => {
 								/>
 							);
 						})}
-					</Row>
+					</ScrollRow>
 				</ion-list>
 			</ion-content>
 
@@ -315,36 +316,4 @@ const AddButton = styled.div`
 	font-size: 15px;
 	font-weight: bold;
 	color: #040;
-`;
-
-const Row = styled.div`
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 10px;
-	overflow-x: auto;
-	white-space: nowrap;
-
-	/* &::-webkit-scrollbar {
-		background-color: #f5f5f5;
-		height: 11px;
-		border-radius: 30px;
-	}
-	&::-webkit-scrollbar-thumb {
-		background-color: #aaaaaaaa;
-		border-radius: 20px;
-		border: 2.5px solid #f5f5f5;
-	} */
-	&::-webkit-scrollbar {
-		width: 10px !important;
-		height: 8px !important;
-	}
-	&::-webkit-scrollbar-track {
-		background: #f5f5f5 !important;
-	}
-	&::-webkit-scrollbar-thumb {
-		background-color: #aaaa !important;
-		border-radius: 10px !important;
-	}
 `;
