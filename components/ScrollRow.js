@@ -3,32 +3,32 @@ import styled from "styled-components";
 
 const ScrollRow = ({ children }) => {
 	const rowRef = useRef();
-  const [update, setUpdate] = useState(0);
+	const [update, setUpdate] = useState(0);
 
-  useEffect(() => {
-    // Ensure the ref is current
-    if (rowRef.current) {
-      // Get initial width
-      setUpdate(rowRef.current.clientWidth);
+	useEffect(() => {
+		// Ensure the ref is current
+		if (rowRef.current) {
+			// Get initial width
+			setUpdate(rowRef.current.clientWidth);
 
-      // Create a ResizeObserver instance
-      let resizeObserver = new ResizeObserver(entries => {
-        entries.forEach(entry => {
-          setUpdate(entry.target.clientWidth);
-        });
-      });
+			// Create a ResizeObserver instance
+			let resizeObserver = new ResizeObserver((entries) => {
+				entries.forEach((entry) => {
+					setUpdate(entry.target.clientWidth);
+				});
+			});
 
-      // Observe the ref
-      resizeObserver.observe(rowRef.current);
+			// Observe the ref
+			resizeObserver.observe(rowRef.current);
 
-      // Cleanup on unmount
-      return () => {
-        if(resizeObserver && rowRef.current) {
-          resizeObserver.unobserve(rowRef.current);
-        }
-      }
-    }
-  }, []);
+			// Cleanup on unmount
+			return () => {
+				if (resizeObserver && rowRef.current) {
+					resizeObserver.unobserve(rowRef.current);
+				}
+			};
+		}
+	}, []);
 
 	return (
 		<Row
@@ -36,10 +36,10 @@ const ScrollRow = ({ children }) => {
 			ref={rowRef}
 			onScroll={(e) =>
 				// setScroll((e.target.scrollLeft / e.target.scrollWidth) * 100)
-        setUpdate(e.target.scrollLeft)
+				setUpdate(e.target.scrollLeft)
 			}
 		>
-      {/* {console.log(scroll)} */}
+			{/* {console.log(scroll)} */}
 			{children}
 			<Scrollbar>
 				<ScrollThumb
@@ -69,10 +69,10 @@ const Row = styled.div`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 10px;
+	/* margin-bottom: 10px; */
 	overflow-x: auto;
 	white-space: nowrap;
-
+	padding-bottom: 20px;
 	/* &::-webkit-scrollbar {
 		background-color: #f5f5f5;
 		height: 11px;
