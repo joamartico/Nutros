@@ -118,12 +118,12 @@ const food = ({ userData }) => {
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">
-						<a href="/">
-							<ion-button>
+						{/* <a href="/"> */}
+							<ion-button onClick={() => router.back()}>
 								<ion-icon src="/svg/chevron-back.svg" />
 								All Foods
 							</ion-button>
-						</a>
+						{/* </a> */}
 					</ion-buttons>
 					<ion-title>
 						<>
