@@ -61,7 +61,7 @@ export const vitamins = [
 		dbName: "Vitamin C, total ascorbic acid",
 		unit: "mg",
 		description:
-			"Vitamin C is a powerful antioxidant that can strengthen the body's natural defenses, and it's needed for the production of collagen, L-carnitine, and some neurotransmitters. It also improves the absorption of plant-based iron.",
+			"Vitamin C is a powerful antioxidant that can strengthen the body's natural defenses, and it's needed for the production of collagen, L-carnitine, and some neurotransmitters like norepinephrine. It also improves the absorption of plant-based iron.",
 	},
 	{
 		completeName: "Vitamin D",

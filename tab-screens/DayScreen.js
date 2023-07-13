@@ -326,8 +326,7 @@ const Row = styled.div`
 	overflow-x: auto;
 	white-space: nowrap;
 
-
-	&::-webkit-scrollbar {
+	/* &::-webkit-scrollbar {
 		background-color: #f5f5f5;
 		height: 11px;
 		border-radius: 30px;
@@ -336,10 +335,16 @@ const Row = styled.div`
 		background-color: #aaaaaaaa;
 		border-radius: 20px;
 		border: 2.5px solid #f5f5f5;
-
-
+	} */
+	&::-webkit-scrollbar {
+		width: 10px !important;
+		height: 8px !important;
 	}
-	
-
-
+	&::-webkit-scrollbar-track {
+		background: #f5f5f5 !important;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: #aaaa !important;
+		border-radius: 10px !important;
+	}
 `;
