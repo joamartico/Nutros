@@ -1,16 +1,19 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import IonSelect from "../components/IonSelect";
 import SearchFoodList from "../components/SearchFoodList";
 import { minerals, vitamins } from "../nutrients";
 import { useRouter } from "next/router";
 import { getFoodPortion } from "../utils/functions";
 import dv from "../dv.json";
+import { Context } from "../Context";
 
 const FoodsScreen = ({ foodData, userData }) => {
 	const router = useRouter();
 	const [selectedNutrient, setSelectedNutrient] = useState(
 		router.query.nutrient || null
 	);
+
+	const {setShouldGoBack } = useContext(Context);
 
 	useEffect(() => {
 		if (selectedNutrient && router.query.nutrient !== selectedNutrient) {
@@ -20,6 +23,7 @@ const FoodsScreen = ({ foodData, userData }) => {
 				{ shallow: true }
 			);
 		}
+		setShouldGoBack(selectedNutrient ? true : false);
 	}, [selectedNutrient, router]);
 
 	foodData.sort((a, b) => {

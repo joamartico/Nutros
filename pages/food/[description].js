@@ -10,12 +10,15 @@ import foodData from "../../public/foodData_foundation.json";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "..";
 import IonSelect from "../../components/IonSelect";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import { Context } from "../../Context";
 
 const food = ({ userData }) => {
 	const router = useRouter();
 	const { description } = router.query;
+	const { shouldGoBack } = useContext(Context);
+
 	const food = foodData.find(
 		(f) => convertToUrl(f.description) == description
 	);
@@ -121,13 +124,7 @@ const food = ({ userData }) => {
 						{/* <a href="/"> */}
 						<ion-button
 							onClick={() => {
-								console.log('document.referrer', document.referrer)
-								console.log('window.location.origin', window.location.origin)
-								if (
-									document.referrer.includes(
-										window.location.origin
-									)
-								) {
+								if (shouldGoBack) {
 									router.back();
 								} else {
 									router.push("/");

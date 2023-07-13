@@ -4,6 +4,7 @@ export const Context = createContext();
 
 const ContextComponent = props => {
   const [food, setFood] = useState()
+  const [shouldGoBack, setShouldGoBack] = useState()
   
 
 
@@ -11,7 +12,9 @@ const ContextComponent = props => {
     <Context.Provider
       value={{
         food,
-        setFood
+        setFood,
+        shouldGoBack,
+        setShouldGoBack,
       }}
     >
       {props.children}
