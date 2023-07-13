@@ -17,7 +17,7 @@ import {
 	updateDoc,
 } from "firebase/firestore";
 import useAuth from "../hooks/useAuth";
-
+import { convertToUrl } from "../utils/functions";
 
 const days = [
 	"Sunday",
@@ -56,7 +56,6 @@ const DayScreen = ({ foodData, userData }) => {
 		);
 	}, [user, date]);
 
-
 	function getDVPercent(nutrientName, nutrientType) {
 		let amountSum = 0;
 		foods.map((food) => {
@@ -71,7 +70,7 @@ const DayScreen = ({ foodData, userData }) => {
 		});
 
 		return (
-			(amountSum / dv[userData?.group || 'men 19-30'][nutrientName]) *
+			(amountSum / dv[userData?.group || "men 19-30"][nutrientName]) *
 			100
 		).toFixed(0);
 	}
@@ -144,7 +143,8 @@ const DayScreen = ({ foodData, userData }) => {
 								emoji={food.emoji}
 								amount={
 									food.foodPortions
-										? (food.foodPortions[0]?.gramWeight || 100)
+										? food.foodPortions[0]?.gramWeight ||
+										  100
 										: ""
 								}
 								portionName={getPortionName(food)}
@@ -213,6 +213,7 @@ const DayScreen = ({ foodData, userData }) => {
 										"vitamins"
 									)}
 									name={vitamin.shortName}
+									url={"/?nutrient=" + vitamin.dbName}
 								/>
 							);
 						})}
@@ -233,6 +234,7 @@ const DayScreen = ({ foodData, userData }) => {
 										"minerals"
 									)}
 									name={mineral.shortName}
+									url={"/?nutrient=" + mineral.dbName}
 								/>
 							);
 						})}
@@ -321,10 +323,23 @@ const Row = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 10px;
-	overflow-x: scroll;
+	overflow-x: auto;
 	white-space: nowrap;
-	scrollbar-width: none;
-	::-webkit-scrollbar {
-		display: none;
+
+
+	&::-webkit-scrollbar {
+		background-color: #f5f5f5;
+		height: 11px;
+		border-radius: 30px;
 	}
+	&::-webkit-scrollbar-thumb {
+		background-color: #aaaaaaaa;
+		border-radius: 20px;
+		border: 2.5px solid #f5f5f5;
+
+
+	}
+	
+
+
 `;

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-const PercentCircle = ({ num = 0, name }) => {
+const PercentCircle = ({ num = 0, name, url }) => {
 	return (
-		<Center>
+		<Center href={url}>
 			<Svg
 				viewBox="0 0 120 120"
 				version="1.1"
@@ -26,12 +26,14 @@ const PercentCircle = ({ num = 0, name }) => {
 
 export default PercentCircle;
 
-const Center = styled.div`
+const Center = styled.a`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	margin-right: 25px;
+	text-decoration: none;
+	color: black;
 `;
 
 const ExtCircle = styled.div`
