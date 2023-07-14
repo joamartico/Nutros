@@ -9,6 +9,7 @@ import { shuffleArray } from "../utils/functions";
 import foundationFoodData from "../public/foodData_foundation.json";
 import { getAuth } from "firebase/auth";
 import Head from "next/head";
+import ChatbotScreen from "../tab-screens/ChatbotScreen";
 const foodNames = foundationFoodData.map(food => food.description);
 
 export const db = getFirestore(firebaseApp);
@@ -59,6 +60,13 @@ export default function Home({ shuffledFoodNames, userData }) {
 					</ion-tab-button>
 
 					<ion-tab-button
+						tab="chatbot"
+						onClick={() => setSelectedTab("chatbot")}
+					>
+						<ion-icon src="/svg/bot.svg" size="large"></ion-icon>
+					</ion-tab-button>
+
+					<ion-tab-button
 						tab="me"
 						onClick={() => setSelectedTab("me")}
 					>
@@ -82,6 +90,14 @@ export default function Home({ shuffledFoodNames, userData }) {
 
 				<ion-tab tab="track">
 					<DayScreen
+						selectedTab={selectedTab}
+						foodData={foodData}
+						userData={userData}
+					/>
+				</ion-tab>
+
+				<ion-tab tab="chatbot">
+					<ChatbotScreen
 						selectedTab={selectedTab}
 						foodData={foodData}
 						userData={userData}
