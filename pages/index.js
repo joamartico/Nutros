@@ -13,7 +13,7 @@ const foodNames = foundationFoodData.map(food => food.description);
 
 export const db = getFirestore(firebaseApp);
 
-export default function Home({ shuffledFoodNames, cookies, userData }) {
+export default function Home({ shuffledFoodNames, cookies, userData, userCookie }) {
 	const [selectedTab, setSelectedTab] = useState("foods");
 
 	// useEffect(() => {
@@ -34,10 +34,10 @@ export default function Home({ shuffledFoodNames, cookies, userData }) {
 
 	return (
 		<>
-
 			
 			<ion-tabs id="tabs">
 				<ion-tab-bar slot="bottom">
+			<p>User cookie: {userCookie}</p>
 					<ion-tab-button
 						tab="foods"
 						onClick={() => setSelectedTab("foods")}
@@ -106,7 +106,7 @@ export async function getServerSideProps(ctx) {
 	const cookies = ctx.req.headers.cookie?.split("; ");
 	if(!cookies) return { props: { shuffledFoodNames } }
 	const userCookie = cookies?.find((cookie) => cookie.startsWith("user="))?.split("=")[1].replace(/%40/g, '@');
-	// console.log('USERCOOKIE: ', userCookie)
+	console.log('USERCOOKIE: ', userCookie)
 	const auth = getAuth(firebaseApp);
 	// const userCookie = user?.split("=")[1];
 	// const user = auth.currentUser;
@@ -119,7 +119,8 @@ export async function getServerSideProps(ctx) {
 			props: {
 					shuffledFoodNames,
 					cookies,
-					userData
+					userData,
+					userCookie
 			},
 	};
 }
