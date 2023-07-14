@@ -13,7 +13,7 @@ const foodNames = foundationFoodData.map(food => food.description);
 
 export const db = getFirestore(firebaseApp);
 
-export default function Home({ shuffledFoodNames, cookies, userData, userCookie }) {
+export default function Home({ shuffledFoodNames, userData }) {
 	const [selectedTab, setSelectedTab] = useState("foods");
 
 	// useEffect(() => {
@@ -37,7 +37,6 @@ export default function Home({ shuffledFoodNames, cookies, userData, userCookie 
 			
 			<ion-tabs id="tabs">
 				<ion-tab-bar slot="bottom">
-			<p>User cookie: {userCookie}</p>
 					<ion-tab-button
 						tab="foods"
 						onClick={() => setSelectedTab("foods")}
@@ -120,7 +119,7 @@ export async function getServerSideProps(ctx) {
 					shuffledFoodNames,
 					cookies,
 					userData,
-					userCookie
+					// userCookie
 			},
 	};
 }

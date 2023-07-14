@@ -14,7 +14,7 @@ const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const API_URL = "https://api.openai.com/v1/chat/completions";
 
 const UserScreen = ({ selectedTab, userData }) => {
-	console.log({userData})
+	console.log({ userData });
 	const [modalOpen, setModalOpen] = useState(false);
 	const [promptValue, setPromptValue] = useState("");
 	const [response, setResponse] = useState("");
@@ -38,6 +38,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 			});
 
 			setModalOpen(false);
+			window.location.reload();
 		});
 	}
 
@@ -103,10 +104,11 @@ const UserScreen = ({ selectedTab, userData }) => {
 	}
 
 	function getGroupByGenderAndAge(_gender, _age, _maternalStatus) {
-		const ageRange = _age && _age.replace(" months", "").replace(" years", "");
+		const ageRange =
+			_age && _age.replace(" months", "").replace(" years", "");
 		const menOrWomen = _gender && _gender.toLowerCase();
 
-		if(!ageRange || !menOrWomen) return '';
+		if (!ageRange || !menOrWomen) return "";
 
 		if (age?.includes("months")) {
 			return "infant " + ageRange;
@@ -132,10 +134,10 @@ const UserScreen = ({ selectedTab, userData }) => {
 		setDoc(
 			doc(db, "users", auth.currentUser?.email),
 			{
-				gender: gender || '',
-				age: age || '',
-				maternalStatus: maternalStatus || '',
-				group: group || '',
+				gender: gender || "",
+				age: age || "",
+				maternalStatus: maternalStatus || "",
+				group: group || "",
 			}
 			// { merge: true }
 		);
@@ -173,6 +175,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 											// gender = null;
 											// age = null;
 											// maternalStatus = null;
+											window.location.reload();
 										}
 									}}
 								>
