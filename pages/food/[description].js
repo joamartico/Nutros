@@ -394,8 +394,10 @@ export async function getServerSideProps(ctx) {
 	let userData = userCookie
 		? await getDoc(doc(db, "users", userCookie))
 		: null;
-	userData = userData?.data() || null;
-	userData.email = userCookie;
+	userData = userData?.data() || null
+	if(userData){
+		userData.email = userCookie || '';
+	}
 
 	return {
 		props: {
