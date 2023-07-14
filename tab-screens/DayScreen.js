@@ -16,7 +16,6 @@ import {
 	setDoc,
 	updateDoc,
 } from "firebase/firestore";
-import useAuth from "../hooks/useAuth";
 import ScrollRow from "../components/ScrollRow";
 import { convertToUrl } from "../utils/functions";
 
@@ -42,20 +41,19 @@ function getPortionName(food) {
 const DayScreen = ({ foodData, userData }) => {
 	const [foods, setFoods] = useState([]);
 	const [modalOpen, setModalOpen] = useState(false);
-	const user = useAuth();
 	const modalRef = useRef();
 	const router = useRouter();
 	const [date, setDate] = useState(new Date());
 	const formattedDate = date.toLocaleDateString("sv");
 
 	useEffect(() => {
-		if (!user) return;
-		getDocs(collection(db, `users/${user?.email}/`, formattedDate)).then(
+		if (!userData) return;
+		getDocs(collection(db, `users/${userData?.email}/`, formattedDate)).then(
 			(snapshot) => {
 				setFoods(snapshot.docs.map((doc) => doc.data()));
 			}
 		);
-	}, [user, date]);
+	}, [userData, date]);
 
 	function getDVPercent(nutrientName, nutrientType) {
 		let amountSum = 0;
@@ -162,7 +160,7 @@ const DayScreen = ({ foodData, userData }) => {
 									updateDoc(
 										doc(
 											db,
-											`users/${user?.email}/${formattedDate}/`,
+											`users/${userData?.email}/${formattedDate}/`,
 											food.description
 										),
 										{
@@ -180,7 +178,7 @@ const DayScreen = ({ foodData, userData }) => {
 									updateDoc(
 										doc(
 											db,
-											`users/${user?.email}/${formattedDate}/`,
+											`users/${userData?.email}/${formattedDate}/`,
 											food.description
 										),
 										{
@@ -271,7 +269,7 @@ const DayScreen = ({ foodData, userData }) => {
 							setDoc(
 								doc(
 									db,
-									`users/${user?.email}/${formattedDate}/`,
+									`users/${userData?.email}/${formattedDate}/`,
 									food.description
 								),
 								{

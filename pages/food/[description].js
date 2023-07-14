@@ -11,7 +11,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "..";
 import IonSelect from "../../components/IonSelect";
 import { useContext, useState } from "react";
-import useAuth from "../../hooks/useAuth";
 import { Context } from "../../Context";
 
 const food = ({ userData }) => {
@@ -79,7 +78,6 @@ const food = ({ userData }) => {
 
 	console.log("foodPortion", portion);
 
-	const user = useAuth();
 	async function removeFoodFromFoundationJson(food) {
 		fetch("/api/removeFood", {
 			method: "POST",
@@ -118,7 +116,7 @@ const food = ({ userData }) => {
 			</Head>
 
 			{/* {console.log(food?.foodNutrients)} */}
-			{food.foodNutrients.map(item => {
+			{food.foodNutrients.map((item) => {
 				console.log(item.nutrient, item.amount);
 			})}
 			<ion-header translucent>
@@ -216,23 +214,25 @@ const food = ({ userData }) => {
 				</ion-header>
 
 				<ion-list>
-					{user?.email === "joamartico@gmail.com" && (
-						<ion-item>
-							<ion-button
-								onClick={() => {
-									confirm(
-										"Remove " +
-											food.description +
-											" from json?"
-									)
-										? removeFoodFromFoundationJson(food)
-										: console.log("bye");
-								}}
-							>
-								Remove from JSON
-							</ion-button>
-						</ion-item>
-					)}
+					{console.log("environment: ", process.env.NODE_ENV)}
+					{userData?.email === "joamartico@gmail.com" &&
+						process.env.NODE_ENV == "development" && (
+							<ion-item>
+								<ion-button
+									onClick={() => {
+										confirm(
+											"Remove " +
+												food.description +
+												" from json?"
+										)
+											? removeFoodFromFoundationJson(food)
+											: console.log("bye");
+									}}
+								>
+									Remove from JSON
+								</ion-button>
+							</ion-item>
+						)}
 					<ion-list-header>Vitamins</ion-list-header>
 
 					{vitamins.map((vitamin) => {
@@ -395,6 +395,7 @@ export async function getServerSideProps(ctx) {
 		? await getDoc(doc(db, "users", userCookie))
 		: null;
 	userData = userData?.data() || null;
+	userData.email = userCookie;
 
 	return {
 		props: {

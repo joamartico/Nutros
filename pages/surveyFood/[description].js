@@ -10,7 +10,7 @@ import { convertToUrl } from "../../utils/functions";
 // import foodData_foundation from "../../public/foodData_foundation.json";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "..";
-// import useAuth from "../../hooks/useAuth";
+
 
 // let newFoodData = foodData_foundation;
 
@@ -57,7 +57,6 @@ function getFoodPortion(food) {
 const food = ({ userData, food }) => {
 	console.log("FOOD", food);
 	const router = useRouter();
-	// const user = useAuth();
 	const { description } = router.query;
 
 	// useEffect(() => {
@@ -444,7 +443,6 @@ export async function getServerSideProps(ctx) {
 		? await getDoc(doc(db, "users", userCookie))
 		: null;
 	userData = userData?.data() || null;
-
 	userData.email = userCookie;
 
 	let realFood;
