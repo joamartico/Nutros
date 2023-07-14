@@ -252,6 +252,7 @@ const food = ({ userData }) => {
 								recommendedAmount={dv[group][vitamin.dbName]}
 								unitName={nutrient?.nutrient.unitName}
 								onClick={() => console.log(nutrient)}
+								url={`/?nutrient=${vitamin.dbName}`}
 							/>
 						);
 					})}
@@ -301,6 +302,7 @@ const food = ({ userData }) => {
 								recommendedAmount={dv[group][mineral.dbName]}
 								unitName={nutrient?.nutrient.unitName}
 								onClick={() => console.log(nutrient?.nutrient)}
+								url={`/?nutrient=${mineral.dbName}`}
 							/>
 						);
 					})}

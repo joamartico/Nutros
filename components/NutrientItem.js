@@ -1,6 +1,14 @@
+import Link from "next/link";
 import styled from "styled-components";
 
-const NutrientItem = ({ recommendedAmount, completeName, amount, unitName, onClick }) => {
+const NutrientItem = ({
+	recommendedAmount,
+	completeName,
+	amount,
+	unitName,
+	onClick,
+	url
+}) => {
 	const nutrientPercentage = ((amount / recommendedAmount) * 100)?.toFixed(1);
 
 	function getColor(percentage) {
@@ -13,25 +21,26 @@ const NutrientItem = ({ recommendedAmount, completeName, amount, unitName, onCli
 	}
 
 	return (
-		<ion-item onClick={onClick}>
-			<ion-label>
-				<h2>{completeName}</h2>
+		<Link href={url || ''}>
+			<ion-item onClick={onClick} button detail="false">
+				<ion-label>
+					<h2>{completeName}</h2>
 
-				<p>
-					{amount?.toFixed(1) || "Null"} {unitName}{" "}
-				</p>
-			</ion-label>
+					<p>
+						{amount?.toFixed(1) || "Null"} {unitName}{" "}
+					</p>
+				</ion-label>
 
-			{!amount || !nutrientPercentage || !recommendedAmount ? (
-				""
-			) : (
-				<ion-note slot="end" color={getColor(nutrientPercentage)}>
-					{nutrientPercentage}%
-				</ion-note>
-			)}
-		</ion-item>
+				{!amount || !nutrientPercentage || !recommendedAmount ? (
+					""
+				) : (
+					<ion-note slot="end" color={getColor(nutrientPercentage)}>
+						{nutrientPercentage}%
+					</ion-note>
+				)}
+			</ion-item>
+		</Link>
 	);
 };
 
 export default NutrientItem;
-
