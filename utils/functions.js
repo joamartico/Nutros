@@ -12,13 +12,18 @@ export function shuffleArray(array) {
 }
 
 export function getFoodPortion(food) {
-	if(!food?.foodPortions) return null
+	if (!food?.foodPortions) return null;
 	const portion1 = food?.foodPortions?.find(
 		(item) => item?.sequenceNumber == 1
 	);
 
-  if (portion1?.gramWeight > 10 && portion1?.gramWeight < 350)
-    return portion1;
+	if (
+		portion1?.gramWeight > 10 &&
+		portion1?.gramWeight < 350 &&
+		portion1?.modifier != "oz" &&
+		!(portion1.portionDescription == "1 slice" && portion1?.gramWeight < 40)
+	)
+		return portion1;
 
 	const portion2 = food?.foodPortions?.find(
 		(item) => item?.sequenceNumber == 2
@@ -27,12 +32,23 @@ export function getFoodPortion(food) {
 	if (portion2?.gramWeight > 10 && portion2?.gramWeight < 350)
 		return portion2;
 
-  const portion3 = food?.foodPortions?.find(
-    (item) => item?.sequenceNumber == 3
-  );
+	const portion3 = food?.foodPortions?.find(
+		(item) => item?.sequenceNumber == 3
+	);
 
-  if (portion3?.gramWeight > 10 && portion3?.gramWeight < 350)
-    return portion3;
+	if (portion3?.gramWeight > 10 && portion3?.gramWeight < 350)
+		return portion3;
+
+	if (portion1?.gramWeight > 350) {
+		return {
+			gramWeight: "250",
+			sequenceNumber: 1,
+			measureUnit: {
+				name: "250g",
+				abbreviation: "250g",
+			},
+		};
+	}
 
 	return food?.foodPortions[0];
 }

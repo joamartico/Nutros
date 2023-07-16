@@ -187,12 +187,15 @@ const food = ({ userData }) => {
 											/\([^()]*\)/g,
 											""
 										) ||
-											portion.measureUnit.name ||
+											// portion.measureUnit.name || // PARA CHOCOLATE NO SIRVE, ES "undetermined"
 											portion.modifier}{" "}
 										({portion.gramWeight} grams)
 									</span>
 								</ion-select-option>
 							))}
+							<ion-select-option value="250">
+								Portion (250 grams)
+							</ion-select-option>
 							<ion-select-option value="100">
 								Portion (100 grams)
 							</ion-select-option>
