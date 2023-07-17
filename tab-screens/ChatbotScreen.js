@@ -115,7 +115,7 @@ const ChatbotScreen = () => {
 						/>
 
 						<Button>
-							<ion-icon size={30} name="paper-plane" />
+							<ion-icon size={30} src='/svg/paper-plane.svg' />
 						</Button>
 					</Form>
 				</Container>

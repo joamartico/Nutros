@@ -18,7 +18,8 @@ export function getFoodPortion(food) {
 	);
 
 	if (
-		portion1?.gramWeight > 10 &&
+		(portion1?.gramWeight > 10 ||
+			portion1?.measureUnit.name == "teaspoon") &&
 		portion1?.gramWeight < 350 &&
 		portion1?.modifier != "oz" &&
 		!(portion1.portionDescription == "1 slice" && portion1?.gramWeight < 40)

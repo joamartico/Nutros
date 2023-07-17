@@ -112,7 +112,7 @@ export const minerals = [
 		dbName: "Copper, Cu",
 		unit: "mg",
 		description:
-			"Copper aids in iron absorption, heart health, and plays a role in energy production and neurotransmission.",
+			"Copper aids in iron absorption, heart health, and plays a role in energy (ATP) production and neurotransmission.",
 	},
 	{
 		completeName: "Iron",
@@ -128,7 +128,7 @@ export const minerals = [
 		dbName: "Magnesium, Mg",
 		unit: "mg",
 		description:
-			"Magnesium is involved in numerous processes including sleep regulation, energy production, DNA replication, protein synthesis, and nerve function. Additionally, it enhances the absorption of vitamin D, K and calcium.",
+			"Magnesium is involved in numerous processes including sleep regulation, energy (ATP) production, DNA replication, protein synthesis, and nerve function. Additionally, it enhances the absorption of vitamin D, K and calcium.",
 	},
 	{
 		completeName: "Potassium",
@@ -144,7 +144,7 @@ export const minerals = [
 		dbName: "Phosphorus, P",
 		unit: "mg",
 		description:
-			"Phosphorus is necessary for building bones and DNA, and plays a crucial role in energy production.",
+			"Phosphorus is necessary for building bones and DNA, and plays a crucial role in d (ATP) production.",
 	},
 	{
 		completeName: "Selenium",
