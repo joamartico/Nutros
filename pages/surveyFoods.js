@@ -64,7 +64,6 @@ const FoodsScreen = () => {
 			return nameA !== nameB;
 		});
 
-
 	return (
 		<>
 			<ion-header translucent>

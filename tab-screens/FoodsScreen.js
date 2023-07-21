@@ -13,7 +13,7 @@ const FoodsScreen = ({ foodData, userData }) => {
 		router.query.nutrient || null
 	);
 
-	const {setShouldGoBack } = useContext(Context);
+	const { setShouldGoBack } = useContext(Context);
 
 	useEffect(() => {
 		if (selectedNutrient && router.query.nutrient !== selectedNutrient) {
@@ -64,6 +64,14 @@ const FoodsScreen = ({ foodData, userData }) => {
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-title>{selectedNutrient || "Nutros"}</ion-title>
+
+					{process.env.NODE_ENV === "development" && (
+						<ion-buttons slot="start">
+							<ion-button onClick={() => router.push("/surveyFoods")}>
+								Survey
+							</ion-button>
+						</ion-buttons>
+					)}
 
 					<ion-buttons slot="end">
 						<ion-button>Order By</ion-button>

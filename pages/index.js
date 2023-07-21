@@ -6,7 +6,7 @@ import { doc, getDoc, getFirestore } from "firebase/firestore";
 import firebaseApp from "../firebase";
 import { shuffleArray } from "../utils/functions";
 import foundationFoodData from "../public/foodData_foundation.json";
-import { getAuth } from "firebase/auth";
+// import { getAuth } from "firebase/auth";
 import ChatbotScreen from "../tab-screens/ChatbotScreen";
 const foodNames = foundationFoodData.map((food) => food.description);
 
@@ -120,7 +120,7 @@ export async function getServerSideProps(ctx) {
 		?.split("=")[1]
 		.replace(/%40/g, "@");
 	console.log("USERCOOKIE: ", userCookie);
-	const auth = getAuth(firebaseApp);
+	// const auth = getAuth(firebaseApp);
 	// const userCookie = user?.split("=")[1];
 	// const user = auth.currentUser;
 	let userData = userCookie

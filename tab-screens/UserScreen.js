@@ -169,9 +169,9 @@ const UserScreen = ({ selectedTab, userData }) => {
 											setCookie(null, "user", "", {
 												path: "/",
 											});
-											setGender(null);
-											setAge(null);
-											setMaternalStatus(null);
+											// setGender(null);
+											// setAge(null);
+											// setMaternalStatus(null);
 											// gender = null;
 											// age = null;
 											// maternalStatus = null;
