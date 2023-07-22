@@ -74,7 +74,8 @@ const FoodsScreen = ({ foodData, userData }) => {
 					)}
 
 					<ion-buttons slot="end">
-						<ion-button>Order By</ion-button>
+						<ion-button>{userData?.email}Order By</ion-button>
+						{console.log('aasdasd ',userData)}
 
 						<IonSelect
 							onChange={(e) => {

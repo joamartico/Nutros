@@ -73,6 +73,7 @@ export default function Home({ shuffledFoodNames, userData }) {
 					<FoodsScreen
 						selectedTab={selectedTab}
 						foodData={foodData}
+						userData={userData}
 					/>
 				</ion-tab>
 
@@ -127,9 +128,9 @@ export async function getServerSideProps(ctx) {
 		? await getDoc(doc(db, "users", userCookie))
 		: null;
 	userData = userData?.data() || null
-	if(userData){
+	// if(userData){
 		userData.email = userCookie || '';
-	}
+	// }
 
 	return {
 		props: {

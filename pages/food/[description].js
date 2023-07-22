@@ -187,7 +187,7 @@ const food = ({ userData }) => {
 											/\([^()]*\)/g,
 											""
 										) ||
-											// portion.measureUnit.name || // PARA CHOCOLATE NO SIRVE, ES "undetermined"
+											(portion.measureUnit.name != 'undetermined' && portion.measureUnit.name  )|| // PARA CHOCOLATE NO SIRVE, ES "undetermined"
 											portion.modifier}{" "}
 										({portion.gramWeight} grams)
 									</span>
