@@ -163,3 +163,42 @@ export const minerals = [
 			"Zinc is essential for cell growth, wound healing, carbohydrate metabolism, and sensory functions like taste and smell. It plays a crucial role in male fertility, testosterone production, and immune system function. It also improves the absorption of vitamin A.",
 	},
 ];
+
+export const fattyAcids = [
+	{
+		completeName: "Alpha-linolenic Acid (ALA)",
+		shortName: "Omega-3 (ALA)",
+		dbName: "PUFA 18:3 n-3 c,c,c (ALA)",
+		unit: "g",
+		description:
+			"Alpha-linolenic Acid (ALA) is a type of Omega-3 fatty acid that is essential in the diet because our bodies can't produce it. ALA can be converted in small amounts to DHA and EPA in the body, and it is important for heart function and reducing inflammation.",
+		dv: 1.2,
+	},
+	{
+		completeName: "Docosahexaenoic Acid (DHA)",
+		shortName: "Omega-3 (DHA)",
+		dbName: "22:6 n-3 (DHA)",
+		unit: "g",
+		description:
+			"Docosahexaenoic Acid (DHA) is a type of Omega-3 fatty acid that is a primary structural component of the human brain, cerebral cortex, skin, and retina. It plays a crucial role in the development of infant brain and eye health, and supports brain health, cognitive function, and neuron communication throughout life, including learning and memory performance. DHA is also essential for the health of myelin, the protective covering of neurons, aiding in efficient signal transmission.",
+		dv: 0.25,
+	},
+	{
+		completeName: "Eicosapentaenoic Acid (EPA)",
+		shortName: "Omega-3 (EPA)",
+		dbName: "20:5 n-3 (EPA)",
+		unit: "g",
+		description:
+			"Eicosapentaenoic Acid (EPA) is a type of Omega-3 fatty acid that can help reduce inflammation in the body. It has significant effects on brain health, including supporting mood and reducing symptoms of depression.",
+		dv: 0.25,
+	},
+	{
+		completeName: "Omega-6",
+		shortName: "Omega-6",
+		dbName: "Fatty acids, total omega-6",
+		unit: "g",
+		description:
+			"Omega-6 fatty acids are a type of polyunsaturated fat that are essential for brain function and normal growth and development. They can stimulate skin and hair growth, maintain bone health, regulate metabolism, and maintain the reproductive system.",
+		dv: 17,
+	},
+];

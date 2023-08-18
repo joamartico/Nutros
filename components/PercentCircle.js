@@ -19,7 +19,15 @@ const PercentCircle = ({ num = 0, name, url }) => {
 			<ExtCircle>
 				<IntCircle>{num}%</IntCircle>
 			</ExtCircle>
-			{name}
+			<span
+				style={{
+					maxWidth: 70,
+					textAlign: "center",
+					whiteSpace: "wrap",
+				}}
+			>
+				{name}
+			</span>
 		</Center>
 	);
 };
@@ -59,8 +67,7 @@ const ExtCircle = styled.div`
 	justify-content: center;
 	align-items: center;
 	margin-bottom: 5px;
-    margin-top: -60px;
-    
+	margin-top: -60px;
 `;
 
 const IntCircle = styled.div`
@@ -88,7 +95,7 @@ const Circle = styled.circle`
 	stroke-dasharray:330;
 	stroke-dashoffset: ${({ num }) => {
 		return 330 - (num / 100) * 330;
-	}};
+	}};	 
     transition: all 0.5s ease-in-out;
 	transform: rotate(-90deg);
 	transform-origin: center;

@@ -28,6 +28,10 @@ const food = ({ userData }) => {
 	console.log("food", food);
 
 	let omega3 = 0;
+	let omega3ALA = 0;
+	let omega3EPA = 0;
+	let omega3DHA = 0;
+
 	let omega6 = 0;
 
 	const nutrientsHaveN3 = food?.foodNutrients.find((item) =>
@@ -39,22 +43,28 @@ const food = ({ userData }) => {
 	);
 
 	food?.foodNutrients.map((item) => {
-		if (nutrientsHaveN3) {
-			// OMEGA 3
-			if (item?.nutrient?.name.includes("n-3")) {
-				omega3 = omega3 + item?.amount;
-			}
-		} else {
-			if (
-				item?.nutrient?.name.includes("PUFA 18:3") || // ALA
-				item?.nutrient?.name.includes("PUFA 18:4") || // SDA
-				item?.nutrient?.name.includes("PUFA 20:5") || // EPA
-				item?.nutrient?.name.includes("PUFA 22:5") || // DPA
-				item?.nutrient?.name.includes("PUFA 22:6") // DHA
-			) {
-				console.log("contains omega3");
-				omega3 = omega3 + item.amount;
-			}
+		// OMEGA 3
+		if (
+			item?.nutrient?.name.includes("ALA") ||
+			item?.nutrient?.name.includes("PUFA 18:3")
+		) {
+			console.log('ALA', item.amount)
+			omega3ALA = item.amount || omega3ALA;
+		}
+		if (
+			item?.nutrient?.name.includes("EPA") ||
+			item?.nutrient?.name.includes("PUFA 20:5")
+		) {
+			console.log('EPA', item.amount)
+			omega3EPA = item.amount || omega3EPA;
+		}
+
+		if (
+			item?.nutrient?.name.includes("DHA") ||
+			item?.nutrient?.name.includes("PUFA 22:6")
+		) {
+			console.log('DHA', item.amount)
+			omega3DHA = item.amount || omega3DHA;
 		}
 
 		if (nutrientsHaveN6) {
@@ -76,7 +86,7 @@ const food = ({ userData }) => {
 
 	const group = userData?.group || "men 19-30";
 
-	console.log("foodPortion", portion);
+	// console.log("foodPortion", portion);
 
 	async function removeFoodFromFoundationJson(food) {
 		fetch("/api/removeFood", {
@@ -115,10 +125,9 @@ const food = ({ userData }) => {
 				/>
 			</Head>
 
-			{/* {console.log(food?.foodNutrients)} */}
-			{food.foodNutrients.map((item) => {
+			{/* {food.foodNutrients.map((item) => {
 				console.log(item.nutrient, item.amount);
-			})}
+			})} */}
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">
@@ -187,7 +196,9 @@ const food = ({ userData }) => {
 											/\([^()]*\)/g,
 											""
 										) ||
-											(portion.measureUnit.name != 'undetermined' && portion.measureUnit.name  )|| // PARA CHOCOLATE NO SIRVE, ES "undetermined"
+											(portion.measureUnit.name !=
+												"undetermined" &&
+												portion.measureUnit.name) || // PARA CHOCOLATE NO SIRVE, ES "undetermined"
 											portion.modifier}{" "}
 										({portion.gramWeight} grams)
 									</span>
@@ -217,7 +228,6 @@ const food = ({ userData }) => {
 				</ion-header>
 
 				<ion-list>
-					{console.log("environment: ", process.env.NODE_ENV)}
 					{userData?.email === "joamartico@gmail.com" &&
 						process.env.NODE_ENV == "development" && (
 							<ion-item>
@@ -331,15 +341,45 @@ const food = ({ userData }) => {
 				</ion-list>
 
 				<ion-list>
-					<ion-list-header>Fats</ion-list-header>
+					<ion-list-header>Fatty Acids</ion-list-header>
+
 
 					<NutrientItem
-						name="Omega-3"
-						completeName="Omega-3"
-						dbName="Omega-3"
-						amount={omega3 * (portion?.gramWeight / 100) || omega3}
+						name="Omega-3 (ALA)"
+						completeName="Omega-3 (ALA)"
+						dbName="Omega-3 (ALA)"
+						amount={
+							omega3ALA
+						}
 						unitName={"g"}
-						recommendedAmount={dv[group]["Omega-3"]}
+						// recommendedAmount={dv[group]["Omega-3"]}
+						recommendedAmount={1.2}
+					/>
+
+					<NutrientItem
+						name="Omega-3 (EPA)"
+						completeName="Omega-3 (EPA)"
+						dbName="Omega-3 (EPA)"
+						amount={
+							omega3EPA * (foodPortion?.gramWeight / 100) ||
+							omega3EPA
+						}
+						unitName={"g"}
+						// recommendedAmount={dv[group]["Omega-3"]}
+						recommendedAmount={0.25}
+					/>
+
+					<NutrientItem
+						name="Omega-3 (DHA)"
+						completeName="Omega-3 (DHA)"
+						dbName="Omega-3 (DHA)"
+						amount={
+							omega3DHA * (foodPortion?.gramWeight / 100) ||
+							omega3DHA
+						}
+						unitName={"g"}
+						// recommendedAmount={dv[group]["Omega-3"]}
+						recommendedAmount={0.25}
 					/>
 
 					<NutrientItem
@@ -385,6 +425,16 @@ const food = ({ userData }) => {
 export default food;
 
 export async function getServerSideProps(ctx) {
+	// if query is only numbers (id) then redirect to /
+	if (ctx.query.description.match(/^\d+$/)) {
+		return {
+			redirect: {
+				destination: "/",
+				permanent: false,
+			},
+		};
+	}
+
 	const cookies = ctx.req.headers.cookie?.split("; ");
 	const userCookie = cookies
 		?.find((cookie) => cookie.startsWith("user="))
@@ -397,9 +447,9 @@ export async function getServerSideProps(ctx) {
 	let userData = userCookie
 		? await getDoc(doc(db, "users", userCookie))
 		: null;
-	userData = userData?.data() || null
-	if(userData){
-		userData.email = userCookie || '';
+	userData = userData?.data() || null;
+	if (userData) {
+		userData.email = userCookie || "";
 	}
 
 	return {

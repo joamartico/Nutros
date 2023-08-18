@@ -6,7 +6,7 @@ import IonModal from "../components/IonModal";
 import PercentCircle from "../components/PercentCircle";
 import SearchFoodList from "../components/SearchFoodList";
 import dv from "../dv.json";
-import { minerals, vitamins } from "../nutrients";
+import { minerals, vitamins, fattyAcids } from "../nutrients";
 import { db } from "../pages";
 import {
 	collection,
@@ -237,6 +237,27 @@ const DayScreen = ({ foodData, userData }) => {
 									)}
 									name={mineral.shortName}
 									url={"/?nutrient=" + mineral.dbName}
+								/>
+							);
+						})}
+					</ScrollRow>
+				</ion-list>
+
+				<ion-list style={{ marginTop: -30 }}>
+					<ion-list-header>
+						<h2>Fatty Acids</h2>
+					</ion-list-header>
+
+					<ScrollRow>
+						{fattyAcids.map((fat, i) => {
+							return (
+								<PercentCircle
+									num={getDVPercent(
+										fat.dbName,
+										"fattyAcids"
+									)}
+									name={fat.shortName}
+									url={"/?nutrient=" + fat.dbName}
 								/>
 							);
 						})}
