@@ -69,7 +69,7 @@ export const vitamins = [
 		dbName: "Vitamin D (D2 + D3)",
 		unit: "µg",
 		description:
-			"Vitamin D helps regulate the absorption of calcium and phosphorus. It also supports immune system function and can boost testosterone levels in men.",
+			"Vitamin D is vital for calcium absorption, ensuring bone and teeth health. It supports immune function, influences testosterone production, aids neuromuscular function, and modulates cell growth related to cancer.",
 	},
 	{
 		completeName: "Vitamin E",
