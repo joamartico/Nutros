@@ -13,7 +13,7 @@ export const vitamins = [
 		dbName: "Thiamin",
 		unit: "mg",
 		description:
-			"Thiamin is necessary for the metabolism of carbohydrates, aiding in energy (ATP) production. It also supports nerve function and neurotransmission.",
+			"Thiamin is necessary for the metabolism of carbohydrates, aiding in energy (ATP) production. It also supports nerve function and neurotransmission by assisting in the synthesis of acetylcholine and myelin.",
 	},
 	{
 		completeName: "Vitamin B2 (Riboflavin)",
@@ -29,7 +29,7 @@ export const vitamins = [
 		dbName: "Niacin",
 		unit: "mg",
 		description:
-			"Niacin plays a role in energy (ATP) production, cellular signaling, and DNA production and repair. It can also help reduce LDL cholesterol and boost brain function.",
+			"Niacin aids in energy (ATP) production, cellular signaling, and DNA repair. It reduces LDL cholesterol and enhances brain function by supporting serotonin and norepinephrine synthesis and promoting cerebral blood flow.",
 	},
 	{
 		completeName: "Vitamin B6 (Pyridoxine)",
@@ -37,7 +37,7 @@ export const vitamins = [
 		dbName: "Vitamin B-6",
 		unit: "mg",
 		description:
-			"Vitamin B6 is vital for brain development and function. It aids in the production of hormones serotonin and norepinephrine, which can influence mood and body clock.",
+			"Vitamin B6 supports brain function through neurotransmitter synthesis (including serotonin, dopamine, norepinephrine, and GABA), aids in amino acid metabolism, and regulates cardiovascular health via homocysteine.",
 	},
 	{
 		completeName: "Vitamin B9 (Folate)",
@@ -53,7 +53,7 @@ export const vitamins = [
 		dbName: "Vitamin B-12",
 		unit: "µg",
 		description:
-			"Vitamin B12 is crucial for brain function and the production of red blood cells and DNA. It also aids in the metabolism of proteins and fats.",
+			"Vitamin B12 is crucial for brain function due to its role in nerve cell maintenance and myelin formation. It's essential for red blood cell and DNA production and aids in the metabolism of proteins and fats.",
 	},
 	{
 		completeName: "Vitamin C",
@@ -77,7 +77,7 @@ export const vitamins = [
 		dbName: "Vitamin E (alpha-tocopherol)",
 		unit: "mg",
 		description:
-			"Vitamin E is a powerful antioxidant that helps protect your cells from damage. It also plays a role in immune function and metabolic processes.",
+			"Vitamin E is a powerful antioxidant that helps protect your cells from damage. It also plays a role in immune function and metabolic processes, and also blood clotting regulation.",
 	},
 	{
 		completeName: "Vitamin K",
@@ -85,7 +85,7 @@ export const vitamins = [
 		dbName: "Vitamin K (phylloquinone)",
 		unit: "µg",
 		description:
-			"Vitamin K is needed for blood clotting and to modify proteins to bind calcium, an important process in bone health.",
+			"Vitamin K is essential for blood clotting, as it activates proteins responsible for coagulation. It also plays a key role in bone health by assisting in the regulation of calcium and supporting bone mineralization.",
 	},
 	{
 		completeName: "Choline",
@@ -128,7 +128,7 @@ export const minerals = [
 		dbName: "Magnesium, Mg",
 		unit: "mg",
 		description:
-			"Magnesium is involved in numerous processes including sleep regulation, energy (ATP) production, DNA replication, protein synthesis, and nerve function. Additionally, it enhances the absorption of vitamin D, K and calcium.",
+			"Magnesium is crucial for muscle function, nerve conduction, heart rhythm, energy (ATP) and protein synthesis, and aids in sleep by modulating brain GABA levels. Additionally, it enhances the absorption of vitamin D, K and calcium.",
 	},
 	{
 		completeName: "Potassium",
