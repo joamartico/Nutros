@@ -104,7 +104,7 @@ export const minerals = [
 		dbName: "Calcium, Ca",
 		unit: "mg",
 		description:
-			"Calcium is crucial for bone and teeth health, blood clotting, wound healing, and maintaining normal blood pressure.",
+			"Calcium is a vital mineral for skeletal structure and teeth integrity. Beyond its structural role, it's pivotal in muscle contraction, nerve transmission, blood clotting, and hormone secretion.",
 	},
 	{
 		completeName: "Copper",
@@ -112,7 +112,7 @@ export const minerals = [
 		dbName: "Copper, Cu",
 		unit: "mg",
 		description:
-			"Copper aids in iron absorption, heart health, and plays a role in energy (ATP) production and neurotransmission.",
+			"Copper is a vital trace mineral for red blood cell formation, immune support, and collagen synthesis. It's key for energy (ATP) production and aids in the synthesis of neurotransmitters dopamine and norepinephrine.",
 	},
 	{
 		completeName: "Iron",
@@ -120,7 +120,7 @@ export const minerals = [
 		dbName: "Iron, Fe",
 		unit: "mg",
 		description:
-			"Iron is a vital component of hemoglobin in red blood cells and myoglobin in muscle cells, where it helps transport and store oxygen.",
+			"Iron is a vital mineral essential for hemoglobin formation, enabling red blood cells to transport oxygen throughout the body. It also supports cellular energy (ATP) production and DNA synthesis. Deficiency can lead to anemia and fatigue.",
 	},
 	{
 		completeName: "Magnesium",
@@ -136,7 +136,7 @@ export const minerals = [
 		dbName: "Potassium, K",
 		unit: "mg",
 		description:
-			"Potassium helps regulate fluid balance, nerve signals, and muscle contractions.",
+			"Potassium is a key electrolyte for muscle contractions, nerve transmission, heart rhythm, fluid balance, and counteracting sodium's effects on blood pressure",
 	},
 	{
 		completeName: "Phosphorus",
@@ -144,7 +144,7 @@ export const minerals = [
 		dbName: "Phosphorus, P",
 		unit: "mg",
 		description:
-			"Phosphorus is necessary for building bones and DNA, and plays a crucial role in d (ATP) production.",
+			"Phosphorus is necessary for building bones and DNA, and plays a crucial role in energy (ATP) production.",
 	},
 	{
 		completeName: "Selenium",
@@ -152,7 +152,7 @@ export const minerals = [
 		dbName: "Selenium, Se",
 		unit: "µg",
 		description:
-			"Selenium is a powerful antioxidant that can help defend against oxidative stress and enhance immunity.",
+			"Selenium is a trace mineral crucial for antioxidant defense. It supports thyroid function by aiding in the production of thyroid hormones and plays a role in DNA synthesis. Additionally, selenium protects cells from damage and supports immune system health.",
 	},
 	{
 		completeName: "Zinc",
