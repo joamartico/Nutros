@@ -21,9 +21,9 @@ const PercentCircle = ({ num = 0, name, url }) => {
 			</ExtCircle>
 			<span
 				style={{
-					maxWidth: 70,
+					width: 70,
 					textAlign: "center",
-					whiteSpace: "wrap",
+					whiteSpace: "normal",
 				}}
 			>
 				{name}

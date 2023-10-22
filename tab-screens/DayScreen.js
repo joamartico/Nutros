@@ -10,6 +10,7 @@ import { minerals, vitamins, fattyAcids } from "../nutrients";
 import { db } from "../pages";
 import {
 	collection,
+	deleteDoc,
 	doc,
 	getDocs,
 	increment,
@@ -44,35 +45,71 @@ const DayScreen = ({ foodData, userData }) => {
 	const modalRef = useRef();
 	const router = useRouter();
 	const [date, setDate] = useState(new Date());
+	const [loading, setLoading] = useState(true);
 	const formattedDate = date.toLocaleDateString("sv");
 
 	useEffect(() => {
 		if (!userData) return;
-		getDocs(collection(db, `users/${userData?.email}/`, formattedDate)).then(
-			(snapshot) => {
-				setFoods(snapshot.docs.map((doc) => doc.data()));
-			}
-		);
+		getDocs(
+			collection(db, `users/${userData?.email}/`, formattedDate)
+		).then((snapshot) => {
+			setFoods(snapshot.docs.map((doc) => doc.data()));
+			setLoading(false);
+		});
 	}, [userData, date]);
 
-	function getDVPercent(nutrientName, nutrientType) {
+	function getDVPercent(nutrientDbName) {
 		let amountSum = 0;
-		foods.map((food) => {
-			food.foodNutrients.map((item) => {
-				if (item.nutrient?.name === nutrientName) {
-					amountSum +=
-						item.amount *
-						((food.foodPortions[0]?.gramWeight || 100) / 100) *
-						food.portions;
-				}
+
+		if (nutrientDbName == "Omega-6") {
+			foods.map((food) => {
+				const nutrientsHaveN6 = food?.foodNutrients.find((item) =>
+					item?.nutrient?.name.includes("n-6")
+				);
+
+				food?.foodNutrients.map((item) => {
+					if (nutrientsHaveN6) {
+						// OMEGA 6
+						if (item?.nutrient?.name.includes("n-6")) {
+							amountSum += item.amount * (food.amount / 100);
+						}
+					} else {
+						if (
+							item?.nutrient?.name.includes("PUFA 18:2") || // LA
+							// item?.nutrient?.name.includes("PUFA 18:3") || // GLA
+							item?.nutrient?.name.includes("PUFA 20:3") || // DGLA
+							item?.nutrient?.name.includes("PUFA 20:4") // AA
+						) {
+							amountSum += item.amount * (food.amount / 100);
+						}
+					}
+				});
 			});
-		});
+		} else {
+			foods.map((food) => {
+				food.foodNutrients.map((item) => {
+					if (item.nutrient?.name.includes(nutrientDbName) && item.amount && food.amount) {
+						amountSum += item.amount * (food.amount / 100);
+					}
+				});
+			});
+		}
 
 		return (
-			(amountSum / dv[userData?.group || "men 19-30"][nutrientName]) *
+			(amountSum / dv[userData?.group || "men 19-30"][nutrientDbName]) *
 			100
 		).toFixed(0);
 	}
+
+	const getAmount = (foodPortions) => {
+		if (!foodPortions || !foodPortions[0]?.gramWeight) {
+			return 100;
+		}
+
+		return foodPortions[0].gramWeight > 250
+			? 250
+			: foodPortions[0].gramWeight;
+	};
 
 	return (
 		<>
@@ -140,12 +177,7 @@ const DayScreen = ({ foodData, userData }) => {
 							<FoodItem
 								name={food.description}
 								emoji={food.emoji}
-								amount={
-									food.foodPortions
-										? food.foodPortions[0]?.gramWeight ||
-										  100
-										: ""
-								}
+								amount={getAmount(food.foodPortions)}
 								portionName={getPortionName(food)}
 								onClick={() => {
 									router.push(
@@ -156,6 +188,10 @@ const DayScreen = ({ foodData, userData }) => {
 								onAdd={() => {
 									const newFoods = [...foods];
 									newFoods[i].portions += 1;
+									newFoods[i].amount =
+										getAmount(food.foodPortions) *
+										newFoods[i].portions;
+
 									setFoods(newFoods);
 									updateDoc(
 										doc(
@@ -165,32 +201,61 @@ const DayScreen = ({ foodData, userData }) => {
 										),
 										{
 											portions: increment(1),
+											amount:
+												getAmount(food.foodPortions) *
+												newFoods[i].portions,
 										}
 									);
 								}}
 								onRemove={() => {
 									const newFoods = [...foods];
 									newFoods[i].portions -= 1;
+									newFoods[i].amount =
+										getAmount(food.foodPortions) *
+										newFoods[i].portions;
 									if (newFoods[i].portions === 0) {
 										newFoods.splice(i, 1);
+
+										deleteDoc(
+											doc(
+												db,
+												`users/${userData?.email}/${formattedDate}/`,
+												food.description
+											)
+										);
+									} else {
+										updateDoc(
+											doc(
+												db,
+												`users/${userData?.email}/${formattedDate}/`,
+												food.description
+											),
+											{
+												portions: increment(-1),
+												amount:
+													getAmount(
+														food.foodPortions
+													) * newFoods[i].portions,
+											}
+										);
 									}
 									setFoods(newFoods);
-									updateDoc(
-										doc(
-											db,
-											`users/${userData?.email}/${formattedDate}/`,
-											food.description
-										),
-										{
-											portions: increment(-1),
-										}
-									);
 								}}
 								portions={food.portions}
 							/>
 							// </Link>
 						);
 					})}
+
+					{loading ? (
+						<ion-spinner
+							style={{
+								display: "block",
+								margin: "20px auto",
+							}}
+							name="crescent"
+						/>
+					) : null}
 
 					<AddButton
 						onClick={() => {
@@ -210,10 +275,7 @@ const DayScreen = ({ foodData, userData }) => {
 						{vitamins.map((vitamin, i) => {
 							return (
 								<PercentCircle
-									num={getDVPercent(
-										vitamin.dbName,
-										"vitamins"
-									)}
+									num={getDVPercent(vitamin.dbName)}
 									name={vitamin.shortName}
 									url={"/?nutrient=" + vitamin.dbName}
 								/>
@@ -231,10 +293,7 @@ const DayScreen = ({ foodData, userData }) => {
 						{minerals.map((mineral, i) => {
 							return (
 								<PercentCircle
-									num={getDVPercent(
-										mineral.dbName,
-										"minerals"
-									)}
+									num={getDVPercent(mineral.dbName)}
 									name={mineral.shortName}
 									url={"/?nutrient=" + mineral.dbName}
 								/>
@@ -252,10 +311,7 @@ const DayScreen = ({ foodData, userData }) => {
 						{fattyAcids.map((fat, i) => {
 							return (
 								<PercentCircle
-									num={getDVPercent(
-										fat.dbName,
-										"fattyAcids"
-									)}
+									num={getDVPercent(fat.dbName)}
 									name={fat.shortName}
 									url={"/?nutrient=" + fat.dbName}
 								/>
@@ -296,6 +352,7 @@ const DayScreen = ({ foodData, userData }) => {
 								{
 									...food,
 									portions: 1,
+									amount: getAmount(food.foodPortions),
 								}
 							);
 						}}

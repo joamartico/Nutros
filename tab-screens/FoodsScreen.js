@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import IonSelect from "../components/IonSelect";
 import SearchFoodList from "../components/SearchFoodList";
-import { minerals, vitamins } from "../nutrients";
+import { fattyAcids, minerals, vitamins } from "../nutrients";
 import { useRouter } from "next/router";
 import { getFoodPortion } from "../utils/functions";
 import dv from "../dv.json";
@@ -29,10 +29,10 @@ const FoodsScreen = ({ foodData, userData }) => {
 	foodData.sort((a, b) => {
 		if (!a.foodPortions || !b.foodPortions) return 1;
 		const aNutrientObj = a.foodNutrients.find(
-			(item) => item.nutrient && item.nutrient.name === selectedNutrient
+			(item) => item.nutrient && item.nutrient.name.includes(selectedNutrient)
 		);
 		const bNutrientObj = b.foodNutrients.find(
-			(item) => item.nutrient && item.nutrient.name === selectedNutrient
+			(item) => item.nutrient && item.nutrient.name.includes(selectedNutrient)
 		);
 
 		const aAmount = aNutrientObj ? aNutrientObj.amount : 0;
@@ -48,16 +48,23 @@ const FoodsScreen = ({ foodData, userData }) => {
 		return bAmount * (bGramWeight / 100) - aAmount * (aGramWeight / 100);
 	});
 
-	const allNutrients = [...vitamins, ...minerals];
+	const allNutrients = [...vitamins, ...minerals, ...fattyAcids];
 
 	const nutrient = allNutrients.find(
-		(nutrient) => nutrient.dbName === selectedNutrient
+		(nutrient) => nutrient.dbName.includes(selectedNutrient)
 	);
 
 	const unit = nutrient?.unit || "";
 	const description = nutrient?.description || "";
 
 	const group = userData?.group || "men 19-30";
+
+
+	function getNutrientTitle(selectedNutrient){
+		if(selectedNutrient?.includes('(')){
+			return 'Omega-3 ' + selectedNutrient
+		} else return selectedNutrient
+	}
 
 	return (
 		<>
@@ -75,7 +82,6 @@ const FoodsScreen = ({ foodData, userData }) => {
 
 					<ion-buttons slot="end">
 						<ion-button>Order By</ion-button>
-						{console.log('aasdasd ',userData)}
 
 						<IonSelect
 							onChange={(e) => {
@@ -106,7 +112,7 @@ const FoodsScreen = ({ foodData, userData }) => {
 
 			<ion-content fullscreen>
 				<SearchFoodList
-					title={selectedNutrient || "Nutros"}
+					title={getNutrientTitle(selectedNutrient) || "Nutros"}
 					description={
 						selectedNutrient &&
 						`${description}

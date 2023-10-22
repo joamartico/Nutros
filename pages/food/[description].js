@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import dv from "../../dv.json";
 import NutrientItem from "../../components/NutrientItem";
-import { minerals, vitamins } from "../../nutrients";
+import { minerals, vitamins, fattyAcids } from "../../nutrients";
 import Head from "next/head";
 import { convertToUrl, getFoodPortion } from "../../utils/functions";
 // import fs from "fs";
@@ -27,16 +27,12 @@ const food = ({ userData }) => {
 
 	console.log("food", food);
 
-	let omega3 = 0;
 	let omega3ALA = 0;
 	let omega3EPA = 0;
 	let omega3DHA = 0;
 
 	let omega6 = 0;
 
-	const nutrientsHaveN3 = food?.foodNutrients.find((item) =>
-		item?.nutrient?.name.includes("n-3")
-	);
 
 	const nutrientsHaveN6 = food?.foodNutrients.find((item) =>
 		item?.nutrient?.name.includes("n-6")
@@ -48,14 +44,14 @@ const food = ({ userData }) => {
 			item?.nutrient?.name.includes("ALA") ||
 			item?.nutrient?.name.includes("PUFA 18:3")
 		) {
-			console.log('ALA', item.amount)
+			console.log("ALA", item.amount, item?.nutrient?.name);
 			omega3ALA = item.amount || omega3ALA;
 		}
 		if (
 			item?.nutrient?.name.includes("EPA") ||
 			item?.nutrient?.name.includes("PUFA 20:5")
 		) {
-			console.log('EPA', item.amount)
+			console.log("EPA", item.amount, item?.nutrient?.name);
 			omega3EPA = item.amount || omega3EPA;
 		}
 
@@ -63,7 +59,7 @@ const food = ({ userData }) => {
 			item?.nutrient?.name.includes("DHA") ||
 			item?.nutrient?.name.includes("PUFA 22:6")
 		) {
-			console.log('DHA', item.amount)
+			console.log("DHA", item.amount, item?.nutrient?.name);
 			omega3DHA = item.amount || omega3DHA;
 		}
 
@@ -343,53 +339,35 @@ const food = ({ userData }) => {
 				<ion-list>
 					<ion-list-header>Fatty Acids</ion-list-header>
 
-
-					<NutrientItem
-						name="Omega-3 (ALA)"
-						completeName="Omega-3 (ALA)"
-						dbName="Omega-3 (ALA)"
-						amount={
-							omega3ALA
-						}
-						unitName={"g"}
-						// recommendedAmount={dv[group]["Omega-3"]}
-						recommendedAmount={1.2}
-					/>
-
-					<NutrientItem
-						name="Omega-3 (EPA)"
-						completeName="Omega-3 (EPA)"
-						dbName="Omega-3 (EPA)"
-						amount={
-							omega3EPA * (foodPortion?.gramWeight / 100) ||
-							omega3EPA
-						}
-						unitName={"g"}
-						// recommendedAmount={dv[group]["Omega-3"]}
-						recommendedAmount={0.25}
-					/>
-
-					<NutrientItem
-						name="Omega-3 (DHA)"
-						completeName="Omega-3 (DHA)"
-						dbName="Omega-3 (DHA)"
-						amount={
-							omega3DHA * (foodPortion?.gramWeight / 100) ||
-							omega3DHA
-						}
-						unitName={"g"}
-						// recommendedAmount={dv[group]["Omega-3"]}
-						recommendedAmount={0.25}
-					/>
-
-					<NutrientItem
-						name="Omega-6"
-						completeName="Omega-6"
-						dbName="Omega-6"
-						amount={omega6 * (portion?.gramWeight / 100) || omega6}
-						recommendedAmount={dv[group]["Omega-6"]}
-						unitName={"g"}
-					/>
+					{fattyAcids.map((fattyAcid) => {
+						return (
+							<NutrientItem
+								dbName={fattyAcid.dbName}
+								completeName={fattyAcid.completeName}
+								amount={
+									fattyAcid.dbName.includes("ALA")
+										? omega3ALA *
+												(portion?.gramWeight / 100) ||
+										  omega3ALA
+										: fattyAcid.dbName.includes("EPA")
+										? omega3EPA *
+												(portion?.gramWeight / 100) ||
+										  omega3EPA
+										: fattyAcid.dbName.includes("DHA")
+										? omega3DHA *
+												(portion?.gramWeight / 100) ||
+										  omega3DHA
+										: omega6 *
+												(portion?.gramWeight / 100) ||
+										  omega6
+								}
+								recommendedAmount={dv[group][fattyAcid.dbName]}
+								unitName={"g"}
+								url={`/?nutrient=${fattyAcid.dbName}`}
+								decimals={2}
+							/>
+						);
+					})}
 				</ion-list>
 
 				<ion-list>

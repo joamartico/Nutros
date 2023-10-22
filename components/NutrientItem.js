@@ -7,7 +7,8 @@ const NutrientItem = ({
 	amount,
 	unitName,
 	onClick,
-	url
+	url,
+	decimals,
 }) => {
 	const nutrientPercentage = ((amount / recommendedAmount) * 100)?.toFixed(1);
 
@@ -21,13 +22,13 @@ const NutrientItem = ({
 	}
 
 	return (
-		<Link href={url || ''}>
+		<Link href={url ?? '#'}>
 			<ion-item onClick={onClick} button detail="false">
 				<ion-label>
 					<h2>{completeName}</h2>
 
 					<p>
-						{amount?.toFixed(1) || "Null"} {unitName}{" "}
+						{amount?.toFixed(decimals ?? 1) || "Null"} {unitName}{" "}
 					</p>
 				</ion-label>
 

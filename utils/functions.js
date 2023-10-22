@@ -1,5 +1,5 @@
 export function convertToUrl(text) {
-	return text.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "-");
+	return text?.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "-");
 }
 
 export function shuffleArray(array) {
