@@ -5,7 +5,7 @@ import useInstallPwa from "../hooks/useInstallPwa";
 import { getMessaging, getToken } from "firebase/messaging";
 import IonSelect from "../components/IonSelect";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../pages";
 import firebaseApp from "../firebase";
 import { setCookie } from "nookies";
@@ -24,7 +24,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 		userData?.maternalStatus
 	);
 
-	const { installPwa } = useInstallPwa();
+	// const { installPwa } = useInstallPwa();
 
 	const auth = getAuth(firebaseApp);
 
@@ -128,21 +128,31 @@ const UserScreen = ({ selectedTab, userData }) => {
 		return menOrWomen + " " + ageRange;
 	}
 
-	useEffect(() => {
-		if (!db || !auth.currentUser) return;
+	// useEffect(() => {
+	// 	if (!db || !auth.currentUser) return;
+	// 	const group = getGroupByGenderAndAge(gender, age, maternalStatus);
+	// 	setDoc(
+	// 		doc(db, "users", auth.currentUser?.email),
+	// 		{
+	// 			gender: gender,
+	// 			age: age,
+	// 			maternalStatus: maternalStatus,
+	// 			group: group,
+	// 		}
+	// 		// { merge: true }
+	// 	);
+	// 	console.log("group: ", group);
+	// }, [gender, age, maternalStatus, db, auth.currentUser, userData]);
+
+	function updateUserData(obj) {
+		console.log("updateData");
+		console.log(auth.currentUser?.email);
 		const group = getGroupByGenderAndAge(gender, age, maternalStatus);
-		setDoc(
+		updateDoc(
 			doc(db, "users", auth.currentUser?.email),
-			{
-				gender: gender || "",
-				age: age || "",
-				maternalStatus: maternalStatus || "",
-				group: group || "",
-			}
-			// { merge: true }
+			{...obj, group}
 		);
-		console.log("group: ", group);
-	}, [gender, age, maternalStatus, db, auth.currentUser]);
+	}
 
 	return (
 		<>
@@ -169,12 +179,6 @@ const UserScreen = ({ selectedTab, userData }) => {
 											setCookie(null, "user", "", {
 												path: "/",
 											});
-											// setGender(null);
-											// setAge(null);
-											// setMaternalStatus(null);
-											// gender = null;
-											// age = null;
-											// maternalStatus = null;
 											window.location.reload();
 										}
 									}}
@@ -212,6 +216,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 							onChange={(option) => {
 								const newGender = option.detail.value;
 								setGender(newGender);
+								updateUserData({gender: newGender});
 							}}
 						/>
 					</ion-item>
@@ -238,6 +243,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 							onChange={(option) => {
 								const newAge = option.detail.value;
 								setAge(newAge);
+								updateUserData({age: newAge});
 							}}
 						/>
 					</ion-item>
@@ -254,6 +260,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 									const newMaternalStatus =
 										option.detail.value;
 									setMaternalStatus(newMaternalStatus);
+									updateUserData({maternalStatus: newMaternalStatus});
 								}}
 							/>
 						</ion-item>

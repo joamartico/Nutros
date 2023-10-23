@@ -82,7 +82,6 @@ const food = ({ userData }) => {
 
 	const group = userData?.group || "men 19-30";
 
-	// console.log("foodPortion", portion);
 
 	async function removeFoodFromFoundationJson(food) {
 		fetch("/api/removeFood", {
