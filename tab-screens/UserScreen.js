@@ -18,8 +18,8 @@ const UserScreen = ({ selectedTab, userData }) => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [promptValue, setPromptValue] = useState("");
 	const [response, setResponse] = useState("");
-	const [age, setAge] = useState(userData.age);
-	const [gender, setGender] = useState(userData.gender);
+	const [age, setAge] = useState(userData?.age);
+	const [gender, setGender] = useState(userData?.gender);
 	const [weight, setWeight] = useState(userData?.weight);
 	const [physicalActivity, setPhysicalActivity] = useState(
 		userData?.physicalActivity
