@@ -14,12 +14,18 @@ const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const API_URL = "https://api.openai.com/v1/chat/completions";
 
 const UserScreen = ({ selectedTab, userData }) => {
-	console.log({ userData });
+	// console.log({ userData });
 	const [modalOpen, setModalOpen] = useState(false);
 	const [promptValue, setPromptValue] = useState("");
 	const [response, setResponse] = useState("");
-	const [age, setAge] = useState(userData?.age);
-	const [gender, setGender] = useState(userData?.gender);
+	const [age, setAge] = useState(userData.age);
+	const [gender, setGender] = useState(userData.gender);
+	const [weight, setWeight] = useState(userData?.weight);
+	const [physicalActivity, setPhysicalActivity] = useState(
+		userData?.physicalActivity
+	);
+	const [height, setHeight] = useState(userData?.height);
+
 	const [maternalStatus, setMaternalStatus] = useState(
 		userData?.maternalStatus
 	);
@@ -78,8 +84,6 @@ const UserScreen = ({ selectedTab, userData }) => {
 			const { value, done } = await reader.read();
 
 			if (done) {
-				// setResponse((prev) => prev.concat("<br/><br/>"));
-
 				break;
 			}
 
@@ -104,24 +108,46 @@ const UserScreen = ({ selectedTab, userData }) => {
 	}
 
 	function getGroupByGenderAndAge(_gender, _age, _maternalStatus) {
-		const ageRange =
-			_age && _age.replace(" months", "").replace(" years", "");
-		const menOrWomen = _gender && _gender.toLowerCase();
+		const cleanAge = _age?.replace(" years", "");
+		let ageRange = "";
+
+		if (_age?.includes("months")) {
+			ageRange = _age.replace(" months", "");
+		} else if (cleanAge) {
+			const ageInt = parseInt(cleanAge, 10);
+			if (ageInt > 70) ageRange = "+70";
+			else if (ageInt > 50) ageRange = "51-70";
+			else if (ageInt > 30) ageRange = "31-50";
+			else if (ageInt > 18) ageRange = "19-30";
+			else if (ageInt > 13) ageRange = "14-18";
+			else if (ageInt > 8) ageRange = "9-13";
+			else if (ageInt > 3) ageRange = "4-8";
+			else if (ageInt > 1) ageRange = "1-3";
+			else if (ageInt > 0) ageRange = "7-12";
+		}
+
+		const menOrWomen = _gender?.toLowerCase();
 
 		if (!ageRange || !menOrWomen) return "";
 
-		if (age?.includes("months")) {
+		if (_age?.includes("months")) {
 			return "infant " + ageRange;
 		}
-		if (ageRange == "1-3" || ageRange == "4-8") {
+		if (["1-3", "4-8"].includes(ageRange)) {
 			return "child " + ageRange;
 		}
-		if (_gender == "Women" && _maternalStatus == "Pregnant") {
-			if (ageRange == "9-13" || ageRange == "14-18") return null;
+		if (
+			_gender === "Women" &&
+			_maternalStatus === "Pregnant" &&
+			!["9-13", "14-18"].includes(ageRange)
+		) {
 			return "pregnant " + ageRange;
 		}
-		if (_gender == "Women" && _maternalStatus == "Lactating") {
-			if (ageRange == "9-13" || ageRange == "14-18") return null;
+		if (
+			_gender === "Women" &&
+			_maternalStatus === "Lactating" &&
+			!["9-13", "14-18"].includes(ageRange)
+		) {
 			return "nursing mother " + ageRange;
 		}
 
@@ -145,13 +171,20 @@ const UserScreen = ({ selectedTab, userData }) => {
 	// }, [gender, age, maternalStatus, db, auth.currentUser, userData]);
 
 	function updateUserData(obj) {
-		console.log("updateData");
-		console.log(auth.currentUser?.email);
-		const group = getGroupByGenderAndAge(gender, age, maternalStatus);
-		updateDoc(
-			doc(db, "users", auth.currentUser?.email),
-			{...obj, group}
-		);
+		console.log("updateData obj", obj);
+		if (obj.gender || obj.age || obj.maternalStatus) {
+			const group = getGroupByGenderAndAge(
+				obj.gender,
+				obj.age,
+				obj.maternalStatus
+			);
+
+			updateDoc(doc(db, "users", auth.currentUser?.email), {
+				...obj,
+				group,
+			});
+		}
+		updateDoc(doc(db, "users", auth.currentUser?.email), { ...obj });
 	}
 
 	return (
@@ -204,7 +237,6 @@ const UserScreen = ({ selectedTab, userData }) => {
 					<ion-list-header>
 						<ion-label>About you</ion-label>
 					</ion-list-header>
-
 					<ion-item style={{ cursor: "pointer" }}>
 						<ion-label>Gender</ion-label>
 
@@ -216,38 +248,54 @@ const UserScreen = ({ selectedTab, userData }) => {
 							onChange={(option) => {
 								const newGender = option.detail.value;
 								setGender(newGender);
-								updateUserData({gender: newGender});
+								updateUserData({
+									gender: newGender,
+									age,
+									maternalStatus,
+								});
 							}}
 						/>
 					</ion-item>
-
 					<ion-item style={{ cursor: "pointer" }}>
-						<ion-label>Age range</ion-label>
+						<ion-label>Age</ion-label>
 						<IonSelect
 							placeholder="Select age"
 							interface="picker"
 							// options={["Child", "Teenager", "Adult", "Elderly"]}
+							// options={[
+							// 	"0-6 months",
+							// 	"7-12 months",
+							// 	"1-3 years",
+							// 	"4-8 years",
+							// 	"9-13 years",
+							// 	"14-18 years",
+							// 	"19-30 years",
+							// 	"31-50 years",
+							// 	"51-70 years",
+							// 	"+70 years",
+							// ]}
+							// from 1 to 100
 							options={[
 								"0-6 months",
 								"7-12 months",
-								"1-3 years",
-								"4-8 years",
-								"9-13 years",
-								"14-18 years",
-								"19-30 years",
-								"31-50 years",
-								"51-70 years",
-								"+70 years",
+								...Array.from(
+									{ length: 100 },
+									(_, i) => `${i + 1} years`
+								),
 							]}
 							defaultValue={userData?.age}
 							onChange={(option) => {
 								const newAge = option.detail.value;
+								console.log("setAge ", newAge);
 								setAge(newAge);
-								updateUserData({age: newAge});
+								updateUserData({
+									age: newAge,
+									gender,
+									maternalStatus,
+								});
 							}}
 						/>
 					</ion-item>
-
 					{gender == "Women" && (
 						<ion-item style={{ cursor: "pointer" }}>
 							<ion-label>Maternal Status</ion-label>
@@ -260,16 +308,73 @@ const UserScreen = ({ selectedTab, userData }) => {
 									const newMaternalStatus =
 										option.detail.value;
 									setMaternalStatus(newMaternalStatus);
-									updateUserData({maternalStatus: newMaternalStatus});
+									updateUserData({
+										maternalStatus: newMaternalStatus,
+										age,
+										gender,
+									});
 								}}
 							/>
 						</ion-item>
 					)}
-
+					<ion-item style={{ cursor: "pointer" }}>
+						<ion-label>Weight</ion-label>
+						<IonSelect
+							placeholder="Select weight"
+							interface="picker"
+							options={Array.from(
+								{ length: 200 },
+								(_, i) => `${i + 1} kg`
+							)}
+							defaultValue={userData?.weight}
+							onChange={(option) => {
+								const newWeight = option.detail.value;
+								setWeight(newWeight);
+								updateUserData({ weight: newWeight });
+							}}
+						/>
+					</ion-item>
+					<ion-item style={{ cursor: "pointer" }}>
+						<ion-label>Physical Activity</ion-label>
+						<IonSelect
+							placeholder="Select activity level"
+							interface="picker"
+							options={["Sedentary", "Medium", "Athlete"]}
+							optionsLabels={[
+								"Sedentary (no exercise)",
+								"Medium (exercise 3-5 days/week)",
+								"Athlete (exercise every day)",
+							]}
+							defaultValue={userData?.physicalActivity}
+							onChange={(option) => {
+								const newPhysicalActivity = option.detail.value;
+								setPhysicalActivity(newPhysicalActivity);
+								updateUserData({
+									physicalActivity: newPhysicalActivity,
+								});
+							}}
+						/>
+					</ion-item>
+					<ion-item style={{ cursor: "pointer" }}>
+						<ion-label>Height</ion-label>
+						<IonSelect
+							placeholder="Select height"
+							interface="picker"
+							options={Array.from(
+								{ length: 111 },
+								(_, i) => `${i + 100} cm`
+							)}
+							defaultValue={userData?.height}
+							onChange={(option) => {
+								const newHeight = option.detail.value;
+								setHeight(newHeight);
+								updateUserData({ height: newHeight });
+							}}
+						/>
+					</ion-item>
 					<ion-list-header style={{ marginTop: 10 }}>
 						<ion-label>Your goal</ion-label>
 					</ion-list-header>
-
 					<TextArea
 						placeholder="Write what you want to achieve..."
 						autoGrow

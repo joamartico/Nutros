@@ -9,10 +9,12 @@ const IonSelect = (props) => {
 		const picker = await pickerController.create({
 			columns: [
 				{
-					name: "gender",
-					options: props.options?.map((option) => {
+					name: "title",
+					options: props.options?.map((option, i) => {
 						return {
-							text: option,
+							text: props.optionsLabels
+								? props.optionsLabels[i]
+								: option,
 							value: option,
 						};
 					}),
@@ -26,7 +28,13 @@ const IonSelect = (props) => {
 				{
 					text: "Confirm",
 					handler: (value) => {
-						setPickerValue(value.gender.text);
+						setPickerValue(value.title.value);
+						if (props.onChange) {
+							// I'm assuming here that the structure you want to send is like this:
+							props.onChange({
+								detail: { value: value.title.value },
+							});
+						}
 					},
 				},
 			],
@@ -35,7 +43,9 @@ const IonSelect = (props) => {
 	}
 
 	useEffect(() => {
-		ref?.current?.addEventListener("ionChange", props.onChange);
+		if (props.interface != "picker") {
+			ref?.current?.addEventListener("ionChange", props.onChange);
+		}
 
 		// cleanup this component
 		// return () => {

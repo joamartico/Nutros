@@ -6,7 +6,7 @@ import IonModal from "../components/IonModal";
 import PercentCircle from "../components/PercentCircle";
 import SearchFoodList from "../components/SearchFoodList";
 import dv from "../dv.json";
-import { minerals, vitamins, fattyAcids } from "../nutrients";
+import { minerals, vitamins, fattyAcids, macronutients } from "../nutrients";
 import { db } from "../pages";
 import {
 	collection,
@@ -88,11 +88,64 @@ const DayScreen = ({ foodData, userData }) => {
 		} else {
 			foods.map((food) => {
 				food.foodNutrients.map((item) => {
-					if (item.nutrient?.name.includes(nutrientDbName) && item.amount && food.amount) {
+					if (
+						item.nutrient?.name.includes(nutrientDbName) &&
+						item.amount &&
+						food.amount
+					) {
 						amountSum += item.amount * (food.amount / 100);
 					}
 				});
 			});
+		}
+
+		if (nutrientDbName == "Protein") {
+			if (!userData?.weight || !userData?.physicalActivity)
+				return ((amountSum / 75) * 100).toFixed(0);
+
+			const gPerKg =
+				userData.physicalActivity == "Sedentary"
+					? 1
+					: userData.physicalActivity == "Medium"
+					? 1.5
+					: 2;
+			return (
+				(amountSum / (userData.weight.replace(" kg", "") * gPerKg)) *
+				100
+			).toFixed(0);
+		}
+
+		/*
+Men: ���=(10×weight in kg)+(6.25×height in cm)−(5×age in years)+5BMR=(10×weight in kg)+(6.25×height in cm)−(5×age in years)+5Women: ���=(10×weight in kg)+(6.25×height in cm)−(5×age in years)−161BMR=(10×weight in kg)+(6.25×height in cm)−(5×age in years)−161
+		*/
+
+		if (nutrientDbName == "Energy") {
+			// console.log(
+			// 	userData.weight.replace(" kg", ""),
+			// 	userData.height.replace(" cm", ""),
+			// 	userData.age
+			// );
+
+			return 0;
+			// return (
+			// 	((10 * userData.weight.replace(" kg", "")) /
+			// 		(6.25 * userData.height.replace(" cm", "")) -
+			// 		5 * userData.age +
+			// 		5) *
+			// 	100
+			// ).toFixed(0);
+		}
+
+		if (nutrientDbName == "Fiber, total dietary") {
+			return 0;
+		}
+
+		if (nutrientDbName == "Carbohydrate, by difference") {
+			return 0;
+		}
+
+		if (nutrientDbName == "Total lipid (fat)") {
+			return 0;
 		}
 
 		return (
@@ -268,6 +321,24 @@ const DayScreen = ({ foodData, userData }) => {
 
 				<ion-list>
 					<ion-list-header>
+						<h2>Macronutrients</h2>
+					</ion-list-header>
+
+					<ScrollRow>
+						{macronutients.map((macronutrient, i) => {
+							return (
+								<PercentCircle
+									num={getDVPercent(macronutrient.dbName)}
+									name={macronutrient.shortName}
+									url={"/?nutrient=" + macronutrient.dbName}
+								/>
+							);
+						})}
+					</ScrollRow>
+				</ion-list>
+
+				<ion-list>
+					<ion-list-header>
 						<h2>Vitamins</h2>
 					</ion-list-header>
 
@@ -346,11 +417,16 @@ const DayScreen = ({ foodData, userData }) => {
 							setDoc(
 								doc(
 									db,
-									`users/${userData?.email}/${formattedDate}/`,
-									food.description
+									`users/${userData?.email}/${formattedDate}`,
+									// food.description.replace / to ' '
+									food.description.replace(/\//g, " ")
 								),
 								{
 									...food,
+									description: food.description.replace(
+										/\//g,
+										" "
+									),
 									portions: 1,
 									amount: getAmount(food.foodPortions),
 								}

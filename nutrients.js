@@ -202,3 +202,46 @@ export const fattyAcids = [
 		dv: 17,
 	},
 ];
+
+export const macronutients = [
+	{
+		completeName: "Protein",
+		shortName: "Protein",
+		dbName: "Protein",
+		unit: "g",
+		description:
+			"Protein is a macronutrient that is essential to building muscle mass. It is commonly found in animal products, though is also present in other sources, such as nuts and legumes.",
+	},
+	{
+		completeName: "Carbohydrates",
+		shortName: "Carbs",
+		dbName: "Carbohydrate, by difference",
+		unit: "g",
+		description:
+			"Carbohydrates are the body's main source of energy. They are found in grains, fruits, vegetables, and dairy products. Carbs are broken down into glucose, which is used to fuel bodily functions and physical activity.",
+	},
+	{
+		completeName: "Fat",
+		shortName: "Fat",
+		dbName: "Total lipid (fat)",
+		unit: "g",
+		description:
+			"Fat is a macronutrient that is essential to building cell membranes and hormones. It is essential for a healthy body and is the most concentrated source of energy.",
+	},
+	{
+		completeName: "Fiber",
+		shortName: "Fiber",
+		dbName: "Fiber, total dietary",
+		unit: "g",
+		description:
+			"Fiber is a type of carbohydrate that the body can't digest. Though most carbohydrates are broken down into sugar molecules, fiber cannot be broken down into sugar molecules, and instead it passes through the body undigested. Fiber helps regulate the body's use of sugars, helping to keep hunger and blood sugar in check.",
+	},
+	{
+		completeName: "Calories",
+		shortName: "Calories",
+		dbName: "Energy",
+		unit: "kcal",
+		description:
+			"Calories are a unit of energy. They are a measure of the amount of energy in food and beverages. The calories a person consumes from food and drinks are converted to energy (measured in calories) and used by the body. If a person consumes more calories than they burn, their body will store the extra calories as fat. If a person consumes fewer calories than they burn, they will lose weight.",
+	},
+];
