@@ -58,7 +58,7 @@ const DayScreen = ({ foodData, userData }) => {
 		});
 	}, [userData, date]);
 
-	function getDVPercent(nutrientDbName) {
+	function getDVPercent(nutrientDbName, nutrientUnit) {
 		let amountSum = 0;
 
 		if (nutrientDbName == "Omega-6") {
@@ -90,6 +90,7 @@ const DayScreen = ({ foodData, userData }) => {
 				food.foodNutrients.map((item) => {
 					if (
 						item.nutrient?.name.includes(nutrientDbName) &&
+						item.nutrient?.unitName.toLowerCase() == nutrientUnit &&
 						item.amount &&
 						food.amount
 					) {
@@ -147,6 +148,11 @@ Men: ���=(10×weight in kg)+(6.25×height in cm)−(5×age in years)+5BMR=
 		if (nutrientDbName == "Total lipid (fat)") {
 			return 0;
 		}
+
+		console.log("");
+		console.log("nutrientDbName", nutrientDbName);
+		console.log("amountSum", amountSum);
+		console.log("of ", dv[userData?.group || "men 19-30"][nutrientDbName]);
 
 		return (
 			(amountSum / dv[userData?.group || "men 19-30"][nutrientDbName]) *
@@ -328,7 +334,10 @@ Men: ���=(10×weight in kg)+(6.25×height in cm)−(5×age in years)+5BMR=
 						{macronutients.map((macronutrient, i) => {
 							return (
 								<PercentCircle
-									num={getDVPercent(macronutrient.dbName)}
+									num={getDVPercent(
+										macronutrient.dbName,
+										macronutrient.unit
+									)}
 									name={macronutrient.shortName}
 									url={"/?nutrient=" + macronutrient.dbName}
 								/>
@@ -346,7 +355,10 @@ Men: ���=(10×weight in kg)+(6.25×height in cm)−(5×age in years)+5BMR=
 						{vitamins.map((vitamin, i) => {
 							return (
 								<PercentCircle
-									num={getDVPercent(vitamin.dbName)}
+									num={getDVPercent(
+										vitamin.dbName,
+										vitamin.unit
+									)}
 									name={vitamin.shortName}
 									url={"/?nutrient=" + vitamin.dbName}
 								/>
@@ -364,7 +376,10 @@ Men: ���=(10×weight in kg)+(6.25×height in cm)−(5×age in years)+5BMR=
 						{minerals.map((mineral, i) => {
 							return (
 								<PercentCircle
-									num={getDVPercent(mineral.dbName)}
+									num={getDVPercent(
+										mineral.dbName,
+										mineral.unit
+									)}
 									name={mineral.shortName}
 									url={"/?nutrient=" + mineral.dbName}
 								/>
@@ -382,7 +397,7 @@ Men: ���=(10×weight in kg)+(6.25×height in cm)−(5×age in years)+5BMR=
 						{fattyAcids.map((fat, i) => {
 							return (
 								<PercentCircle
-									num={getDVPercent(fat.dbName)}
+									num={getDVPercent(fat.dbName, fat.unit)}
 									name={fat.shortName}
 									url={"/?nutrient=" + fat.dbName}
 								/>
