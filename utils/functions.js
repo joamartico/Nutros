@@ -88,3 +88,64 @@ function getFilteredFoods() {
 		);
 	});
 }
+
+export function getProteinDV(userData) {
+	if (!userData?.weight || !userData?.physicalActivity) return 75;
+
+	const gPerKg =
+		userData?.physicalActivity == "Sedentary"
+			? 1
+			: userData?.physicalActivity == "Medium"
+			? 1.9
+			: 2.2;
+
+	return (userData?.weight.replace(" kg", "") * gPerKg).toFixed(0);
+}
+
+export function getCaloriesDV(userData) {
+	if (
+		!userData?.weight ||
+		!userData?.physicalActivity ||
+		!userData?.age ||
+		!userData?.gender
+	)
+		return 2000;
+
+	const weight = parseFloat(userData.weight.replace(" kg", ""));
+	const height = parseFloat(userData.height.replace(" cm", ""));
+	const age = parseFloat(userData.age.replace(" years", ""));
+
+	const genderFactor = userData?.gender == "Men" ? 5 : -161;
+
+	const bmr = 10 * weight + 6.25 * height - 5 * age + genderFactor;
+
+	const pal =
+		userData?.physicalActivity == "Sedentary"
+			? 1.2
+			: userData?.physicalActivity == "Medium"
+			? 1.55
+			: 1.9;
+	return (bmr * pal).toFixed(0);
+}
+
+export function getFiberDV(userData) {
+	if (!userData?.gender || !userData?.age) return 30;
+
+	if (userData.gender == "Men") {
+		return userData?.age.replace(" years", "") < 50 ? 38 : 30;
+	}
+
+	if (userData.gender == "Women") {
+		return userData?.age.replace(" years", "") < 50 ? 25 : 21;
+	}
+}
+
+export function getCarbsDV(userData) {
+	const calories = getCaloriesDV(userData);
+	return ((calories * 0.55) / 4).toFixed(0);
+}
+
+export function getFatDV(userData) {
+	const calories = getCaloriesDV(userData);
+	return ((calories * 0.3) / 9).toFixed(0);
+}

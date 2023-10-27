@@ -3,7 +3,14 @@ import IonSelect from "../components/IonSelect";
 import SearchFoodList from "../components/SearchFoodList";
 import { fattyAcids, minerals, vitamins } from "../nutrients";
 import { useRouter } from "next/router";
-import { getFoodPortion } from "../utils/functions";
+import {
+	getCaloriesDV,
+	getCarbsDV,
+	getFatDV,
+	getFiberDV,
+	getFoodPortion,
+	getProteinDV,
+} from "../utils/functions";
 import dv from "../dv.json";
 import { Context } from "../Context";
 
@@ -29,10 +36,12 @@ const FoodsScreen = ({ foodData, userData }) => {
 	foodData.sort((a, b) => {
 		if (!a.foodPortions || !b.foodPortions) return 1;
 		const aNutrientObj = a.foodNutrients.find(
-			(item) => item.nutrient && item.nutrient.name.includes(selectedNutrient)
+			(item) =>
+				item.nutrient && item.nutrient.name.includes(selectedNutrient)
 		);
 		const bNutrientObj = b.foodNutrients.find(
-			(item) => item.nutrient && item.nutrient.name.includes(selectedNutrient)
+			(item) =>
+				item.nutrient && item.nutrient.name.includes(selectedNutrient)
 		);
 
 		const aAmount = aNutrientObj ? aNutrientObj.amount : 0;
@@ -50,8 +59,8 @@ const FoodsScreen = ({ foodData, userData }) => {
 
 	const allNutrients = [...vitamins, ...minerals, ...fattyAcids];
 
-	const nutrient = allNutrients.find(
-		(nutrient) => nutrient.dbName.includes(selectedNutrient)
+	const nutrient = allNutrients.find((nutrient) =>
+		nutrient.dbName.includes(selectedNutrient)
 	);
 
 	const unit = nutrient?.unit || "";
@@ -59,11 +68,36 @@ const FoodsScreen = ({ foodData, userData }) => {
 
 	const group = userData?.group || "men 19-30";
 
+	function getNutrientTitle(selectedNutrient) {
+		if (selectedNutrient?.includes("(")) {
+			return "Omega-3 " + selectedNutrient;
+		} else return selectedNutrient;
+	}
 
-	function getNutrientTitle(selectedNutrient){
-		if(selectedNutrient?.includes('(')){
-			return 'Omega-3 ' + selectedNutrient
-		} else return selectedNutrient
+	function getNutrientDV() {
+		if (selectedNutrient?.includes("Protein")) {
+			return getProteinDV(userData) + " g";
+		}
+
+		if (selectedNutrient?.includes("Energy")) {
+			return getCaloriesDV(userData) + " kcal";
+		}
+
+		if (selectedNutrient?.includes("Fiber, total dietary")) {
+			return getFiberDV(userData) + " g";
+		}
+
+		if (selectedNutrient?.includes("Carbohydrate, by difference")) {
+			return getCarbsDV(userData) + " g";
+		}
+
+		if (selectedNutrient?.includes("Total lipid (fat)")) {
+			return getFatDV(userData) + " g";
+		}
+
+
+
+		return dv[group][selectedNutrient];
 	}
 
 	return (
@@ -74,7 +108,9 @@ const FoodsScreen = ({ foodData, userData }) => {
 
 					{process.env.NODE_ENV === "development" && (
 						<ion-buttons slot="start">
-							<ion-button onClick={() => router.push("/surveyFoods")}>
+							<ion-button
+								onClick={() => router.push("/surveyFoods")}
+							>
 								Survey
 							</ion-button>
 						</ion-buttons>
@@ -116,7 +152,7 @@ const FoodsScreen = ({ foodData, userData }) => {
 					description={
 						selectedNutrient &&
 						`${description}
-						You need ${dv[group][selectedNutrient]} ${unit} per day`
+						You need ${getNutrientDV()} ${unit} per day`
 					}
 					foodData={foodData}
 				/>

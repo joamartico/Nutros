@@ -18,7 +18,14 @@ import {
 	updateDoc,
 } from "firebase/firestore";
 import ScrollRow from "../components/ScrollRow";
-import { convertToUrl } from "../utils/functions";
+import {
+	convertToUrl,
+	getCaloriesDV,
+	getCarbsDV,
+	getFatDV,
+	getFiberDV,
+	getProteinDV,
+} from "../utils/functions";
 
 const days = [
 	"Sunday",
@@ -101,52 +108,23 @@ const DayScreen = ({ foodData, userData }) => {
 		}
 
 		if (nutrientDbName == "Protein") {
-			if (!userData?.weight || !userData?.physicalActivity)
-				return ((amountSum / 75) * 100).toFixed(0);
-
-			const gPerKg =
-				userData.physicalActivity == "Sedentary"
-					? 1
-					: userData.physicalActivity == "Medium"
-					? 1.5
-					: 2;
-			return (
-				(amountSum / (userData.weight.replace(" kg", "") * gPerKg)) *
-				100
-			).toFixed(0);
+			return ((amountSum / getProteinDV(userData)) * 100).toFixed(0);
 		}
 
-		/*
-Men: ���=(10×weight in kg)+(6.25×height in cm)−(5×age in years)+5BMR=(10×weight in kg)+(6.25×height in cm)−(5×age in years)+5Women: ���=(10×weight in kg)+(6.25×height in cm)−(5×age in years)−161BMR=(10×weight in kg)+(6.25×height in cm)−(5×age in years)−161
-		*/
-
 		if (nutrientDbName == "Energy") {
-			// console.log(
-			// 	userData.weight.replace(" kg", ""),
-			// 	userData.height.replace(" cm", ""),
-			// 	userData.age
-			// );
-
-			return 0;
-			// return (
-			// 	((10 * userData.weight.replace(" kg", "")) /
-			// 		(6.25 * userData.height.replace(" cm", "")) -
-			// 		5 * userData.age +
-			// 		5) *
-			// 	100
-			// ).toFixed(0);
+			return ((amountSum / getCaloriesDV(userData)) * 100).toFixed(0);
 		}
 
 		if (nutrientDbName == "Fiber, total dietary") {
-			return 0;
+			return ((amountSum / getFiberDV(userData)) * 100).toFixed(0);
 		}
 
 		if (nutrientDbName == "Carbohydrate, by difference") {
-			return 0;
+			return ((amountSum / getCarbsDV(userData)) * 100).toFixed(0);
 		}
 
 		if (nutrientDbName == "Total lipid (fat)") {
-			return 0;
+			return ((amountSum / getFatDV(userData)) * 100).toFixed(0);
 		}
 
 		console.log("");
