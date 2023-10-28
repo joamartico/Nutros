@@ -46,7 +46,7 @@ function getPortionName(food) {
 	return name;
 }
 
-const DayScreen = ({ foodData, userData }) => {
+const DayScreen = ({ foodData, userData, ip }) => {
 	const [foods, setFoods] = useState([]);
 	const [modalOpen, setModalOpen] = useState(false);
 	const modalRef = useRef();
@@ -205,7 +205,7 @@ const DayScreen = ({ foodData, userData }) => {
 
 				<ion-list>
 					<ion-list-header>
-						<h2>Ingests</h2>
+						<h2>Ingests {ip}</h2>
 					</ion-list-header>
 
 					{foods.map((food, i) => {

@@ -12,7 +12,7 @@ const foodNames = foundationFoodData.map((food) => food.description);
 
 export const db = getFirestore(firebaseApp);
 
-export default function Home({ shuffledFoodNames, userData }) {
+export default function Home({ shuffledFoodNames, userData, ip }) {
 	const [selectedTab, setSelectedTab] = useState("foods");
 
 	// useEffect(() => {
@@ -74,6 +74,7 @@ export default function Home({ shuffledFoodNames, userData }) {
 						selectedTab={selectedTab}
 						foodData={foodData}
 						userData={userData}
+						ip={ip}
 					/>
 				</ion-tab>
 
@@ -81,6 +82,8 @@ export default function Home({ shuffledFoodNames, userData }) {
 					<CameraScreen
 						selectedTab={selectedTab}
 						foodData={foodData}
+						userData={userData}
+						ip={ip}
 					/>
 				</ion-tab> */}
 
@@ -89,6 +92,7 @@ export default function Home({ shuffledFoodNames, userData }) {
 						selectedTab={selectedTab}
 						foodData={foodData}
 						userData={userData}
+						ip={ip}
 					/>
 				</ion-tab>
 
@@ -97,6 +101,7 @@ export default function Home({ shuffledFoodNames, userData }) {
 						selectedTab={selectedTab}
 						foodData={foodData}
 						userData={userData}
+						ip={ip}
 					/>
 				</ion-tab>
 
@@ -105,6 +110,7 @@ export default function Home({ shuffledFoodNames, userData }) {
 						selectedTab={selectedTab}
 						foodData={foodData}
 						userData={userData}
+						ip={ip}
 					/>
 				</ion-tab>
 			</ion-tabs>
@@ -127,16 +133,30 @@ export async function getServerSideProps(ctx) {
 	let userData = userCookie
 		? await getDoc(doc(db, "users", userCookie))
 		: null;
-	userData = userData?.data() || null
-	if(userData){
-		userData.email = userCookie || '';
+	userData = userData?.data() || null;
+	if (userData) {
+		userData.email = userCookie || "";
 	}
+
+	// Extract IP from the request headers
+	let ip =
+		ctx.req.headers["x-forwarded-for"] ||
+		ctx.req.connection.remoteAddress;
+
+	// If the IP contains a comma, consider the first part (in case of multiple forwarded addresses)
+	if (ip.includes(",")) {
+		ip = ip.split(",")[0];
+	}
+
+	// Remove IPv6 prefix if it's there
+	ip = ip.replace("::ffff:", "");
 
 	return {
 		props: {
 			shuffledFoodNames,
 			cookies,
 			userData,
+			ip,
 		},
 	};
 }

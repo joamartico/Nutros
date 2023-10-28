@@ -96,7 +96,7 @@ export function getProteinDV(userData) {
 		userData?.physicalActivity == "Sedentary"
 			? 1
 			: userData?.physicalActivity == "Medium"
-			? 1.9
+			? 1.8
 			: 2.2;
 
 	return (userData?.weight.replace(" kg", "") * gPerKg).toFixed(0);
