@@ -120,23 +120,7 @@ export default function Home({ shuffledFoodNames, userData, ip }) {
 
 export async function getServerSideProps(ctx) {
 	const shuffledFoodNames = shuffleArray(foodNames);
-	const cookies = ctx.req.headers.cookie?.split("; ");
-	if (!cookies) return { props: { shuffledFoodNames } };
-	const userCookie = cookies
-		?.find((cookie) => cookie.startsWith("user="))
-		?.split("=")[1]
-		.replace(/%40/g, "@");
-	console.log("USERCOOKIE: ", userCookie);
-	// const auth = getAuth(firebaseApp);
-	// const userCookie = user?.split("=")[1];
-	// const user = auth.currentUser;
-	let userData = userCookie
-		? await getDoc(doc(db, "users", userCookie))
-		: null;
-	userData = userData?.data() || null;
-	if (userData) {
-		userData.email = userCookie || "";
-	}
+
 
 	// Extract IP from the request headers
 	let ip =
@@ -150,6 +134,23 @@ export async function getServerSideProps(ctx) {
 
 	// Remove IPv6 prefix if it's there
 	ip = ip.replace("::ffff:", "");
+
+
+	const cookies = ctx.req.headers.cookie?.split("; ");
+	// if (!cookies) return { props: { shuffledFoodNames } };
+	const userCookie = cookies
+		?.find((cookie) => cookie.startsWith("user="))
+		?.split("=")[1]
+		.replace(/%40/g, "@");
+		// let userData = userCookie
+		// 	? await getDoc(doc(db, "users", userCookie))
+		// 	: null;
+	let userData = await getDoc(doc(db, "users", userCookie || ip))
+
+	userData = userData?.data() || null;
+	if (userData) {
+		userData.email = userCookie || "";
+	}
 
 	return {
 		props: {

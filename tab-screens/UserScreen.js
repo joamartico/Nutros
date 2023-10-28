@@ -13,20 +13,20 @@ import { setCookie } from "nookies";
 const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const API_URL = "https://api.openai.com/v1/chat/completions";
 
-const UserScreen = ({ selectedTab, userData }) => {
+const UserScreen = ({ selectedTab, userData, ip }) => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [promptValue, setPromptValue] = useState("");
 	const [response, setResponse] = useState("");
-	const [age, setAge] = useState(userData?.age);
-	const [gender, setGender] = useState(userData?.gender);
-	const [weight, setWeight] = useState(userData?.weight);
+	const [age, setAge] = useState(userData?.age || "");
+	const [gender, setGender] = useState(userData?.gender || "");
+	const [weight, setWeight] = useState(userData?.weight || "");
 	const [physicalActivity, setPhysicalActivity] = useState(
-		userData?.physicalActivity
+		userData?.physicalActivity || ""
 	);
-	const [height, setHeight] = useState(userData?.height);
+	const [height, setHeight] = useState(userData?.height || "");
 
 	const [maternalStatus, setMaternalStatus] = useState(
-		userData?.maternalStatus
+		userData?.maternalStatus || ""
 	);
 
 	// const { installPwa } = useInstallPwa();
@@ -40,6 +40,7 @@ const UserScreen = ({ selectedTab, userData }) => {
 			// document.cookie = `user=${result.user.email}`;
 			setCookie(null, "user", result.user.email, {
 				path: "/",
+				maxAge: 10 * 365 * 24 * 60 * 60,
 			});
 
 			setModalOpen(false);
@@ -170,7 +171,6 @@ const UserScreen = ({ selectedTab, userData }) => {
 	// }, [gender, age, maternalStatus, db, auth.currentUser, userData]);
 
 	function updateUserData(obj) {
-		console.log("updateData obj", obj);
 		if (obj.gender || obj.age || obj.maternalStatus) {
 			const group = getGroupByGenderAndAge(
 				obj.gender,
@@ -178,12 +178,27 @@ const UserScreen = ({ selectedTab, userData }) => {
 				obj.maternalStatus
 			);
 
-			updateDoc(doc(db, "users", auth.currentUser?.email), {
-				...obj,
+			setDoc(doc(db, "users", auth.currentUser?.email || ip), {
+				gender,
+				age,
+				maternalStatus,
+				weight,
+				physicalActivity,
+				height,
 				group,
+				...obj,
+			});
+		} else {
+			setDoc(doc(db, "users", auth.currentUser?.email || ip), {
+				gender,
+				age,
+				maternalStatus,
+				weight,
+				physicalActivity,
+				height,
+				...obj,
 			});
 		}
-		updateDoc(doc(db, "users", auth.currentUser?.email), { ...obj });
 	}
 
 	return (

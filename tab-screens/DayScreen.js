@@ -56,9 +56,8 @@ const DayScreen = ({ foodData, userData, ip }) => {
 	const formattedDate = date.toLocaleDateString("sv");
 
 	useEffect(() => {
-		if (!userData) return;
 		getDocs(
-			collection(db, `users/${userData?.email}/`, formattedDate)
+			collection(db, `users/${userData?.email || ip}/`, formattedDate)
 		).then((snapshot) => {
 			setFoods(snapshot.docs.map((doc) => doc.data()));
 			setLoading(false);
@@ -169,15 +168,17 @@ const DayScreen = ({ foodData, userData, ip }) => {
 								src="/svg/chevron-back.svg"
 								style={{ marginRight: 20, cursor: "pointer" }}
 								color="primary"
-								onClick={() =>
+								onClick={() => {
+									setFoods([]);
+									setLoading(true);
 									setDate(
 										(prev) =>
 											new Date(
 												prev.getTime() -
 													24 * 60 * 60 * 1000
 											)
-									)
-								}
+									);
+								}}
 							/>
 							<div style={{ height: 34, lineHeight: 1 }}>
 								{days[date.getDay()]}
@@ -187,15 +188,17 @@ const DayScreen = ({ foodData, userData, ip }) => {
 								src="/svg/chevron-forward.svg"
 								style={{ marginLeft: 20, cursor: "pointer" }}
 								color="primary"
-								onClick={() =>
+								onClick={() => {
+									setFoods([]);
+									setLoading(true);
 									setDate(
 										(prev) =>
 											new Date(
 												prev.getTime() +
 													24 * 60 * 60 * 1000
 											)
-									)
-								}
+									);
+								}}
 							/>
 						</Header>
 					</ion-toolbar>
@@ -205,7 +208,7 @@ const DayScreen = ({ foodData, userData, ip }) => {
 
 				<ion-list>
 					<ion-list-header>
-						<h2>Ingests {ip}</h2>
+						<h2>Ingests</h2>
 					</ion-list-header>
 
 					{foods.map((food, i) => {
@@ -233,7 +236,9 @@ const DayScreen = ({ foodData, userData, ip }) => {
 									updateDoc(
 										doc(
 											db,
-											`users/${userData?.email}/${formattedDate}/`,
+											`users/${
+												userData?.email || ip
+											}/${formattedDate}/`,
 											food.description
 										),
 										{
@@ -256,7 +261,9 @@ const DayScreen = ({ foodData, userData, ip }) => {
 										deleteDoc(
 											doc(
 												db,
-												`users/${userData?.email}/${formattedDate}/`,
+												`users/${
+													userData?.email || ip
+												}/${formattedDate}/`,
 												food.description
 											)
 										);
@@ -264,7 +271,9 @@ const DayScreen = ({ foodData, userData, ip }) => {
 										updateDoc(
 											doc(
 												db,
-												`users/${userData?.email}/${formattedDate}/`,
+												`users/${
+													userData?.email || ip
+												}/${formattedDate}/`,
 												food.description
 											),
 											{
@@ -410,7 +419,9 @@ const DayScreen = ({ foodData, userData, ip }) => {
 							setDoc(
 								doc(
 									db,
-									`users/${userData?.email}/${formattedDate}`,
+									`users/${
+										userData?.email || ip
+									}/${formattedDate}`,
 									// food.description.replace / to ' '
 									food.description.replace(/\//g, " ")
 								),
