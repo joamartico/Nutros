@@ -149,3 +149,20 @@ export function getFatDV(userData) {
 	const calories = getCaloriesDV(userData);
 	return ((calories * 0.3) / 9).toFixed(0);
 }
+
+export function getRecommendedAmount(nutrientDbName, userData) {
+	switch (nutrientDbName) {
+		case "Protein":
+			return getProteinDV(userData);
+		case "Energy":
+			return getCaloriesDV(userData);
+		case "Fiber, total dietary":
+			return getFiberDV(userData);
+		case "Carbohydrate, by difference":
+			return getCarbsDV(userData);
+		case "Total lipid (fat)":
+			return getFatDV(userData);
+		default:
+			return 0;
+	}
+}

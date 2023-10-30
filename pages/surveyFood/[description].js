@@ -1,16 +1,17 @@
 import { useRouter } from "next/router";
 import dv from "../../dv.json";
 import NutrientItem from "../../components/NutrientItem";
-import { minerals, vitamins } from "../../nutrients";
+import { macronutients, minerals, vitamins } from "../../nutrients";
 import Head from "next/head";
-import { convertToUrl } from "../../utils/functions";
+import { convertToUrl, getRecommendedAmount } from "../../utils/functions";
 // import fs from "fs";
 // import path from "path";
 // import foodData_survey from "../../public/foodData_survey.json";
 // import foodData_foundation from "../../public/foodData_foundation.json";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "..";
-
+import { useState } from "react";
+import IonSelect from "../../components/IonSelect";
 
 // let newFoodData = foodData_foundation;
 
@@ -58,6 +59,8 @@ const food = ({ userData, food }) => {
 	console.log("FOOD", food);
 	const router = useRouter();
 	const { description } = router.query;
+	const foodPortion = getFoodPortion(food);
+	const [portion, setPortion] = useState(foodPortion);
 
 	// useEffect(() => {
 	// fetch(
@@ -127,10 +130,6 @@ const food = ({ userData, food }) => {
 	});
 
 	const group = userData?.group || "men 19-30";
-
-	const foodPortion = getFoodPortion(food);
-
-	console.log("foodPortion", foodPortion);
 
 	async function getEmoji(foodName) {
 		const response = await fetch(API_URL, {
@@ -214,7 +213,6 @@ const food = ({ userData, food }) => {
 			<Head>
 				<title>{food?.description} - Nutros</title>
 			</Head>
-			{/* {console.log(food?.foodNutrients)} */}
 			<ion-header translucent>
 				<ion-toolbar>
 					<ion-buttons slot="start">
@@ -242,36 +240,118 @@ const food = ({ userData, food }) => {
 					</ion-toolbar>
 
 					<ion-toolbar>
-						<ion-text class="ion-padding">
+						<IonSelect
+							value={portion?.gramWeight || "100"}
+							placeholder="Select portion"
+							style={{
+								width: "fit-content",
+								paddingLeft: 15,
+								textTransform: "capitalize",
+							}}
+							onChange={(e) => {
+								console.log("e", e.detail.value);
+								setPortion({
+									...portion,
+									gramWeight: e.detail.value,
+								});
+							}}
+							interface="alert"
+						>
+							{food.foodMeasures?.map((portion) => (
+								<ion-select-option
+									value={portion.gramWeight}
+									style={{ textTransform: "capitalize" }}
+								>
+									<span
+										class="ion-text-capitalize"
+										style={{ textTransform: "capitalize" }}
+									>
+										{portion.portionDescription?.replace(
+											/\([^()]*\)/g,
+											""
+										) ||
+											(portion.disseminationText !=
+												"undetermined" &&
+												portion.disseminationText) || // PARA CHOCOLATE NO SIRVE, ES "undetermined"
+											portion.modifier}{" "}
+										({portion.gramWeight} grams)
+									</span>
+								</ion-select-option>
+							))}
+							<ion-select-option value="250">
+								Portion (250 grams)
+							</ion-select-option>
+							<ion-select-option value="100">
+								Portion (100 grams)
+							</ion-select-option>
+							<ion-select-option value="50">
+								Portion (50 grams)
+							</ion-select-option>
+						</IonSelect>
+						{/* </ion-item> */}
+						{/* <ion-text class="ion-padding">
 							<span class="ion-text-capitalize">
-								{foodPortion?.disseminationText ||
-									foodPortion?.portionDescription ||
-									foodPortion?.measureUnit?.name ||
+								{foodPortion?.portionDescription ||
+									foodPortion?.measureUnit.name ||
 									foodPortion?.modifier ||
 									"Portion"}{" "}
 							</span>
-							({foodPortion?.gramWeight || 100} grams)
-						</ion-text>
+							({portion?.gramWeight || 100} grams)
+						</ion-text> */}
 					</ion-toolbar>
 				</ion-header>
 
-				<ion-list>
-					{userData?.email === "joamartico@gmail.com" && (
-						<ion-item>
-							<ion-button
-								onClick={() => {
-									confirm(
-										"Add " + food.description + " to json?"
-									)
-										? addFoodToFoundationJson(food)
-										: console.log("bye");
-								}}
-							>
-								Add to JSON
-							</ion-button>
-						</ion-item>
-					)}
+				{userData?.email === "joamartico@gmail.com" && (
+					<div
+						style={{
+							border: "1px solid green",
+							width: "fit-content",
+							marginLeft: "auto",
+							cursor: "pointer",
+							borderRadius: 5,
+							padding: 5,
+						}}
+						onClick={() => {
+							confirm("Add " + food.description + " to json?")
+								? addFoodToFoundationJson(food)
+								: console.log("bye");
+						}}
+					>
+						Add to JSON
+					</div>
+				)}
 
+				<ion-list>
+					<ion-list-header>Macronutrients</ion-list-header>
+
+					{macronutients.map((macronutrient) => {
+						const nutrient = food?.foodNutrients.find(
+							(item) => macronutrient.dbName == item?.nutrientName
+						);
+
+						if (!nutrient?.value) return null;
+
+						return (
+							<NutrientItem
+								dbName={macronutrient.dbName}
+								completeName={macronutrient.completeName}
+								amount={
+									nutrient?.value *
+										(portion?.gramWeight / 100) ||
+									nutrient?.value
+								}
+								recommendedAmount={getRecommendedAmount(
+									macronutrient.dbName,
+									userData
+								)}
+								unitName={nutrient?.unitName.toLowerCase()}
+								url={`/?nutrient=${macronutrient.dbName}`}
+							/>
+						);
+					})}
+				</ion-list>
+
+				<ion-list>
 					<ion-list-header>Vitamins</ion-list-header>
 
 					{vitamins.map((vitamin) => {
@@ -280,8 +360,6 @@ const food = ({ userData, food }) => {
 								return vitamin.dbName == nutrient?.nutrientName;
 							}
 						);
-
-						console.log(nutrient);
 
 						return (
 							<NutrientItem
@@ -397,16 +475,13 @@ const food = ({ userData, food }) => {
 
 				<ion-list>
 					<ion-list-header>General</ion-list-header>
-
 					{food?.foodNutrients
-						.filter((nutrient) => {
-							// console.log(nutrient?.nutrientName, nutrient.value);
-
-							return (
-								// parseInt(nutrient.nutrient?.id) > 1086 &&
-								parseInt(nutrient?.nutrientId) < 1087
-							);
-						})
+						// .filter((nutrient) => {
+						// 	return (
+						// 		// parseInt(nutrient.nutrient?.id) > 1086 &&
+						// 		parseInt(nutrient?.nutrientId) < 1087
+						// 	);
+						// })
 						.map((nutrient) => (
 							<NutrientItem
 								completeName={nutrient?.nutrientName}
@@ -442,9 +517,9 @@ export async function getServerSideProps(ctx) {
 	let userData = userCookie
 		? await getDoc(doc(db, "users", userCookie))
 		: null;
-	userData = userData?.data() || null
-	if(userData){
-		userData.email = userCookie || '';
+	userData = userData?.data() || null;
+	if (userData) {
+		userData.email = userCookie || "";
 	}
 
 	let realFood;

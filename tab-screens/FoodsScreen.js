@@ -69,7 +69,11 @@ const FoodsScreen = ({ foodData, userData }) => {
 	const group = userData?.group || "men 19-30";
 
 	function getNutrientTitle(selectedNutrient) {
-		if (selectedNutrient?.includes("(")) {
+		if (
+			selectedNutrient?.includes("(ALA)") ||
+			selectedNutrient?.includes("(EPA)") ||
+			selectedNutrient?.includes("(DHA)")
+		) {
 			return "Omega-3 " + selectedNutrient;
 		} else return selectedNutrient;
 	}
@@ -94,8 +98,6 @@ const FoodsScreen = ({ foodData, userData }) => {
 		if (selectedNutrient?.includes("Total lipid (fat)")) {
 			return getFatDV(userData) + " g";
 		}
-
-
 
 		return dv[group][selectedNutrient];
 	}

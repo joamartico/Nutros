@@ -1,9 +1,13 @@
 import { useRouter } from "next/router";
 import dv from "../../dv.json";
 import NutrientItem from "../../components/NutrientItem";
-import { minerals, vitamins, fattyAcids } from "../../nutrients";
+import { minerals, vitamins, fattyAcids, macronutients } from "../../nutrients";
 import Head from "next/head";
-import { convertToUrl, getFoodPortion } from "../../utils/functions";
+import {
+	convertToUrl,
+	getFoodPortion,
+	getRecommendedAmount,
+} from "../../utils/functions";
 // import fs from "fs";
 // import path from "path";
 import foodData from "../../public/foodData_foundation.json";
@@ -22,7 +26,6 @@ const food = ({ userData }) => {
 		(f) => convertToUrl(f.description) == description
 	);
 	const foodPortion = getFoodPortion(food);
-
 	const [portion, setPortion] = useState(foodPortion);
 
 	console.log("food", food);
@@ -32,7 +35,6 @@ const food = ({ userData }) => {
 	let omega3DHA = 0;
 
 	let omega6 = 0;
-
 
 	const nutrientsHaveN6 = food?.foodNutrients.find((item) =>
 		item?.nutrient?.name.includes("n-6")
@@ -81,7 +83,6 @@ const food = ({ userData }) => {
 	});
 
 	const group = userData?.group || "men 19-30";
-
 
 	async function removeFoodFromFoundationJson(food) {
 		fetch("/api/removeFood", {
@@ -222,25 +223,62 @@ const food = ({ userData }) => {
 					</ion-toolbar>
 				</ion-header>
 
+				{userData?.email === "joamartico@gmail.com" &&
+					process.env.NODE_ENV == "development" && (
+						<div
+							style={{
+								border: "1px solid red",
+								width: "fit-content",
+								marginLeft: "auto",
+								cursor: "pointer",
+								borderRadius: 5,
+								padding: 5,
+							}}
+							onClick={() => {
+								confirm(
+									"Remove " + food.description + " from json?"
+								)
+									? removeFoodFromFoundationJson(food)
+									: console.log("bye");
+							}}
+						>
+							Remove
+						</div>
+					)}
+
 				<ion-list>
-					{userData?.email === "joamartico@gmail.com" &&
-						process.env.NODE_ENV == "development" && (
-							<ion-item>
-								<ion-button
-									onClick={() => {
-										confirm(
-											"Remove " +
-												food.description +
-												" from json?"
-										)
-											? removeFoodFromFoundationJson(food)
-											: console.log("bye");
-									}}
-								>
-									Remove from JSON
-								</ion-button>
-							</ion-item>
-						)}
+					<ion-list-header>Macronutrients</ion-list-header>
+
+					{macronutients.map((macronutrient) => {
+						const nutrient = food?.foodNutrients.find(
+							(item) =>
+								macronutrient.dbName == item?.nutrient?.name
+						);
+
+						if (!nutrient?.amount) return null;
+
+						return (
+							<NutrientItem
+								dbName={macronutrient.dbName}
+								completeName={macronutrient.completeName}
+								amount={
+									nutrient?.amount *
+										(portion?.gramWeight / 100) ||
+									nutrient?.amount
+								}
+								recommendedAmount={getRecommendedAmount(
+									macronutrient.dbName,
+									userData
+								)}
+								unitName={nutrient?.nutrient.unitName}
+								onClick={() => console.log(nutrient?.nutrient)}
+								url={`/?nutrient=${macronutrient.dbName}`}
+							/>
+						);
+					})}
+				</ion-list>
+
+				<ion-list>
 					<ion-list-header>Vitamins</ion-list-header>
 
 					{vitamins.map((vitamin) => {
@@ -369,18 +407,15 @@ const food = ({ userData }) => {
 					})}
 				</ion-list>
 
-				<ion-list>
+				{/* <ion-list>
 					<ion-list-header>General</ion-list-header>
-
 					{food?.foodNutrients
-						.filter((item) => {
-							// console.log(item?.nutrient?.name, item.amount);
-
-							return (
-								// parseInt(item.nutrient?.id) > 1086 &&
-								parseInt(item.nutrient?.id) < 1087
-							);
-						})
+						// .filter((item) => {
+						// 	return (
+						// 		// parseInt(item.nutrient?.id) > 1086 &&
+						// 		parseInt(item.nutrient?.id) < 1087
+						// 	);
+						// })
 						.map((item) => (
 							<NutrientItem
 								completeName={item?.nutrient?.name}
@@ -393,7 +428,7 @@ const food = ({ userData }) => {
 								// recommendedAmount={100}
 							/>
 						))}
-				</ion-list>
+				</ion-list> */}
 			</ion-content>
 		</>
 	);
