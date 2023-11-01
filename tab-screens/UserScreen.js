@@ -50,7 +50,7 @@ const UserScreen = ({ selectedTab, userData, ip }) => {
 
 	useEffect(() => {
 		console.log('userData ', userData)
-		if (selectedTab == "me" && !auth.currentUser && !userData.email) {
+		if (selectedTab == "me" && !auth.currentUser && !userData?.email) {
 			setModalOpen((prev) => prev + 1);
 		}
 	}, [selectedTab]);
