@@ -24,6 +24,7 @@ import {
 	getCarbsDV,
 	getFatDV,
 	getFiberDV,
+	getFoodPortion,
 	getProteinDV,
 } from "../utils/functions";
 
@@ -39,7 +40,9 @@ const days = [
 
 function getPortionName(food) {
 	if (!food.portions) return "";
-	const name = food.foodPortions[0]?.portionDescription;
+	const foodPortion = getFoodPortion(food);
+	const name = foodPortion?.portionDescription;
+	// const name = food.foodPortions[0]?.portionDescription;
 	if (name?.startsWith("1 ")) {
 		return name.substring(2);
 	}
@@ -126,25 +129,20 @@ const DayScreen = ({ foodData, userData, ip }) => {
 			return ((amountSum / getFatDV(userData)) * 100).toFixed(0);
 		}
 
-		console.log("");
-		console.log("nutrientDbName", nutrientDbName);
-		console.log("amountSum", amountSum);
-		console.log("of ", dv[userData?.group || "men 19-30"][nutrientDbName]);
-
 		return (
 			(amountSum / dv[userData?.group || "men 19-30"][nutrientDbName]) *
 			100
 		).toFixed(0);
 	}
 
-	const getAmount = (foodPortions) => {
-		if (!foodPortions || !foodPortions[0]?.gramWeight) {
+	const getAmount = (food) => {
+		const foodPortion = getFoodPortion(food);
+
+		if (!food || !foodPortion.gramWeight) {
 			return 100;
 		}
 
-		return foodPortions[0].gramWeight > 250
-			? 250
-			: foodPortions[0].gramWeight;
+		return foodPortion.gramWeight > 250 ? 250 : foodPortion.gramWeight;
 	};
 
 	return (
@@ -217,7 +215,7 @@ const DayScreen = ({ foodData, userData, ip }) => {
 							<FoodItem
 								name={food.description}
 								emoji={food.emoji}
-								amount={getAmount(food.foodPortions)}
+								amount={getAmount(food)}
 								portionName={getPortionName(food)}
 								onClick={() => {
 									router.push(
@@ -229,8 +227,7 @@ const DayScreen = ({ foodData, userData, ip }) => {
 									const newFoods = [...foods];
 									newFoods[i].portions += 1;
 									newFoods[i].amount =
-										getAmount(food.foodPortions) *
-										newFoods[i].portions;
+										getAmount(food) * newFoods[i].portions;
 
 									setFoods(newFoods);
 									updateDoc(
@@ -244,7 +241,7 @@ const DayScreen = ({ foodData, userData, ip }) => {
 										{
 											portions: increment(1),
 											amount:
-												getAmount(food.foodPortions) *
+												getAmount(food) *
 												newFoods[i].portions,
 										}
 									);
@@ -253,8 +250,7 @@ const DayScreen = ({ foodData, userData, ip }) => {
 									const newFoods = [...foods];
 									newFoods[i].portions -= 1;
 									newFoods[i].amount =
-										getAmount(food.foodPortions) *
-										newFoods[i].portions;
+										getAmount(food) * newFoods[i].portions;
 									if (newFoods[i].portions === 0) {
 										newFoods.splice(i, 1);
 
@@ -279,9 +275,8 @@ const DayScreen = ({ foodData, userData, ip }) => {
 											{
 												portions: increment(-1),
 												amount:
-													getAmount(
-														food.foodPortions
-													) * newFoods[i].portions,
+													getAmount(food) *
+													newFoods[i].portions,
 											}
 										);
 									}
@@ -432,7 +427,7 @@ const DayScreen = ({ foodData, userData, ip }) => {
 										" "
 									),
 									portions: 1,
-									amount: getAmount(food.foodPortions),
+									amount: getAmount(food),
 								}
 							);
 						}}

@@ -46,14 +46,12 @@ const food = ({ userData }) => {
 			item?.nutrient?.name.includes("ALA") ||
 			item?.nutrient?.name.includes("PUFA 18:3")
 		) {
-			console.log("ALA", item.amount, item?.nutrient?.name);
 			omega3ALA = item.amount || omega3ALA;
 		}
 		if (
 			item?.nutrient?.name.includes("EPA") ||
 			item?.nutrient?.name.includes("PUFA 20:5")
 		) {
-			console.log("EPA", item.amount, item?.nutrient?.name);
 			omega3EPA = item.amount || omega3EPA;
 		}
 
@@ -61,7 +59,6 @@ const food = ({ userData }) => {
 			item?.nutrient?.name.includes("DHA") ||
 			item?.nutrient?.name.includes("PUFA 22:6")
 		) {
-			console.log("DHA", item.amount, item?.nutrient?.name);
 			omega3DHA = item.amount || omega3DHA;
 		}
 

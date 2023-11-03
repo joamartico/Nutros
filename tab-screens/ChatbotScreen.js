@@ -46,6 +46,7 @@ const ChatbotScreen = () => {
 			},
 			body: JSON.stringify({
 				model: "gpt-3.5-turbo",
+				// model: "gpt-4",
 				messages: newMessages,
 				// stream: true,
 				temperature: 0.1,

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import dv from "../../dv.json";
 import NutrientItem from "../../components/NutrientItem";
-import { macronutients, minerals, vitamins } from "../../nutrients";
+import { fattyAcids, macronutients, minerals, vitamins } from "../../nutrients";
 import Head from "next/head";
 import { convertToUrl, getRecommendedAmount } from "../../utils/functions";
 // import fs from "fs";
@@ -82,40 +82,45 @@ const food = ({ userData, food }) => {
 
 	// console.log("food", food);
 
-	let omega3 = 0;
-	let omega6 = 0;
+	let omega3ALA = 0;
+	let omega3EPA = 0;
+	let omega3DHA = 0;
 
-	const nutrientsHaveN3 = food?.foodNutrients.find((nutrient) =>
-		nutrient?.nutrientName.includes("n-3")
-	);
+	let omega6 = 0;
 
 	const nutrientsHaveN6 = food?.foodNutrients.find((nutrient) =>
 		nutrient?.nutrientName.includes("n-6")
 	);
 
 	food?.foodNutrients.map((nutrient) => {
-		if (nutrientsHaveN3) {
-			// OMEGA 3
-			if (nutrient?.nutrientName.includes("n-3")) {
-				omega3 = omega3 + nutrient?.value;
-			}
-		} else {
-			if (
-				nutrient?.nutrientName.includes("PUFA 18:3") || // ALA
-				nutrient?.nutrientName.includes("PUFA 18:4") || // SDA
-				nutrient?.nutrientName.includes("PUFA 20:5") || // EPA
-				nutrient?.nutrientName.includes("PUFA 22:5") || // DPA
-				nutrient?.nutrientName.includes("PUFA 22:6") // DHA
-			) {
-				console.log("contains omega3");
-				omega3 = omega3 + nutrient.value;
-			}
+		// OMEGA 3
+		if (
+			nutrient?.nutrientName.includes("ALA") ||
+			nutrient?.nutrientName.includes("PUFA 18:3")
+		) {
+			console.log("ALA", nutrient?.value, nutrient?.nutrientName);
+			omega3ALA = nutrient?.value || omega3ALA;
+		}
+		if (
+			nutrient?.nutrientName.includes("EPA") ||
+			nutrient?.nutrientName.includes("PUFA 20:5")
+		) {
+			console.log("EPA", nutrient?.value, nutrient?.nutrientName);
+			omega3EPA = nutrient?.value || omega3EPA;
+		}
+
+		if (
+			nutrient?.nutrientName.includes("DHA") ||
+			nutrient?.nutrientName.includes("PUFA 22:6")
+		) {
+			console.log("DHA", nutrient?.value, nutrient?.nutrientName);
+			omega3DHA = nutrient?.value || omega3DHA;
 		}
 
 		if (nutrientsHaveN6) {
 			// OMEGA 6
 			if (nutrient?.nutrientName.includes("n-6")) {
-				omega6 = omega6 + nutrient?.value;
+				omega6 = omega6 + amount;
 			}
 		} else {
 			if (
@@ -124,7 +129,7 @@ const food = ({ userData, food }) => {
 				nutrient?.nutrientName.includes("PUFA 20:3") || // DGLA
 				nutrient?.nutrientName.includes("PUFA 20:4") // AA
 			) {
-				omega6 = omega6 + nutrient.value;
+				omega6 = omega6 + nutrient?.value;
 			}
 		}
 	});
@@ -156,8 +161,9 @@ const food = ({ userData, food }) => {
 				temperature: 0.2,
 			}),
 		});
-
+		console.log("response", response);
 		const data = await response.json();
+		console.log("data", data);
 		const emoji = data.choices[0].message.content;
 		return emoji;
 	}
@@ -448,29 +454,37 @@ const food = ({ userData, food }) => {
 				</ion-list>
 
 				<ion-list>
-					<ion-list-header>Fats</ion-list-header>
+					<ion-list-header>Fatty Acids</ion-list-header>
 
-					<NutrientItem
-						name="Omega-3"
-						completeName="Omega-3"
-						dbName="Omega-3"
-						amount={
-							omega3 * (foodPortion?.gramWeight / 100) || omega3
-						}
-						unitName={"g"}
-						recommendedAmount={dv[group]["Omega-3"]}
-					/>
-
-					<NutrientItem
-						name="Omega-6"
-						completeName="Omega-6"
-						dbName="Omega-6"
-						amount={
-							omega6 * (foodPortion?.gramWeight / 100) || omega6
-						}
-						recommendedAmount={dv[group]["Omega-6"]}
-						unitName={"g"}
-					/>
+					{fattyAcids.map((fattyAcid) => {
+						return (
+							<NutrientItem
+								dbName={fattyAcid.dbName}
+								completeName={fattyAcid.completeName}
+								amount={
+									fattyAcid.dbName.includes("ALA")
+										? omega3ALA *
+												(portion?.gramWeight / 100) ||
+										  omega3ALA
+										: fattyAcid.dbName.includes("EPA")
+										? omega3EPA *
+												(portion?.gramWeight / 100) ||
+										  omega3EPA
+										: fattyAcid.dbName.includes("DHA")
+										? omega3DHA *
+												(portion?.gramWeight / 100) ||
+										  omega3DHA
+										: omega6 *
+												(portion?.gramWeight / 100) ||
+										  omega6
+								}
+								recommendedAmount={dv[group][fattyAcid.dbName]}
+								unitName={"g"}
+								url={`/?nutrient=${fattyAcid.dbName}`}
+								decimals={2}
+							/>
+						);
+					})}
 				</ion-list>
 
 				<ion-list>
