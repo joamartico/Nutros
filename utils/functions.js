@@ -150,6 +150,7 @@ export function getFatDV(userData) {
 	return ((calories * 0.3) / 9).toFixed(0);
 }
 
+
 export function getRecommendedAmount(nutrientDbName, userData) {
 	switch (nutrientDbName) {
 		case "Protein":
