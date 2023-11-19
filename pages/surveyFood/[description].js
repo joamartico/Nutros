@@ -307,7 +307,9 @@ const food = ({ userData, food }) => {
 					</ion-toolbar>
 				</ion-header>
 
-				{userData?.email === "joamartico@gmail.com" && (
+				{/* {userData?.email === "joamartico@gmail.com" && ( */}
+				{/* localhost && */}
+				{process.env.NODE_ENV === "development" && (
 					<div
 						style={{
 							border: "1px solid green",
@@ -373,12 +375,13 @@ const food = ({ userData, food }) => {
 								completeName={vitamin.completeName}
 								amount={
 									nutrient?.value *
-										(foodPortion?.gramWeight / 100) ||
+										(portion?.gramWeight / 100) ||
 									nutrient?.value
 								}
 								recommendedAmount={dv[group][vitamin.dbName]}
 								unitName={nutrient?.unitName.toLowerCase()}
 								onClick={() => console.log(nutrient)}
+								decimals={2}
 							/>
 						);
 					})}
@@ -423,7 +426,7 @@ const food = ({ userData, food }) => {
 								completeName={mineral.completeName}
 								amount={
 									nutrient?.value *
-										(foodPortion?.gramWeight / 100) ||
+										(portion?.gramWeight / 100) ||
 									nutrient?.value
 								}
 								recommendedAmount={dv[group][mineral.dbName]}
@@ -502,7 +505,7 @@ const food = ({ userData, food }) => {
 								dbName={nutrient?.nutrientName}
 								amount={
 									nutrient.value *
-										(foodPortion?.gramWeight / 100) ||
+										(portion?.gramWeight / 100) ||
 									nutrient.value
 								}
 								unitName={nutrient?.unitName.toLowerCase()}

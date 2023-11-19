@@ -296,6 +296,7 @@ const food = ({ userData }) => {
 								unitName={nutrient?.nutrient.unitName}
 								onClick={() => console.log(nutrient)}
 								url={`/?nutrient=${vitamin.dbName}`}
+								decimals={2}
 							/>
 						);
 					})}

@@ -2,6 +2,7 @@ import FoodsScreen from "../tab-screens/FoodsScreen";
 import { useState } from "react";
 import DayScreen from "../tab-screens/DayScreen";
 import UserScreen from "../tab-screens/UserScreen";
+import CameraScreeen from "../tab-screens/CameraScreen";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import firebaseApp from "../firebase";
 import { shuffleArray } from "../utils/functions";
@@ -40,18 +41,18 @@ export default function Home({ shuffledFoodNames, userData, ip }) {
 						<ion-icon src="/svg/fruits-icon.svg"></ion-icon>
 					</ion-tab-button>
 
-					{/* <ion-tab-button
-						tab="camera"
-						onClick={() => setSelectedTab("camera")}
-					>
-						<ion-icon src="/svg/camera.svg"></ion-icon>
-					</ion-tab-button> */}
-
 					<ion-tab-button
 						tab="track"
 						onClick={() => setSelectedTab("track")}
 					>
 						<ion-icon src="/svg/calendar.svg"></ion-icon>
+					</ion-tab-button>
+
+					<ion-tab-button
+						tab="camera"
+						onClick={() => setSelectedTab("camera")}
+					>
+						<ion-icon src="/svg/camera.svg"></ion-icon>
 					</ion-tab-button>
 
 					<ion-tab-button
@@ -78,17 +79,17 @@ export default function Home({ shuffledFoodNames, userData, ip }) {
 					/>
 				</ion-tab>
 
-				{/* <ion-tab tab="camera">
-					<CameraScreen
+				<ion-tab tab="track">
+					<DayScreen
 						selectedTab={selectedTab}
 						foodData={foodData}
 						userData={userData}
 						ip={ip}
 					/>
-				</ion-tab> */}
+				</ion-tab>
 
-				<ion-tab tab="track">
-					<DayScreen
+				<ion-tab tab="camera">
+					<CameraScreeen
 						selectedTab={selectedTab}
 						foodData={foodData}
 						userData={userData}
@@ -121,11 +122,9 @@ export default function Home({ shuffledFoodNames, userData, ip }) {
 export async function getServerSideProps(ctx) {
 	const shuffledFoodNames = shuffleArray(foodNames);
 
-
 	// Extract IP from the request headers
 	let ip =
-		ctx.req.headers["x-forwarded-for"] ||
-		ctx.req.connection.remoteAddress;
+		ctx.req.headers["x-forwarded-for"] || ctx.req.connection.remoteAddress;
 
 	// If the IP contains a comma, consider the first part (in case of multiple forwarded addresses)
 	if (ip.includes(",")) {
@@ -135,17 +134,16 @@ export async function getServerSideProps(ctx) {
 	// Remove IPv6 prefix if it's there
 	ip = ip.replace("::ffff:", "");
 
-
 	const cookies = ctx.req.headers.cookie?.split("; ");
 	// if (!cookies) return { props: { shuffledFoodNames } };
 	const userCookie = cookies
 		?.find((cookie) => cookie.startsWith("user="))
 		?.split("=")[1]
 		.replace(/%40/g, "@");
-		// let userData = userCookie
-		// 	? await getDoc(doc(db, "users", userCookie))
-		// 	: null;
-	let userData = await getDoc(doc(db, "users", userCookie || ip))
+	// let userData = userCookie
+	// 	? await getDoc(doc(db, "users", userCookie))
+	// 	: null;
+	let userData = await getDoc(doc(db, "users", userCookie || ip));
 
 	userData = userData?.data() || null;
 	if (userData) {
@@ -155,9 +153,9 @@ export async function getServerSideProps(ctx) {
 	return {
 		props: {
 			shuffledFoodNames,
-			cookies,
-			userData,
-			ip,
+			cookies: cookies ? cookies : "",
+			userData: userData ? userData : "",
+			ip: ip ? ip : "",
 		},
 	};
 }
