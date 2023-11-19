@@ -100,7 +100,7 @@ export const vitamins = [
 export const minerals = [
 	{
 		completeName: "Calcium",
-		shortName: "Ca",
+		shortName: "Calcium",
 		dbName: "Calcium, Ca",
 		unit: "mg",
 		description:
@@ -108,7 +108,7 @@ export const minerals = [
 	},
 	{
 		completeName: "Copper",
-		shortName: "Cu",
+		shortName: "Copper",
 		dbName: "Copper, Cu",
 		unit: "mg",
 		description:
@@ -116,7 +116,7 @@ export const minerals = [
 	},
 	{
 		completeName: "Iron",
-		shortName: "Fe",
+		shortName: "Iron",
 		dbName: "Iron, Fe",
 		unit: "mg",
 		description:
@@ -124,7 +124,7 @@ export const minerals = [
 	},
 	{
 		completeName: "Magnesium",
-		shortName: "Mg",
+		shortName: "Magnesium",
 		dbName: "Magnesium, Mg",
 		unit: "mg",
 		description:
@@ -132,7 +132,7 @@ export const minerals = [
 	},
 	{
 		completeName: "Potassium",
-		shortName: "K",
+		shortName: "Potassium",
 		dbName: "Potassium, K",
 		unit: "mg",
 		description:
@@ -140,7 +140,7 @@ export const minerals = [
 	},
 	{
 		completeName: "Phosphorus",
-		shortName: "P",
+		shortName: "Phosphorus",
 		dbName: "Phosphorus, P",
 		unit: "mg",
 		description:
@@ -148,7 +148,7 @@ export const minerals = [
 	},
 	{
 		completeName: "Selenium",
-		shortName: "Se",
+		shortName: "Selenium",
 		dbName: "Selenium, Se",
 		unit: "µg",
 		description:
@@ -156,7 +156,7 @@ export const minerals = [
 	},
 	{
 		completeName: "Zinc",
-		shortName: "Zn",
+		shortName: "Zinc",
 		dbName: "Zinc, Zn",
 		unit: "mg",
 		description:

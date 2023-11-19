@@ -7,21 +7,12 @@ import { doc, getDoc, getFirestore } from "firebase/firestore";
 import firebaseApp from "../firebase";
 import { shuffleArray } from "../utils/functions";
 import foundationFoodData from "../public/foodData_foundation.json";
-// import { getAuth } from "firebase/auth";
 import ChatbotScreen from "../tab-screens/ChatbotScreen";
 const foodNames = foundationFoodData.map((food) => food.description);
-
 export const db = getFirestore(firebaseApp);
 
 export default function Home({ shuffledFoodNames, userData, ip }) {
 	const [selectedTab, setSelectedTab] = useState("foods");
-
-	// useEffect(() => {
-	// 	if (!user) return;
-	// 	getDoc(doc(db, "users", user?.email)).then((userDoc) => {
-	// 		setUserData(userDoc.data());
-	// 	});
-	// }, [user]);
 
 	const foodDataMap = foundationFoodData.reduce((acc, food) => {
 		acc[food.description] = food;
