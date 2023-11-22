@@ -130,13 +130,14 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 			</ion-header>
 
 			<ion-content fullscreen class="ion-padding">
-				{!capturedImage && !food && playingVideo && (
+				{!capturedImage && !food && (
 					<>
 						<CameraVideo
 							ref={videoRef}
 							muted
-							autoPlay={false}
+							autoPlay={playingVideo}
 							playsInline={true}
+							// playingVideo
 						/>
 						<CaptureButton
 							onClick={() => {
