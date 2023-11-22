@@ -89,7 +89,10 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 	}
 
 	useEffect(() => {
-		(selectedTab == "camera" || selectedTab == "foods") && getVideo();
+		if (selectedTab == "camera") {
+			getVideo();
+			getVideo();
+		}
 	}, [selectedTab, capturedImage]);
 
 	return (
