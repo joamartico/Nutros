@@ -15,6 +15,7 @@ function extractNumber(str) {
 const CameraScreen = ({ selectedTab, foodData, userData }) => {
 	const [capturedImage, setCapturedImage] = useState(null);
 	const [food, setFood] = useState();
+	const [playingVideo, setPlayingVideo] = useState(false);
 
 	const group = userData?.group || "men 19-30";
 
@@ -31,6 +32,7 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 				console.log(stream);
 				video.srcObject = stream;
 				video.play();
+				setPlayingVideo(true);
 			})
 			.catch((err) => console.log(err));
 	};
@@ -91,7 +93,9 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 	useEffect(() => {
 		if (selectedTab == "camera") {
 			getVideo();
-			getVideo();
+			setTimeout(() => {
+				videoRef.current.play();
+			}, 1000);
 		}
 	}, [selectedTab, capturedImage]);
 
@@ -126,7 +130,7 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 			</ion-header>
 
 			<ion-content fullscreen class="ion-padding">
-				{!capturedImage && !food && (
+				{!capturedImage && !food && playingVideo && (
 					<>
 						<CameraVideo
 							ref={videoRef}
