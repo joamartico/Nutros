@@ -131,7 +131,7 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 						<CameraVideo
 							ref={videoRef}
 							muted
-							autoPlay={true}
+							autoPlay={false}
 							playsInline={true}
 						/>
 						<CaptureButton
