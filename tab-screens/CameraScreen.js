@@ -76,14 +76,21 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 
 		const data = await response.json();
 		console.log("data: ", data);
-		alert(data.choices[0].message.content);
+		console.log(data.choices[0].message.content);
+		// if data.choices[0].message.content is not a JSON
+		if (data.choices[0].message.content[0] != "{") {
+			setCapturedImage(null);
+			setFood(null);
+			alert(data.choices[0].message.content);
+			return;
+		}
 		const foodJson = JSON.parse(data.choices[0].message.content);
 		setFood(foodJson);
 	}
 
 	useEffect(() => {
-		selectedTab == "camera" && getVideo();
-	}, [selectedTab]);
+		(selectedTab == "camera" || selectedTab == "foods") && getVideo();
+	}, [selectedTab, capturedImage]);
 
 	return (
 		<>
@@ -92,193 +99,181 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 					<ion-title>Photo your food</ion-title>
 				</ion-toolbar>
 			</ion-header> */}
+			<ion-header translucent>
+				<ion-toolbar>
+					<ion-buttons slot="start">
+						{/* <a href="/"> */}
+						<ion-button
+							onClick={() => {
+								setCapturedImage(null);
+								setFood(null);
+							}}
+						>
+							<ion-icon src="/svg/chevron-back.svg" />
+						</ion-button>
+						{/* </a> */}
+					</ion-buttons>
+					<ion-title>
+						<>
+							{food?.emoji}&nbsp;&nbsp;
+							{food?.description?.split(", ")[0]}
+						</>
+					</ion-title>
+				</ion-toolbar>
+			</ion-header>
 
 			<ion-content fullscreen class="ion-padding">
-				{/* <ion-header collapse="condense">
-					<ion-toolbar>
-						<ion-title onClick={() => getVideo()} size="large">
-							Photo your food
-						</ion-title>
-					</ion-toolbar>
-				</ion-header> */}
-				{!food && (
+				{!capturedImage && !food && (
 					<>
-						{capturedImage ? (
-							<CapturedImage src={capturedImage} alt="Captured" />
-						) : (
-							<CameraVideo
-								ref={videoRef}
-								muted
-								autoPlay={true}
-								playsInline={true}
-							/>
-						)}
+						<CameraVideo
+							ref={videoRef}
+							muted
+							autoPlay={true}
+							playsInline={true}
+						/>
+						<CaptureButton
+							onClick={() => {
+								const canvas = document.createElement("canvas");
+								canvas.width = videoRef.current.videoWidth;
+								canvas.height = videoRef.current.videoHeight;
+								canvas
+									.getContext("2d")
+									.drawImage(
+										videoRef.current,
+										0,
+										0,
+										canvas.width,
+										canvas.height
+									);
+								const data = canvas.toDataURL("image/jpeg");
+								console.log(data);
+								setCapturedImage(data); // Guarda la imagen capturada
+								askToGpt(data);
+							}}
+						>
+							<ion-icon src="/svg/camera.svg" size="large" />
+						</CaptureButton>
 					</>
 				)}
 
-				{!capturedImage && !food && (
-					<CaptureButton
-						onClick={() => {
-							const canvas = document.createElement("canvas");
-							canvas.width = videoRef.current.videoWidth;
-							canvas.height = videoRef.current.videoHeight;
-							canvas
-								.getContext("2d")
-								.drawImage(
-									videoRef.current,
-									0,
-									0,
-									canvas.width,
-									canvas.height
-								);
-							const data = canvas.toDataURL("image/jpeg");
-							console.log(data);
-							setCapturedImage(data); // Guarda la imagen capturada
-							askToGpt(data);
-						}}
-					>
-						<ion-icon src="/svg/camera.svg" size="large"></ion-icon>
-					</CaptureButton>
+				{capturedImage && !food && (
+					<>
+						<Spinner>
+							<ion-spinner
+								style={{
+									width: 70,
+									height: 70,
+									display: "flex",
+									color: "#7ed445",
+								}}
+								name="crescent"
+							/>
+						</Spinner>
+						<CapturedImage src={capturedImage} alt="Captured" />
+					</>
 				)}
 
 				{food && (
 					<>
-						<ion-header translucent>
+						<ion-header collapse="condense">
 							<ion-toolbar>
-								<ion-buttons slot="start">
-									{/* <a href="/"> */}
-									<ion-button
-									// onClick={() => {
-									// 	if (shouldGoBack) {
-									// 		router.back();
-									// 	} else {
-									// 		router.push("/");
-									// 	}
-									// }}
+								<h1>
+									<ion-title
+										size="large"
+										style={{ height: 50 }}
 									>
-										<ion-icon src="/svg/chevron-back.svg" />
-										All Foods
-									</ion-button>
-									{/* </a> */}
-								</ion-buttons>
-								<ion-title>
-									<>
-										{food?.emoji}&nbsp;&nbsp;
-										{food?.description?.split(", ")[0]}
-									</>
-								</ion-title>
+										{food?.emoji}&nbsp;
+										{food?.description}
+									</ion-title>
+								</h1>
 							</ion-toolbar>
 						</ion-header>
 
-						<ion-content fullscreen>
-							<ion-header collapse="condense">
-								<ion-toolbar>
-									<h1>
-										<ion-title
-											size="large"
-											style={{ height: 50 }}
-										>
-											{food?.emoji}&nbsp;
-											{food?.description}
-										</ion-title>
-									</h1>
-								</ion-toolbar>
-							</ion-header>
+						<ion-list>
+							<ion-list-header>Macronutrients</ion-list-header>
 
-							<ion-list>
-								<ion-list-header>
-									Macronutrients
-								</ion-list-header>
+							{macronutients.map((macronutrient) => {
+								const nutrient =
+									food?.[macronutrient.shortName];
 
-								{macronutients.map((macronutrient) => {
-									const nutrient =
-										food?.[macronutrient.shortName];
+								if (!nutrient) return null;
 
-									if (!nutrient) return null;
+								return (
+									<NutrientItem
+										dbName={macronutrient.dbName}
+										completeName={
+											macronutrient.completeName
+										}
+										amount={extractNumber(nutrient)}
+										recommendedAmount={getRecommendedAmount(
+											macronutrient.dbName,
+											userData
+										)}
+										// unitName={
+										// 	nutrient?.nutrient.unitName
+										// }
+										onClick={() => console.log(nutrient)}
+										url={`/?nutrient=${macronutrient.dbName}`}
+									/>
+								);
+							})}
+						</ion-list>
 
-									return (
-										<NutrientItem
-											dbName={macronutrient.dbName}
-											completeName={
-												macronutrient.completeName
-											}
-											amount={extractNumber(nutrient)}
-											recommendedAmount={getRecommendedAmount(
-												macronutrient.dbName,
-												userData
-											)}
-											// unitName={
-											// 	nutrient?.nutrient.unitName
-											// }
-											onClick={() =>
-												console.log(nutrient)
-											}
-											url={`/?nutrient=${macronutrient.dbName}`}
-										/>
-									);
-								})}
-							</ion-list>
+						<ion-list>
+							<ion-list-header>Vitamins</ion-list-header>
 
-							<ion-list>
-								<ion-list-header>Vitamins</ion-list-header>
+							{vitamins.map((vitamin) => {
+								const nutrient = food?.[vitamin.shortName];
+								console.log("vitamin", vitamin);
+								console.log("nutrient", nutrient);
 
-								{vitamins.map((vitamin) => {
-									const nutrient = food?.[vitamin.shortName];
-									console.log("vitamin", vitamin);
-									console.log("nutrient", nutrient);
+								if (!nutrient) return null;
 
-									if (!nutrient) return null;
+								return (
+									<NutrientItem
+										dbName={vitamin.dbName}
+										completeName={vitamin.completeName}
+										amount={extractNumber(nutrient)}
+										recommendedAmount={
+											dv[group][vitamin.dbName]
+										}
+										// unitName={
+										// 	nutrient?.nutrient.unitName
+										// }
+										onClick={() => console.log(nutrient)}
+										url={`/?nutrient=${vitamin.dbName}`}
+									/>
+								);
+							})}
+						</ion-list>
 
-									return (
-										<NutrientItem
-											dbName={vitamin.dbName}
-											completeName={vitamin.completeName}
-											amount={extractNumber(nutrient)}
-											recommendedAmount={
-												dv[group][vitamin.dbName]
-											}
-											// unitName={
-											// 	nutrient?.nutrient.unitName
-											// }
-											onClick={() =>
-												console.log(nutrient)
-											}
-											url={`/?nutrient=${vitamin.dbName}`}
-										/>
-									);
-								})}
-							</ion-list>
+						<ion-list>
+							<ion-list-header>Minerals</ion-list-header>
 
-							<ion-list>
-								<ion-list-header>Minerals</ion-list-header>
+							{minerals.map((mineral) => {
+								const nutrient = food?.[mineral.shortName];
+								console.log("mineral", mineral);
+								console.log("nutrient", nutrient);
 
-								{minerals.map((mineral) => {
-									const nutrient = food?.[mineral.shortName];
-									console.log("mineral", mineral);
-									console.log("nutrient", nutrient);
+								if (!nutrient) return null;
 
-									if (!nutrient) return null;
-
-									return (
-										<NutrientItem
-											dbName={mineral.dbName}
-											completeName={mineral.completeName}
-											amount={extractNumber(nutrient)}
-											recommendedAmount={
-												dv[group][mineral.dbName]
-											}
-											// unitName={
-											// 	nutrient?.nutrient.unitName
-											// }
-											onClick={() =>
-												console.log(nutrient)
-											}
-											url={`/?nutrient=${mineral.dbName}`}
-										/>
-									);
-								})}
-							</ion-list>
-						</ion-content>
+								return (
+									<NutrientItem
+										dbName={mineral.dbName}
+										completeName={mineral.completeName}
+										amount={extractNumber(nutrient)}
+										recommendedAmount={
+											dv[group][mineral.dbName]
+										}
+										// unitName={
+										// 	nutrient?.nutrient.unitName
+										// }
+										onClick={() => console.log(nutrient)}
+										url={`/?nutrient=${mineral.dbName}`}
+									/>
+								);
+							})}
+						</ion-list>
 					</>
 				)}
 			</ion-content>
@@ -333,4 +328,18 @@ const CapturedImage = styled.img`
 	width: 100vw;
 	/* do not deform the image */
 	object-fit: cover;
+`;
+
+const Spinner = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: auto auto;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	height: 70px;
+	width: 70px;
+	z-index: 99999999999999999999999999999999999 !important;
 `;
