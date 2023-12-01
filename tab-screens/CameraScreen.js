@@ -12,6 +12,11 @@ function extractNumber(str) {
 	return match ? parseFloat(match[0]) : null;
 }
 
+function extractUnit(str) {
+	const match = str.match(/[a-zA-Z]+/);
+	return match ? match[0] : null;
+}
+
 const CameraScreen = ({ selectedTab, foodData, userData }) => {
 	const [capturedImage, setCapturedImage] = useState(null);
 	const [food, setFood] = useState();
@@ -50,7 +55,7 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 					{
 						role: "system",
 						content:
-							"You are a nutrient analizer. The user will provide you a food image and you will return a json with nutritional information of the food. Format: {description, emoji, amount, Calories, Protein, Fat, Carbs, A, B1, B2, B3, B6, B9, B12, C, D, E, K, Choline, Calcium, Copper, Iron, Magnesium, Potassium, Phosphorus, Selenium, Zinc, ALA, DHA, EPA} Respond directly with the JSON, nothing else, no matter what. Use grams instead of oz.",
+							"You are a nutrient analizer. The user will provide you a food image and you will return a json with nutritional information of the food. Format: {description, emoji, amount, Calories, Protein, Fat, Carbs, A, B1, B2, B3, B6, B9, B12, C, D, E, K, Choline, Boron, Calcium, Copper, Iron, Magnesium, Potassium, Phosphorus, Selenium, Zinc, ALA, DHA, EPA} Respond directly with the JSON, nothing else, no matter what. Use grams instead of oz or IU.",
 						// "The user will provide you a food image and you will return a json with nutritional information (vitamins, minerals, macronutrients, calories, etc) of the food. Respond directly with the JSON, nothing else. Use grams instead of oz.",
 					},
 					{
@@ -94,7 +99,7 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 		if (selectedTab == "camera") {
 			getVideo();
 			setTimeout(() => {
-				videoRef.current.play();
+				videoRef.current?.play();
 			}, 1000);
 		}
 	}, [selectedTab, capturedImage]);
@@ -129,7 +134,7 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 				</ion-toolbar>
 			</ion-header>
 
-			<ion-content fullscreen class="ion-padding">
+			<ion-content fullscreen>
 				{!capturedImage && !food && (
 					<>
 						<CameraVideo
@@ -195,6 +200,11 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 									</ion-title>
 								</h1>
 							</ion-toolbar>
+							<ion-toolbar>
+								<span className="ion-padding">
+									{food.amount}
+								</span>
+							</ion-toolbar>
 						</ion-header>
 
 						<ion-list>
@@ -213,6 +223,8 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 											macronutrient.completeName
 										}
 										amount={extractNumber(nutrient)}
+										decimals={2}
+										unitName={extractUnit(nutrient)}
 										recommendedAmount={getRecommendedAmount(
 											macronutrient.dbName,
 											userData
@@ -242,6 +254,8 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 										dbName={vitamin.dbName}
 										completeName={vitamin.completeName}
 										amount={extractNumber(nutrient)}
+										decimals={2}
+										unitName={extractUnit(nutrient)}
 										recommendedAmount={
 											dv[group][vitamin.dbName]
 										}
@@ -270,17 +284,26 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 										dbName={mineral.dbName}
 										completeName={mineral.completeName}
 										amount={extractNumber(nutrient)}
+										decimals={2}
+										unitName={extractUnit(nutrient)}
 										recommendedAmount={
 											dv[group][mineral.dbName]
 										}
-										// unitName={
-										// 	nutrient?.nutrient.unitName
-										// }
 										onClick={() => console.log(nutrient)}
 										url={`/?nutrient=${mineral.dbName}`}
 									/>
 								);
 							})}
+							<NutrientItem
+								dbName={"Boron"}
+								completeName={"Boron"}
+								amount={extractNumber(food?.Boron)}
+								decimals={2}
+								unitName={extractUnit(food?.Boron)}
+								recommendedAmount={2}
+								onClick={() => console.log(nutrient)}
+								url={`/?nutrient=Boron`}
+							/>
 						</ion-list>
 					</>
 				)}
