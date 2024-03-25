@@ -27,19 +27,30 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 	const videoRef = useRef();
 
 	const getVideo = () => {
+		const constraints = {
+			video: {
+				facingMode: "environment",
+				width: { ideal: 4096, min: 1280 },
+				height: { ideal: 2160, min: 720 },
+			},
+			audio: false,
+		};
+
 		navigator.mediaDevices
-			?.getUserMedia({
-				video: { facingMode: "environment" },
-				audio: false,
-			})
+			.getUserMedia(constraints)
 			.then((stream) => {
 				let video = videoRef.current;
-				console.log(stream);
 				video.srcObject = stream;
 				video.play();
 				setPlayingVideo(true);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => {
+				console.error(
+					"Failed to get video stream with high resolution, trying lower resolution",
+					err
+				);
+				// Here, you could attempt to call getUserMedia again with lower resolution constraints
+			});
 	};
 
 	async function askToGpt(base64_image) {
@@ -158,7 +169,7 @@ const CameraScreen = ({ selectedTab, foodData, userData }) => {
 										canvas.width,
 										canvas.height
 									);
-								const data = canvas.toDataURL("image/jpeg");
+								const data = canvas.toDataURL("image/png");
 								console.log(data);
 								setCapturedImage(data); // Guarda la imagen capturada
 								askToGpt(data);
